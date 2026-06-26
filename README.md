@@ -657,7 +657,7 @@
                 document.getElementById('dig-aposta').innerText = `R$ ${dados.v.toFixed(2)}`; document.getElementById('dig-odd').innerText = dados.o.toFixed(2);
                 document.getElementById('dig-retorno').innerText = (dados.v * dados.o).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
                 if (isValidado) {
-                    let selo = document.getElementById('dig-status'); selo.innerText = "✅ BILHETE VALIDADO PELO CAMBISTA"; selo.classList.remove('status-pendente'); selo.classList.add('status-validado');
+                    let selo = document.getElementById('dig-status'); selo.innerText = "✅ BILHETE VALIDADO POR RICK"; selo.classList.remove('status-pendente'); selo.classList.add('status-validado');
                     elementoData.innerText = dados.d ? `📅 Validado em: ${dados.d}` : "";
                 } else { elementoData.innerText = "⏳ Aguardando validação do cambista"; }
                 let htmlJogos = "";
