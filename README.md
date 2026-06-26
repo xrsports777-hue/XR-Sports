@@ -182,7 +182,7 @@
     </div>
 
     <script>
-        const API_KEY = "2e7baa6bb4ecf184bad2822587e8015d"; 
+        const API_KEY = "06cc49bae5636da5203cd38c1ff62339"; 
         const NUMERO_WHATSAPP = "5582993729095"; 
         const CHAVE_PIX_BANCA = "123.456.789-00";
         
@@ -528,12 +528,18 @@
         function clicarNaOdd(idJogo, tituloJogo, palpite, oddAposta, tipoOpcao) {
             if(!oddAposta || oddAposta === 0) return;
 
-            // AQUI ESTÁ A CORREÇÃO: Colocamos o 1º Tempo junto com os demais Vencedores
+            // NOVA BARRADA: Bloqueia clique em jogos que já iniciaram
+            let jogoAtual = jogosCarregados.find(j => j.id === idJogo);
+            if(jogoAtual && jogoAtual.isLive) {
+                mostrarToast("⚠️ Aposta bloqueada: O jogo já foi iniciado!", "erro");
+                return;
+            }
+
             const gruposMercado = {
                 '1': 'principal', 'X': 'principal', '2': 'principal',
                 '1X': 'principal', '12': 'principal', 'X2': 'principal',
                 'DNBC': 'principal', 'DNBF': 'principal',
-                '1HT': 'principal', 'XHT': 'principal', '2HT': 'principal', // Adicionados aqui
+                '1HT': 'principal', 'XHT': 'principal', '2HT': 'principal',
                 
                 'BTTSY': 'btts', 'BTTSN': 'btts',
                 'M15': 'gols', 'N15': 'gols',
@@ -616,6 +622,16 @@
             }
             if(oddNumerica > 1000) {
                 mostrarToast("A cotação total máxima permitida é 1000.00!", "erro");
+                return;
+            }
+
+            // NOVA BARRADA: Validação extra caso o jogo tenha começado enquanto o cliente montava o bilhete
+            let jogoJaIniciado = carrinho.find(c => {
+                let j = jogosCarregados.find(jg => jg.id === c.idJogo);
+                return j && j.isLive;
+            });
+            if (jogoJaIniciado) {
+                mostrarToast(`⚠️ O jogo ${jogoJaIniciado.tituloJogo} já iniciou! Remova-o do bilhete para continuar.`, "erro");
                 return;
             }
             
