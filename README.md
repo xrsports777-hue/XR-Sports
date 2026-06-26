@@ -135,8 +135,7 @@
         <div class="historico-lista">
             <h3 style="color: #fff; margin-bottom: 15px; font-size: 16px; text-align: center;">📑 Bilhetes Validados (Ativos)</h3>
             <div id="lista-historico-admin">
-                <!-- Preenchido pelo JavaScript -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -190,8 +189,10 @@
         let jogosCarregados = [];
         let carrinho = [];
         
+        // NOVO: Array para salvar o histórico local
         let historicoBilhetes = JSON.parse(localStorage.getItem('xrsports_historico')) || [];
 
+        // --- SISTEMA DE 3 CLIQUES PARA O ADMIN ---
         let clicksAdmin = 0;
         let timerAdmin;
         
@@ -218,102 +219,14 @@
         function salvarCarrinho() { localStorage.setItem('xrsports_carrinho', JSON.stringify(carrinho)); }
         function carregarCarrinho() { let salvo = localStorage.getItem('xrsports_carrinho'); if(salvo) carrinho = JSON.parse(salvo); }
 
-        /* --- BANCO DE ESCUDOS GIGANTE ATUALIZADO --- */
-        const bancoDeEscudos = {
-            "brazil": "https://upload.wikimedia.org/wikipedia/pt/2/2b/Confedera%C3%A7%C3%A3o_Brasileira_de_Futebol_2019.svg",
-            "flamengo": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Flamengo_braz_logo.svg",
-            "palmeiras": "https://upload.wikimedia.org/wikipedia/commons/1/10/Palmeiras_logo.svg",
-            "corinthians": "https://upload.wikimedia.org/wikipedia/pt/b/b4/Corinthians_simbolo.png",
-            "sao paulo": "https://upload.wikimedia.org/wikipedia/commons/2/2b/S%C3%A3o_Paulo_Futebol_Clube.svg",
-            "fluminense": "https://upload.wikimedia.org/wikipedia/pt/a/a3/Fluminense_FC_escudo.png",
-            "botafogo": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Botafogo_de_Futebol_e_Regatas_logo.svg",
-            "vasco da gama": "https://upload.wikimedia.org/wikipedia/pt/a/ac/CRVascodaGama.png",
-            "vasco": "https://upload.wikimedia.org/wikipedia/pt/a/ac/CRVascodaGama.png",
-            "santos": "https://upload.wikimedia.org/wikipedia/commons/1/15/Santos_Logo.png",
-            "cruzeiro": "https://upload.wikimedia.org/wikipedia/commons/9/90/Cruzeiro_Esporte_Clube_%28logo%29.svg",
-            "atletico mineiro": "https://upload.wikimedia.org/wikipedia/commons/2/27/Clube_Atl%C3%A9tico_Mineiro_logo.svg",
-            "atletico-mg": "https://upload.wikimedia.org/wikipedia/commons/2/27/Clube_Atl%C3%A9tico_Mineiro_logo.svg",
-            "gremio": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Logo_Gr%C3%AAmio_Foot-Ball_Porto_Alegrense.png",
-            "internacional": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Escudo_do_Sport_Club_Internacional.svg",
-            "fortaleza": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Fortaleza_Esporte_Clube_logo.svg",
-            "ceara": "https://upload.wikimedia.org/wikipedia/commons/3/38/Cear%C3%A1_Sporting_Club_logo.svg",
-            "bahia": "https://upload.wikimedia.org/wikipedia/commons/2/28/Esporte_Clube_Bahia_logo.svg",
-            "vitoria": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Esporte_Clube_Vit%C3%B3ria_logo.svg",
-            "sport recife": "https://upload.wikimedia.org/wikipedia/pt/2/21/Sport_Club_do_Recife.svg",
-            "athletico paranaense": "https://upload.wikimedia.org/wikipedia/commons/b/b3/CA_Paranaense.svg",
-            "bragantino": "https://upload.wikimedia.org/wikipedia/pt/9/94/Red_Bull_Bragantino.png",
-            "red bull bragantino": "https://upload.wikimedia.org/wikipedia/pt/9/94/Red_Bull_Bragantino.png",
-            "coritiba": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Coritiba_FBC_logo.svg",
-            "juventude": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Esporte_Clube_Juventude_logo.svg",
-            "criciuma": "https://upload.wikimedia.org/wikipedia/commons/4/42/Crici%C3%BAma_Esporte_Clube_logo.svg",
-            "cuiaba": "https://upload.wikimedia.org/wikipedia/pt/a/a2/Cuiaba_Esporte_Clube.png",
-            "atletico goianiense": "https://upload.wikimedia.org/wikipedia/commons/6/68/Atl%C3%A9tico_Goianiense.svg",
-            "goias": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Goi%C3%A1s_Esporte_Clube_logo.svg",
-            "vila nova": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Vila_Nova_Futebol_Clube_logo.svg",
-            "guarani": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Guarani_Futebol_Clube_logo.svg",
-            "ponte preta": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Associa%C3%A7%C3%A3o_Atl%C3%A9tica_Ponte_Preta_logo.svg",
-            "chapecoense": "https://upload.wikimedia.org/wikipedia/commons/6/60/Associa%C3%A7%C3%A3o_Chapecoense_de_Futebol_logo.svg",
-            "paysandu": "https://upload.wikimedia.org/wikipedia/commons/8/86/Paysandu_Sport_Club_logo.svg",
-            "remo": "https://upload.wikimedia.org/wikipedia/commons/2/22/Clube_do_Remo_logo.svg",
-            "crb": "https://upload.wikimedia.org/wikipedia/commons/6/64/CRB_logo.svg",
-            "clube de regatas brasil": "https://upload.wikimedia.org/wikipedia/commons/6/64/CRB_logo.svg",
-            "csa": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Centro_Sportivo_Alagoano_logo.svg",
-            "operario": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Operario_Ferroviario_Esporte_Clube.svg",
-            "mirassol": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Mirassol_Futebol_Clube_logo.svg",
-            "novorizontino": "https://upload.wikimedia.org/wikipedia/commons/7/77/Gremio_Novorizontino.svg",
-            "ituano": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Ituano_Futebol_Clube_logo.svg",
-            "amazonas": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Amazonas_FC_logo.svg",
-            "botafogo-sp": "https://upload.wikimedia.org/wikipedia/commons/9/91/Botafogo_Futebol_Clube_%28Ribeir%C3%A3o_Preto%29_logo.svg",
-            "america mineiro": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Am%C3%A9rica_Futebol_Clube_%28Belo_Horizonte%29_logo.svg",
-            "boca juniors": "https://upload.wikimedia.org/wikipedia/commons/7/73/Boca_Juniors_logo.svg",
-            "river plate": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Logo_River_Plate.png",
-            "peñarol": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Escudo_del_Club_Atl%C3%A9tico_Pe%C3%B1arol.svg",
-            "nacional": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Nacional_logo.svg",
-            "real madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
-            "barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
-            "paris sg": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg",
-            "bayern munich": "https://upload.wikimedia.org/wikipedia/commons/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg",
-            "liverpool": "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
-            "chelsea": "https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg",
-            "arsenal": "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
-            "manchester city": "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
-            "manchester united": "https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg",
-            "tottenham hotspur": "https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg",
-            "juventus": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Juventus_FC_2017_icon_%28black%29.svg",
-            "ac milan": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg",
-            "inter milan": "https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg",
-            "napoli": "https://upload.wikimedia.org/wikipedia/commons/2/28/S.S.C._Napoli_logo.svg",
-            "rosario central":"https://upload.wikimedia.org/wikipedia/commons/b/b1/Rosario_Central_logo.png",
-            "cerro porteño":"https://upload.wikimedia.org/wikipedia/commons/a/ae/Escudo_del_Club_Cerro_Porte%C3%B1o.svg",
-            "independiente rivadavia":"https://upload.wikimedia.org/wikipedia/commons/4/4b/Escudo_del_Club_Sportivo_Independiente_Rivadavia.svg",
-            "aston villa":"https://upload.wikimedia.org/wikipedia/en/9/9f/Aston_Villa_logo.svg",
-            "brighton and hove albion":"https://upload.wikimedia.org/wikipedia/en/f/fd/Brighton_%26_Hove_Albion_logo.svg",
-            "brentford":"https://upload.wikimedia.org/wikipedia/en/2/2a/Brentford_FC_crest.svg",
-            "bournemouth":"https://upload.wikimedia.org/wikipedia/en/e/e5/AFC_Bournemouth_%282013%29.svg",
-            "ipswich town":"https://upload.wikimedia.org/wikipedia/en/4/43/Ipswich_Town.svg",
-            "sunderland":"https://upload.wikimedia.org/wikipedia/en/7/77/Logo_Sunderland.svg",
-            "nottingham forest":"https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg",
-            "leeds united":"https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg",
-            "coventry city":"https://upload.wikimedia.org/wikipedia/en/9/94/Coventry_City_FC_logo.svg",
-            "hull city":"https://upload.wikimedia.org/wikipedia/en/5/54/Hull_City_A.F.C._logo.svg",
-            "everton":"https://upload.wikimedia.org/wikipedia/en/7/73/Everton_FC_logo.svg",
-            "crystal palace":"https://upload.wikimedia.org/wikipedia/en/0/0c/Crystal_Palace_FC_logo.svg"
-        };
+        const bancoDeEscudos={"brazil":"https://upload.wikimedia.org/wikipedia/pt/2/2b/Confedera%C3%A7%C3%A3o_Brasileira_de_Futebol_2019.svg","flamengo":"https://upload.wikimedia.org/wikipedia/commons/2/2e/Flamengo_braz_logo.svg","palmeiras":"https://upload.wikimedia.org/wikipedia/commons/1/10/Palmeiras_logo.svg","palmeiras-sp":"https://upload.wikimedia.org/wikipedia/commons/1/10/Palmeiras_logo.svg","corinthians":"https://upload.wikimedia.org/wikipedia/pt/b/b4/Corinthians_simbolo.png","corinthians-sp":"https://upload.wikimedia.org/wikipedia/pt/b/b4/Corinthians_simbolo.png","são paulo":"https://upload.wikimedia.org/wikipedia/commons/2/2b/S%C3%A3o_Paulo_Futebol_Clube.svg","sao paulo":"https://upload.wikimedia.org/wikipedia/commons/2/2b/S%C3%A3o_Paulo_Futebol_Clube.svg","fluminense":"https://upload.wikimedia.org/wikipedia/pt/a/a3/Fluminense_FC_escudo.png","fluminense-rj":"https://upload.wikimedia.org/wikipedia/pt/a/a3/Fluminense_FC_escudo.png","clube de regatas brasil":"https://upload.wikimedia.org/wikipedia/commons/6/64/CRB_logo.svg","crb":"https://upload.wikimedia.org/wikipedia/commons/6/64/CRB_logo.svg","atletico paranaense":"https://upload.wikimedia.org/wikipedia/commons/b/b3/CA_Paranaense.svg","botafogo":"https://upload.wikimedia.org/wikipedia/commons/c/c2/Botafogo_de_Futebol_e_Regatas_logo.svg","rosario central":"https://upload.wikimedia.org/wikipedia/commons/b/b1/Rosario_Central_logo.png","cerro porteño":"https://upload.wikimedia.org/wikipedia/commons/a/ae/Escudo_del_Club_Cerro_Porte%C3%B1o.svg","independiente rivadavia":"https://upload.wikimedia.org/wikipedia/commons/4/4b/Escudo_del_Club_Sportivo_Independiente_Rivadavia.svg","arsenal":"https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg","manchester city":"https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg","manchester united":"https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg","tottenham hotspur":"https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg","aston villa":"https://upload.wikimedia.org/wikipedia/en/9/9f/Aston_Villa_logo.svg","brighton and hove albion":"https://upload.wikimedia.org/wikipedia/en/f/fd/Brighton_%26_Hove_Albion_logo.svg","brentford":"https://upload.wikimedia.org/wikipedia/en/2/2a/Brentford_FC_crest.svg","bournemouth":"https://upload.wikimedia.org/wikipedia/en/e/e5/AFC_Bournemouth_%282013%29.svg","ipswich town":"https://upload.wikimedia.org/wikipedia/en/4/43/Ipswich_Town.svg","sunderland":"https://upload.wikimedia.org/wikipedia/en/7/77/Logo_Sunderland.svg","nottingham forest":"https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg","leeds united":"https://upload.wikimedia.org/wikipedia/en/5/54/Leeds_United_F.C._logo.svg","coventry city":"https://upload.wikimedia.org/wikipedia/en/9/94/Coventry_City_FC_logo.svg","hull city":"https://upload.wikimedia.org/wikipedia/en/5/54/Hull_City_A.F.C._logo.svg","everton":"https://upload.wikimedia.org/wikipedia/en/7/73/Everton_FC_logo.svg","crystal palace":"https://upload.wikimedia.org/wikipedia/en/0/0c/Crystal_Palace_FC_logo.svg"};
 
         let cacheEscudos = JSON.parse(localStorage.getItem('xrsports_escudos')) || {};
         cacheEscudos = { ...cacheEscudos, ...bancoDeEscudos };
 
-        /* --- TRADUTOR ATUALIZADO --- */
         function normalizarNomeParaBusca(nome) {
             let n = nome.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-rj|-sp|-mg|-rs|-pr|-sc|-ba|-ce|-go|-pe/g, "").trim();
-            const tradutor = { 
-                "wolves": "wolverhampton wanderers", "spurs": "tottenham hotspur", "psg": "paris sg", 
-                "paris saint germain": "paris sg", "nottm forest": "nottingham forest", "sheff utd": "sheffield united", 
-                "crb": "clube de regatas brasil", "vasco": "vasco da gama", "atletico-mg": "atletico mineiro", 
-                "athletico-pr": "athletico paranaense", "sport recife": "sport club do recife",
-                "gremio novorizontino": "novorizontino", "operario pr": "operario", "botafogo sp": "botafogo-sp",
-                "amazonas fc": "amazonas", "america mg": "america mineiro"
-            };
+            const tradutor = { "wolves": "wolverhampton wanderers", "spurs": "tottenham hotspur", "psg": "paris sg", "nottm forest": "nottingham forest", "sheff utd": "sheffield united", "crb": "clube de regatas brasil", "vasco": "vasco da gama", "atletico-mg": "atletico mineiro", "athletico-pr": "athletico paranaense", "sport recife": "sport club do recife" };
             if (tradutor[n]) return tradutor[n];
             return n.replace(/\butd\b/g, "united").replace(/\bfc\b/g, "").trim();
         }
@@ -323,12 +236,6 @@
             if (cacheEscudos[n]) return `<div class="escudo-container"><img src="${cacheEscudos[n]}" class="escudo-img"></div>`;
             let classeUnica = 'time-' + btoa(encodeURIComponent(n)).replace(/[^a-zA-Z0-9]/g, '');
             let nomeCorrigidoParaBusca = normalizarNomeParaBusca(nome);
-            
-            // Se o nome corrigido estiver no banco local, usa direto
-            if (bancoDeEscudos[nomeCorrigidoParaBusca]) {
-                return `<div class="escudo-container"><img src="${bancoDeEscudos[nomeCorrigidoParaBusca]}" class="escudo-img"></div>`;
-            }
-
             buscarEscudoNaInternet(nomeCorrigidoParaBusca, n, classeUnica);
             let letra = nomeCorrigidoParaBusca.substring(0, 1).toUpperCase();
             let num = 0; for (let i = 0; i < nome.length; i++) num += nome.charCodeAt(i);
@@ -362,6 +269,7 @@
         
         function fecharAdmin() { document.getElementById('tela-login').style.display = 'none'; document.getElementById('tela-admin').style.display = 'none'; document.getElementById('tela-principal').style.display = 'block'; }
         
+        // NOVO: Função para renderizar o histórico na tela de admin
         function carregarHistoricoBilhetes() {
             let container = document.getElementById('lista-historico-admin');
             if (historicoBilhetes.length === 0) {
@@ -386,6 +294,7 @@
             container.innerHTML = html;
         }
 
+        // NOVO: Função para apagar um bilhete da lista
         function apagarBilhete(pin) {
             historicoBilhetes = historicoBilhetes.filter(b => b.p !== pin);
             localStorage.setItem('xrsports_historico', JSON.stringify(historicoBilhetes));
@@ -398,7 +307,7 @@
                 document.getElementById('tela-login').style.display = 'none'; document.getElementById('tela-admin').style.display = 'block';
                 document.getElementById('user').value = ''; document.getElementById('pass').value = ''; 
                 mostrarToast("Login efetuado com sucesso!");
-                carregarHistoricoBilhetes(); 
+                carregarHistoricoBilhetes(); // Carrega a lista sempre que logar
             } else { mostrarToast("Usuário ou senha incorretos!", "erro"); }
         }
 
@@ -635,6 +544,7 @@
             let selecoesNesteJogo = carrinho.filter(c => c.idJogo === idJogo);
             let jaSelecionado = selecoesNesteJogo.find(c => c.tipoOpcao === tipoOpcao);
 
+            // NOVA LÓGICA DE BLOQUEIO DE MISTURA (AO VIVO x PRÉ-LIVE)
             if (!jaSelecionado && carrinho.length > 0) {
                 let temLiveCart = false;
                 let temPreCart = false;
@@ -733,6 +643,7 @@
                 return;
             }
 
+            // BARRADA: Validação extra para garantir que não há mistura (caso algum jogo inicie enquanto o cliente monta o bilhete)
             let temLiveCart = false;
             let temPreCart = false;
             carrinho.forEach(c => {
@@ -768,9 +679,10 @@
                 
                 let urlFinal = window.location.origin + window.location.pathname + "?b=" + btoa(encodeURIComponent(JSON.stringify(dados))) + "&v=1";
                 
+                // SALVANDO NO HISTÓRICO
                 let novoBilhete = { p: dados.p, n: dados.n, v: dados.v, o: dados.o, link: urlFinal };
-                historicoBilhetes = historicoBilhetes.filter(b => b.p !== dados.p); 
-                historicoBilhetes.unshift(novoBilhete); 
+                historicoBilhetes = historicoBilhetes.filter(b => b.p !== dados.p); // Remove se já existir (evita duplicar o mesmo PIN)
+                historicoBilhetes.unshift(novoBilhete); // Adiciona no topo da lista
                 localStorage.setItem('xrsports_historico', JSON.stringify(historicoBilhetes));
                 
                 window.location.href = urlFinal;
