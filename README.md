@@ -528,16 +528,16 @@
         function clicarNaOdd(idJogo, tituloJogo, palpite, oddAposta, tipoOpcao) {
             if(!oddAposta || oddAposta === 0) return;
 
-            // AQUI ESTÁ A CORREÇÃO: Unificando as opções no grupo 'principal'
+            // AQUI ESTÁ A CORREÇÃO: Colocamos o 1º Tempo junto com os demais Vencedores
             const gruposMercado = {
                 '1': 'principal', 'X': 'principal', '2': 'principal',
                 '1X': 'principal', '12': 'principal', 'X2': 'principal',
                 'DNBC': 'principal', 'DNBF': 'principal',
+                '1HT': 'principal', 'XHT': 'principal', '2HT': 'principal', // Adicionados aqui
                 
                 'BTTSY': 'btts', 'BTTSN': 'btts',
                 'M15': 'gols', 'N15': 'gols',
                 'M25': 'gols', 'N25': 'gols',
-                '1HT': 'ht', 'XHT': 'ht', '2HT': 'ht',
                 'HDC': 'handicap', 'HDF': 'handicap'
             };
 
