@@ -528,10 +528,12 @@
         function clicarNaOdd(idJogo, tituloJogo, palpite, oddAposta, tipoOpcao) {
             if(!oddAposta || oddAposta === 0) return;
 
+            // AQUI ESTÁ A CORREÇÃO: Unificando as opções no grupo 'principal'
             const gruposMercado = {
-                '1': 'vencedor', 'X': 'vencedor', '2': 'vencedor',
-                '1X': 'dupla', '12': 'dupla', 'X2': 'dupla',
-                'DNBC': 'dnb', 'DNBF': 'dnb',
+                '1': 'principal', 'X': 'principal', '2': 'principal',
+                '1X': 'principal', '12': 'principal', 'X2': 'principal',
+                'DNBC': 'principal', 'DNBF': 'principal',
+                
                 'BTTSY': 'btts', 'BTTSN': 'btts',
                 'M15': 'gols', 'N15': 'gols',
                 'M25': 'gols', 'N25': 'gols',
@@ -655,7 +657,7 @@
                 document.getElementById('dig-aposta').innerText = `R$ ${dados.v.toFixed(2)}`; document.getElementById('dig-odd').innerText = dados.o.toFixed(2);
                 document.getElementById('dig-retorno').innerText = (dados.v * dados.o).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
                 if (isValidado) {
-                    let selo = document.getElementById('dig-status'); selo.innerText = "✅ BILHETE VALIDADO POR RICK"; selo.classList.remove('status-pendente'); selo.classList.add('status-validado');
+                    let selo = document.getElementById('dig-status'); selo.innerText = "✅ BILHETE VALIDADO PELO CAMBISTA"; selo.classList.remove('status-pendente'); selo.classList.add('status-validado');
                     elementoData.innerText = dados.d ? `📅 Validado em: ${dados.d}` : "";
                 } else { elementoData.innerText = "⏳ Aguardando validação do cambista"; }
                 let htmlJogos = "";
