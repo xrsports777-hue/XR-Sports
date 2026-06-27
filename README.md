@@ -299,13 +299,25 @@
 
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
-        // 🚀 MOTOR DE NUVEM COM ASSINATURA (Impede alteração manual do bilhete por h4ckers)
+        // 🚀 MOTOR DE NUVEM COM ASSINATURA E JSONBLOB
         async function salvarNaNuvem(dados) {
             // Assinatura simples de segurança
-            dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`); 
+            dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`);
 
+            // Plano A: JSONBlob (Mais rápido e estável para atualizar)
+            const tentarJsonBlob = async () => {
+                let jsonReq = await fetch("https://jsonblob.com/api/jsonBlob", {
+                    method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                    body: JSON.stringify(dados)
+                });
+                if (!jsonReq.ok) throw new Error("JSONBlob falhou");
+                let blobUrl = jsonReq.headers.get("Location");
+                let id = blobUrl.split('/').pop();
+                return "BLB-" + id;
+            };
+
+            // Plano B: Restful API (Sem o fetchBlindado que travava)
             const tentarRestful = async () => {
-                let res = await fetchBlindado("https://api.restful-api.dev/objects", 6000, 2);
                 let jsonReq = await fetch("https://api.restful-api.dev/objects", {
                     method: "POST", headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ name: "XRSportsTicket", data: dados })
@@ -315,10 +327,13 @@
                 return "RST-" + json.id;
             };
 
+            // Tenta as APIs na ordem
             for (let i = 1; i <= 3; i++) {
-                try { return await tentarRestful(); } 
-                catch (erro) { if (i === 3) break; await new Promise(r => setTimeout(r, 800)); }
+                try { return await tentarJsonBlob(); } catch (e) {}
+                try { return await tentarRestful(); } catch (e) { if (i === 3) break; await new Promise(r => setTimeout(r, 800)); }
             }
+
+            // Plano C: Offline (Se a internet cair de vez)
             try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return null; }
         }
 
@@ -342,16 +357,25 @@
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            if (blobId.startsWith("OFF-")) { 
-                try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return false; } 
+            if (blobId.startsWith("OFF-")) {
+                try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return false; }
+            }
+            if (blobId.startsWith("BLB-")) {
+                let id = blobId.replace("BLB-", "");
+                try {
+                    let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`, {
+                        method: 'PUT', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(dados)
+                    });
+                    return res.ok ? blobId : false;
+                } catch(e) { return false; }
             }
             if (blobId.startsWith("RST-")) {
                 let id = blobId.replace("RST-", "");
-                try { 
-                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { 
-                        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: "XRSportsTicket", data: dados }) 
-                    }); 
-                    return res.ok ? blobId : false; 
+                try {
+                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, {
+                        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: "XRSportsTicket", data: dados })
+                    });
+                    return res.ok ? blobId : false;
                 } catch(e) { return false; }
             }
             return false;
@@ -495,6 +519,13 @@
                         historicoBilhetes.unshift(idParaHistorico);
                         localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
                     }
+
+                    // Bônus: Avisa você se o bilhete salvo for offline (OFF-)
+                    if (idParaHistorico.startsWith("OFF-")) {
+                        let linkNovo = window.location.href.split('?')[0] + "?b=" + idParaHistorico;
+                        prompt("⚠️ AVISO: Bilhete Offline! O link do cliente não atualiza sozinho. Copie o link validado abaixo e envie pra ele:", linkNovo);
+                    }
+
                     document.getElementById('codigo-recebido').value = '';
                     document.getElementById('nome-cliente-admin').value = '';
                     mostrarToast("Bilhete Validado Oficialmente!");
