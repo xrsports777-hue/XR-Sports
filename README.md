@@ -19,7 +19,7 @@
         .logo-title strong { color: var(--neon); margin-right: 4px; font-style: italic; }
         .logo-subtitle { font-size: 9px; font-weight: 800; color: var(--texto-secundario); letter-spacing: 3.5px; text-transform: uppercase; margin-top: 2px; }
         
-        .btn-sync{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda);padding:6px 12px;border-radius:8px;font-weight:700;cursor:pointer;transition:.2s;font-size:13px}.btn-sync:active{transform:scale(.95);background:var(--bg-hover)}.nav-ligas{display:flex;gap:10px;margin-top:18px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.nav-ligas::-webkit-scrollbar{display:none}.liga-btn{background:rgba(9,14,23,0.8);color:var(--texto-secundario);border:1px solid var(--borda);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:.3s}.liga-btn.ativo{background:var(--neon);color:#000;border-color:var(--neon)}#status-msg{text-align:center;padding:25px 20px;color:var(--texto-secundario);font-size:14px;margin:20px 15px;border-radius:12px;background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px dashed var(--borda);line-height:1.6}.container{padding:5px 15px;max-width:600px;margin:0 auto}.card-jogo{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--borda);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}.card-topo{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);padding-bottom:10px}.liga-tag{font-size:11px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;letter-spacing:.5px}.badge-horario{font-size:11px;font-weight:800;color:#000;background:var(--neon);padding:4px 8px;border-radius:6px}.badge-aovivo{background:rgba(255,59,59,0.15);color:var(--live);border:1px solid var(--live);animation:piscar 1.5s infinite}.badge-intervalo{background:rgba(245,166,35,0.15);color:var(--amarelo);border:1px solid var(--amarelo);animation:piscar 1.5s infinite}@keyframes piscar{0%,100%{opacity:1}50%{opacity:.5}}.placar-box{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px}.time-box{display:flex;align-items:center;gap:10px;width:40%}.time-box.visitante{flex-direction:row-reverse;text-align:right}.escudo-container{width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.escudo-img{width:100%;height:100%;object-fit:contain}.escudo-letra{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;box-shadow:inset 0 2px 5px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1)}.nome-time{font-size:14px;font-weight:800;color:var(--texto);line-height:1.2}.vs-txt{font-size:12px;font-weight:900;color:var(--texto-secundario)}.placar-live{font-size:16px;font-weight:900;color:var(--neon);background:rgba(0,255,136,0.1);padding:4px 8px;border-radius:6px;letter-spacing:1px;white-space:nowrap}.mercado-titulo{font-size:11px;color:var(--texto-secundario);font-weight:700;text-transform:uppercase;margin-bottom:-5px;margin-top:5px;text-align:center;border-top:1px dashed rgba(255,255,255,0.05);padding-top:10px}.odds-linha{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.odds-linha-dupla{display:grid;grid-template-columns:1fr 1fr;gap:8px}.odd-btn{background:rgba(9,14,23,0.6);border:1px solid var(--borda);border-radius:10px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;user-select:none}.odd-btn.selecionado{background:var(--neon);border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.2)}.odd-btn.selecionado .odd-lbl,.odd-btn.selecionado .odd-val{color:#000}.odd-lbl{font-size:10px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;margin-bottom:2px;text-align:center}.odd-val{font-size:15px;font-weight:900;color:var(--texto)}#btn-gaveta{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;width:90%;max-width:400px;padding:16px 20px;border-radius:14px;font-weight:900;font-size:15px;display:none;justify-content:space-between;align-items:center;box-shadow:0 10px 30px rgba(0,255,136,0.3);z-index:90;cursor:pointer;border:none}.badge-qtd{background:#000;color:var(--neon);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}#modal-bilhete{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;display:none;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(5px)}.bilhete-conteudo{background:rgba(18,25,39,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--borda);width:100%;max-height:85vh;border-top-left-radius:24px;border-top-right-radius:24px;padding:24px;display:flex;flex-direction:column;animation:subirTela .3s ease-out forwards}@keyframes subirTela{from{transform:translateY(100%)}to{transform:translateY(0)}}.bilhete-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--borda);padding-bottom:15px}.bilhete-titulo{font-size:20px;font-weight:900}.btn-fechar{background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:var(--texto);width:36px;height:36px;border-radius:50%;font-weight:700;cursor:pointer}.lista-palpites{overflow-y:auto;max-height:35vh;margin-bottom:15px;padding-right:5px}.palpite-item{background:rgba(9,14,23,0.6);padding:14px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--borda);border-left:4px solid var(--neon)}.palpite-jogo{font-size:12px;color:var(--texto-secundario);font-weight:700;margin-bottom:5px}.palpite-escolha{font-size:15px;font-weight:900}.palpite-odd{font-weight:900;color:var(--neon);font-size:18px}.caixa-valores{background:rgba(5,8,12,0.8);padding:18px;border-radius:16px;border:1px solid var(--borda);margin-bottom:15px}.linha-valor{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;font-weight:700;color:var(--texto-secundario)}.odd-final{color:var(--texto);font-size:18px;font-weight:900}.input-grana{width:100%;background:rgba(18,25,39,0.6);border:2px solid var(--borda);color:#fff;padding:16px;border-radius:12px;font-size:20px;font-weight:900;text-align:center;outline:0;margin-bottom:10px}.input-grana:focus{border-color:var(--neon)}.linha-retorno{display:flex;justify-content:space-between;align-items:center;margin-top:15px;font-weight:800}.retorno-verde{color:var(--neon);font-size:24px;font-weight:900}.btn-enviar-zap{width:100%;background:#25D366;color:#fff;padding:18px;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;text-transform:uppercase;margin-top:5px;box-shadow:0 4px 15px rgba(37,211,102,0.3)}.btn-apagar-tudo{background:0 0;border:none;color:var(--danger);font-size:13px;font-weight:700;margin-top:20px;width:100%;cursor:pointer;text-decoration:underline}.botao-fantasma{position:fixed;bottom:0;right:0;width:60px;height:60px;background:0 0;z-index:9999;cursor:default}#tela-login,#tela-admin{display:none;padding:25px;max-width:500px;margin:40px auto;background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}.input-admin{width:100%;padding:16px;margin-bottom:15px;background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:#fff;border-radius:8px;font-size:16px}.btn-admin{width:100%;background:var(--neon);color:#000;padding:18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:10px;font-size:16px}.btn-voltar{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda)}#tela-digital{display:none;padding:20px;max-width:500px;margin:0 auto; opacity:0; transition: opacity 0.4s ease;}.digital-card{background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;padding:20px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}.digital-header{text-align:center;border-bottom:2px dashed var(--borda);padding-bottom:15px;margin-bottom:15px}.digital-pin{font-size:28px;font-weight:900;color:var(--texto);letter-spacing:2px}.digital-status{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:900;margin-top:10px;border:1px solid transparent}
+        .btn-sync{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda);padding:6px 12px;border-radius:8px;font-weight:700;cursor:pointer;transition:.2s;font-size:13px}.btn-sync:active{transform:scale(.95);background:var(--bg-hover)}.btn-sync.bloqueado{opacity:0.5;cursor:not-allowed;color:var(--amarelo)}.nav-ligas{display:flex;gap:10px;margin-top:18px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.nav-ligas::-webkit-scrollbar{display:none}.liga-btn{background:rgba(9,14,23,0.8);color:var(--texto-secundario);border:1px solid var(--borda);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:.3s}.liga-btn.ativo{background:var(--neon);color:#000;border-color:var(--neon)}#status-msg{text-align:center;padding:25px 20px;color:var(--texto-secundario);font-size:14px;margin:20px 15px;border-radius:12px;background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px dashed var(--borda);line-height:1.6}.container{padding:5px 15px;max-width:600px;margin:0 auto}.card-jogo{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--borda);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}.card-topo{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);padding-bottom:10px}.liga-tag{font-size:11px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;letter-spacing:.5px}.badge-horario{font-size:11px;font-weight:800;color:#000;background:var(--neon);padding:4px 8px;border-radius:6px}.badge-aovivo{background:rgba(255,59,59,0.15);color:var(--live);border:1px solid var(--live);animation:piscar 1.5s infinite}.badge-intervalo{background:rgba(245,166,35,0.15);color:var(--amarelo);border:1px solid var(--amarelo);animation:piscar 1.5s infinite}@keyframes piscar{0%,100%{opacity:1}50%{opacity:.5}}.placar-box{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px}.time-box{display:flex;align-items:center;gap:10px;width:40%}.time-box.visitante{flex-direction:row-reverse;text-align:right}.escudo-container{width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.escudo-img{width:100%;height:100%;object-fit:contain}.escudo-letra{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;box-shadow:inset 0 2px 5px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1)}.nome-time{font-size:14px;font-weight:800;color:var(--texto);line-height:1.2}.vs-txt{font-size:12px;font-weight:900;color:var(--texto-secundario)}.placar-live{font-size:16px;font-weight:900;color:var(--neon);background:rgba(0,255,136,0.1);padding:4px 8px;border-radius:6px;letter-spacing:1px;white-space:nowrap}.mercado-titulo{font-size:11px;color:var(--texto-secundario);font-weight:700;text-transform:uppercase;margin-bottom:-5px;margin-top:5px;text-align:center;border-top:1px dashed rgba(255,255,255,0.05);padding-top:10px}.odds-linha{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.odds-linha-dupla{display:grid;grid-template-columns:1fr 1fr;gap:8px}.odd-btn{background:rgba(9,14,23,0.6);border:1px solid var(--borda);border-radius:10px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;user-select:none}.odd-btn.selecionado{background:var(--neon);border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.2)}.odd-btn.selecionado .odd-lbl,.odd-btn.selecionado .odd-val{color:#000}.odd-lbl{font-size:10px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;margin-bottom:2px;text-align:center}.odd-val{font-size:15px;font-weight:900;color:var(--texto)}#btn-gaveta{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;width:90%;max-width:400px;padding:16px 20px;border-radius:14px;font-weight:900;font-size:15px;display:none;justify-content:space-between;align-items:center;box-shadow:0 10px 30px rgba(0,255,136,0.3);z-index:90;cursor:pointer;border:none}.badge-qtd{background:#000;color:var(--neon);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}#modal-bilhete{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;display:none;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(5px)}.bilhete-conteudo{background:rgba(18,25,39,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--borda);width:100%;max-height:85vh;border-top-left-radius:24px;border-top-right-radius:24px;padding:24px;display:flex;flex-direction:column;animation:subirTela .3s ease-out forwards}@keyframes subirTela{from{transform:translateY(100%)}to{transform:translateY(0)}}.bilhete-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--borda);padding-bottom:15px}.bilhete-titulo{font-size:20px;font-weight:900}.btn-fechar{background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:var(--texto);width:36px;height:36px;border-radius:50%;font-weight:700;cursor:pointer}.lista-palpites{overflow-y:auto;max-height:35vh;margin-bottom:15px;padding-right:5px}.palpite-item{background:rgba(9,14,23,0.6);padding:14px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--borda);border-left:4px solid var(--neon)}.palpite-jogo{font-size:12px;color:var(--texto-secundario);font-weight:700;margin-bottom:5px}.palpite-escolha{font-size:15px;font-weight:900}.palpite-odd{font-weight:900;color:var(--neon);font-size:18px}.caixa-valores{background:rgba(5,8,12,0.8);padding:18px;border-radius:16px;border:1px solid var(--borda);margin-bottom:15px}.linha-valor{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;font-weight:700;color:var(--texto-secundario)}.odd-final{color:var(--texto);font-size:18px;font-weight:900}.input-grana{width:100%;background:rgba(18,25,39,0.6);border:2px solid var(--borda);color:#fff;padding:16px;border-radius:12px;font-size:20px;font-weight:900;text-align:center;outline:0;margin-bottom:10px}.input-grana:focus{border-color:var(--neon)}.linha-retorno{display:flex;justify-content:space-between;align-items:center;margin-top:15px;font-weight:800}.retorno-verde{color:var(--neon);font-size:24px;font-weight:900}.btn-enviar-zap{width:100%;background:#25D366;color:#fff;padding:18px;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;text-transform:uppercase;margin-top:5px;box-shadow:0 4px 15px rgba(37,211,102,0.3)}.btn-apagar-tudo{background:0 0;border:none;color:var(--danger);font-size:13px;font-weight:700;margin-top:20px;width:100%;cursor:pointer;text-decoration:underline}.botao-fantasma{position:fixed;bottom:0;right:0;width:60px;height:60px;background:0 0;z-index:9999;cursor:default}#tela-login,#tela-admin{display:none;padding:25px;max-width:500px;margin:40px auto;background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}.input-admin{width:100%;padding:16px;margin-bottom:15px;background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:#fff;border-radius:8px;font-size:16px}.btn-admin{width:100%;background:var(--neon);color:#000;padding:18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:10px;font-size:16px}.btn-voltar{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda)}#tela-digital{display:none;padding:20px;max-width:500px;margin:0 auto; opacity:0; transition: opacity 0.4s ease;}.digital-card{background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;padding:20px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}.digital-header{text-align:center;border-bottom:2px dashed var(--borda);padding-bottom:15px;margin-bottom:15px}.digital-pin{font-size:28px;font-weight:900;color:var(--texto);letter-spacing:2px}.digital-status{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:900;margin-top:10px;border:1px solid transparent}
         
         /* CORES DOS STATUS */
         .status-0{background:rgba(245,166,35,0.15);color:var(--amarelo);border-color:var(--amarelo)}
@@ -73,7 +73,7 @@
                         <div class="logo-subtitle">A Banca Premium</div>
                     </div>
                 </div>
-                <button class="btn-sync" onclick="buscarJogosNaAPI()">🔄 Atualizar</button>
+                <button class="btn-sync" id="btn-atualizar" onclick="buscarJogosNaAPI(true)">🔄 Atualizar</button>
             </div>
             <div class="nav-ligas">
                 <button class="liga-btn ativo" onclick="trocarLiga('soccer_brazil_campeonato', this)">🇧🇷 Brasileirão</button>
@@ -203,6 +203,7 @@
         let nomeLigaFoco = "🇧🇷 Brasileirão";
         let jogosCarregados = [];
         let carrinho = [];
+        let isRequisitandoAPI = false; // Lock contra spam
         
         let historicoBilhetes = JSON.parse(localStorage.getItem('xrsports_historico_links')) || [];
 
@@ -231,10 +232,38 @@
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
         // ==========================================
-        // 🚀 MOTOR DE CONCORRÊNCIA (BLINDAGEM MAX)
+        // 🚀 MOTOR DE CONCORRÊNCIA E BLINDAGEM DA API
         // ==========================================
+        
+        // Função Fetch super blindada contra rate limits e timeouts
+        async function fetchBlindado(url, retries = 3, timeoutMs = 8000) {
+            for (let i = 0; i < retries; i++) {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+                try {
+                    let res = await fetch(url, { signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    
+                    if (!res.ok) {
+                        // Se tomou erro 429 (Rate limit), espera mais antes de tentar de novo
+                        if (res.status === 429) {
+                            console.warn("⚠️ Rate Limit atingido! Pausando requisições...");
+                            await new Promise(r => setTimeout(r, 2000 * (i + 1))); 
+                            continue;
+                        }
+                        throw new Error(`Erro API: ${res.status}`);
+                    }
+                    return await res.json();
+                } catch (err) {
+                    clearTimeout(timeoutId);
+                    if (i === retries - 1) throw err; // Se falhar na ultima, devolve erro
+                    await new Promise(r => setTimeout(r, 1000 * (i + 1))); // Backoff exponencial suave
+                }
+            }
+        }
+
         async function salvarNaNuvem(dados) {
-            const fetchAPI = async (url, method, bodyStr, parseFunc) => {
+            const reqAPI = async (url, method, bodyStr, parseFunc) => {
                 const controller = new AbortController();
                 const id = setTimeout(() => controller.abort(), 6000);
                 try {
@@ -249,10 +278,9 @@
             };
 
             const jsonStr = JSON.stringify(dados);
-
-            const p1 = fetchAPI("https://api.npoint.io", "POST", jsonStr, async (r) => "NPT-" + (await r.json()).id);
-            const p2 = fetchAPI("https://jsonblob.com/api/jsonBlob", "POST", jsonStr, async (r) => "BLB-" + (r.headers.get("Location") || r.headers.get("location")).split('/').pop());
-            const p3 = fetchAPI("https://api.restful-api.dev/objects", "POST", JSON.stringify({ name: "XR", data: dados }), async (r) => "RST-" + (await r.json()).id);
+            const p1 = reqAPI("https://api.npoint.io", "POST", jsonStr, async (r) => "NPT-" + (await r.json()).id);
+            const p2 = reqAPI("https://jsonblob.com/api/jsonBlob", "POST", jsonStr, async (r) => "BLB-" + (r.headers.get("Location") || r.headers.get("location")).split('/').pop());
+            const p3 = reqAPI("https://api.restful-api.dev/objects", "POST", JSON.stringify({ name: "XR", data: dados }), async (r) => "RST-" + (await r.json()).id);
 
             try {
                 return await new Promise((resolve, reject) => {
@@ -266,9 +294,7 @@
                 console.warn("APIs bloqueadas. Gerando link local.");
                 try {
                     return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(jsonStr)));
-                } catch(err) {
-                    return null;
-                }
+                } catch(err) { return null; }
             }
         }
 
@@ -437,9 +463,6 @@
             esconderLoading();
         }
 
-        // ==========================================
-        // 🛠️ CORREÇÃO DO WHATSAPP
-        // ==========================================
         async function enviarParaAdmin() {
             let valorDep = parseFloat(document.getElementById('input-dinheiro').value);
             if(isNaN(valorDep) || valorDep < 2) { mostrarToast("O valor mínimo é R$ 2,00!", "erro"); return; }
@@ -468,8 +491,8 @@
             let placaresMap = {};
             for (let liga of ligas) {
                 try {
-                    let req = await fetch(`https://api.the-odds-api.com/v4/sports/${liga}/scores/?apiKey=${API_KEY}`);
-                    let res = await req.json();
+                    // Utilizando fetchBlindado para não dar crash na hora de verificar placar no digital
+                    let res = await fetchBlindado(`https://api.the-odds-api.com/v4/sports/${liga}/scores/?apiKey=${API_KEY}`, 2, 5000);
                     if(Array.isArray(res)) { res.forEach(s => { placaresMap[s.id] = s; }); }
                 } catch(e) {}
             }
@@ -543,22 +566,60 @@
 
         function arrumarData(dataIso) { let dt = new Date(dataIso); return `${dt.getDate().toString().padStart(2, '0')}/${(dt.getMonth() + 1).toString().padStart(2, '0')} às ${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}`; }
 
-        function trocarLiga(chave, botao) { document.querySelectorAll('.liga-btn').forEach(b => b.classList.remove('ativo')); botao.classList.add('ativo'); ligaFoco = chave; nomeLigaFoco = botao.innerText; buscarJogosNaAPI(); }
+        function trocarLiga(chave, botao) { 
+            if(isRequisitandoAPI) return; // Trava contra cliques duplos ao mudar de liga
+            document.querySelectorAll('.liga-btn').forEach(b => b.classList.remove('ativo')); 
+            botao.classList.add('ativo'); 
+            ligaFoco = chave; 
+            nomeLigaFoco = botao.innerText; 
+            buscarJogosNaAPI(); 
+        }
 
-        // --- SISTEMA DE ODDS AVANÇADO (CÁLCULO E DERRETIMENTO) ---
-        async function buscarJogosNaAPI() {
+        // --- SISTEMA DE ODDS AVANÇADO (AGORA BLINDADO COM FETCH RESILIENTE E CACHE) ---
+        async function buscarJogosNaAPI(forcarRefresh = false) {
+            if(isRequisitandoAPI) return; // Bloqueio se já estiver processando
+            isRequisitandoAPI = true;
+            
+            let btnAtt = document.getElementById('btn-atualizar');
+            btnAtt.classList.add('bloqueado');
+            btnAtt.innerText = "⏳ Aguarde...";
+
             let painelAviso = document.getElementById('status-msg');
             document.getElementById('container-jogos').innerHTML = "";
             painelAviso.style.display = "block";
             painelAviso.innerHTML = `⏳ Analisando mercados e placares ao vivo para:<br><strong style="color:var(--neon)">${nomeLigaFoco}</strong>...`;
 
+            // CACHE SYSTEM - Blinda contra excesso de uso do usuário
+            const cacheKey = `xrcache_${ligaFoco}`;
+            const cacheTimeKey = `xrcache_time_${ligaFoco}`;
+            const agora = Date.now();
+            const ultimoRefresh = localStorage.getItem(cacheTimeKey) || 0;
+
+            if (!forcarRefresh && (agora - ultimoRefresh < 20000)) { // 20 segundos de bloqueio de requisição para poupar API
+                let cacheSalvo = localStorage.getItem(cacheKey);
+                if (cacheSalvo) {
+                    jogosCarregados = JSON.parse(cacheSalvo);
+                    painelAviso.style.display = "none";
+                    processarRenderizacao(btnAtt);
+                    return;
+                }
+            }
+
             const linkOdds = `https://api.the-odds-api.com/v4/sports/${ligaFoco}/odds/?apiKey=${API_KEY}&regions=eu,us&markets=h2h,totals`;
             const linkScores = `https://api.the-odds-api.com/v4/sports/${ligaFoco}/scores/?apiKey=${API_KEY}`;
 
             try {
-                const [reqOdds, reqScores] = await Promise.all([fetch(linkOdds), fetch(linkScores)]);
-                const resOdds = await reqOdds.json(); const resScores = await reqScores.json();
-                if(resOdds.message) { painelAviso.innerHTML = `⚠️ Aviso: ${resOdds.message}`; return; }
+                // Requisições blindadas
+                const [resOdds, resScores] = await Promise.all([
+                    fetchBlindado(linkOdds, 3, 7000), 
+                    fetchBlindado(linkScores, 2, 7000)
+                ]);
+                
+                if(resOdds && resOdds.message) { 
+                    painelAviso.innerHTML = `⚠️ Aviso da API: ${resOdds.message}`; 
+                    liberarTravaAPI(btnAtt);
+                    return; 
+                }
 
                 let horaAtual = new Date(); let horaLimiteSumir = new Date(horaAtual.getTime() - (2 * 60 * 60 * 1000));
                 jogosCarregados = []; let mapaScores = {};
@@ -582,9 +643,8 @@
                     if (minutosCorridos >= 46 && minutosCorridos <= 60) { isIntervalo = true; }
 
                     let totalGols = placarCInt + placarFInt; 
-                    let isBtts = placarCInt > 0 && placarFInt > 0;
 
-                    let oddC = 0, oddE = 0, oddF = 0, oddM15 = 0, oddN15 = 0, oddM25 = 0, oddN25 = 0, oddBttsSim = 0, oddBttsNao = 0;
+                    let oddC = 0, oddE = 0, oddF = 0, oddM15 = 0, oddN15 = 0, oddM25 = 0, oddN25 = 0;
                     let oddCrtM25 = 0, oddCrtN25 = 0; 
 
                     jogo.bookmakers.forEach(bm => {
@@ -597,14 +657,13 @@
                         });
                     });
 
-                    // Sintéticas Iniciais (Gols, BTTS, Cartões)
+                    // Sintéticas Iniciais (Gols, Cartões) - REMOVIDO BTTS
                     if (oddM25 > 0 && oddM15 === 0) { let pM25 = 1 / oddM25; let pM15 = Math.min(0.95, pM25 * 1.35); oddM15 = (1 / pM15) * 0.92; oddN15 = (1 / (1-pM15)) * 0.92; }
-                    if (oddM25 > 0) { let pBttsSim = Math.min(0.88, (1 / oddM25) * 1.05); oddBttsSim = (1 / pBttsSim) * 0.92; oddBttsNao = (1 / (1 - pBttsSim)) * 0.92; } else if (oddC > 0) { oddBttsSim = 1.85 * 0.92; oddBttsNao = 1.85 * 0.92; }
                     
                     let probM25Cartoes = 0.70 + (Math.random() * 0.1); 
                     oddCrtM25 = (1 / probM25Cartoes) * 0.92; oddCrtN25 = (1 / (1 - probM25Cartoes)) * 0.92;
 
-                    // 🏆 ALGORITMO DE CORREÇÃO AO VIVO (Derretimento e Fechamento de Mercado)
+                    // 🏆 ALGORITMO DE CORREÇÃO AO VIVO (Derretimento)
                     if (isLive && minutosCorridos > 0 && minutosCorridos <= 100) {
                         let f = Math.max(0.02, (90 - minutosCorridos) / 90); 
                         let fUnder = Math.pow(f, 1.5); 
@@ -615,53 +674,68 @@
 
                         if (totalGols >= 2) { oddM15 = 0; oddN15 = 0; } else { oddN15 = 1.01 + (oddN15 - 1.01) * fUnder; oddM15 = oddM15 / f; }
                         if (totalGols >= 3) { oddM25 = 0; oddN25 = 0; } else { oddN25 = 1.01 + (oddN25 - 1.01) * fUnder; oddM25 = oddM25 / f; }
-                        if (isBtts) { oddBttsSim = 0; oddBttsNao = 0; } else { oddBttsNao = 1.01 + (oddBttsNao - 1.01) * fUnder; oddBttsSim = oddBttsSim / f; }
 
                         let cartoesSimulados = Math.floor(minutosCorridos / 25);
                         if (cartoesSimulados >= 3) { oddCrtM25 = 0; oddCrtN25 = 0; } else { oddCrtN25 = 1.01 + (oddCrtN25 - 1.01) * fUnder; oddCrtM25 = oddCrtM25 / f; }
                     } else if (isLive && minutosCorridos > 100) {
-                        oddC=0; oddE=0; oddF=0; oddM15=0; oddN15=0; oddM25=0; oddN25=0; oddBttsSim=0; oddBttsNao=0; oddCrtM25=0; oddCrtN25=0;
+                        oddC=0; oddE=0; oddF=0; oddM15=0; oddN15=0; oddM25=0; oddN25=0; oddCrtM25=0; oddCrtN25=0;
                     }
 
-                    // Dupla Chance, DNB e HT
-                    let odd1X = 0, odd12 = 0, oddX2 = 0, oddDnbCasa = 0, oddDnbFora = 0, oddC_HT = 0, oddE_HT = 0, oddF_HT = 0;
+                    // Dupla Chance e DNB - REMOVIDO HT
+                    let odd1X = 0, odd12 = 0, oddX2 = 0, oddDnbCasa = 0, oddDnbFora = 0;
                     if(oddC > 0 && oddE > 0 && oddF > 0) {
                         let probC = 1 / oddC, probE = 1 / oddE, probF = 1 / oddF;
                         odd1X = (1 / (probC + probE)) * 0.92; odd12 = (1 / (probC + probF)) * 0.92; oddX2 = (1 / (probF + probE)) * 0.92;
                         oddDnbCasa = (1 / (probC / (probC + probF))) * 0.92; oddDnbFora = (1 / (probF / (probC + probF))) * 0.92;
-                        
-                        if(minutosCorridos < 45) { oddC_HT = oddC * 1.15; oddE_HT = oddE * 0.85; oddF_HT = oddF * 1.15; }
                     }
 
-                    // 💸 CONFIGURAÇÃO DO SEU LUCRO (MARGEM DA CASA)
-                    // 0.85 significa que você corta 15% da odd original para a banca.
-                    // Se quiser lucrar mais, diminua o valor (ex: 0.80). Se quiser pagar mais, aumente (ex: 0.90).
                     const MARGEM_CASA = 0.85; 
-
-                    // Aplica a sua margem e Trava as ODDs (Mínimo 1.01 e Máximo 50.00)
                     const clampOdd = (val) => val > 0 ? Math.min(50.00, Math.max(1.01, val * MARGEM_CASA)) : 0;
 
                     odd1X = clampOdd(odd1X); odd12 = clampOdd(odd12); oddX2 = clampOdd(oddX2);
                     oddDnbCasa = clampOdd(oddDnbCasa); oddDnbFora = clampOdd(oddDnbFora);
-                    oddC_HT = clampOdd(oddC_HT); oddE_HT = clampOdd(oddE_HT); oddF_HT = clampOdd(oddF_HT);
                     oddC = clampOdd(oddC); oddE = clampOdd(oddE); oddF = clampOdd(oddF);
                     oddM15 = clampOdd(oddM15); oddN15 = clampOdd(oddN15);
                     oddM25 = clampOdd(oddM25); oddN25 = clampOdd(oddN25);
-                    oddBttsSim = clampOdd(oddBttsSim); oddBttsNao = clampOdd(oddBttsNao);
                     oddCrtM25 = clampOdd(oddCrtM25); oddCrtN25 = clampOdd(oddCrtN25);
 
                     if(oddC > 0 || oddM25 > 0) {
                         jogosCarregados.push({
-                            id: jogo.id, casa: jogo.home_team, fora: jogo.away_team, oddC, oddE, oddF, odd1X, odd12, oddX2, oddDnbCasa, oddDnbFora, oddBttsSim, oddBttsNao, oddM15, oddN15, oddM25, oddN25, oddC_HT, oddE_HT, oddF_HT, oddCrtM25, oddCrtN25, dataCrua: horaDoJogo, dataVisual: arrumarData(jogo.commence_time), isLive, isIntervalo, minutosCorridos, placarC, placarF
+                            id: jogo.id, casa: jogo.home_team, fora: jogo.away_team, oddC, oddE, oddF, odd1X, odd12, oddX2, oddDnbCasa, oddDnbFora, oddM15, oddN15, oddM25, oddN25, oddCrtM25, oddCrtN25, dataCrua: horaDoJogo, dataVisual: arrumarData(jogo.commence_time), isLive, isIntervalo, minutosCorridos, placarC, placarF
                         });
                     }
                 });
 
-                if(jogosCarregados.length === 0) { painelAviso.innerHTML = `⚽ Mercado Fechado para ${nomeLigaFoco}.`; return; }
-                jogosCarregados.sort((a, b) => a.dataCrua - b.dataCrua); painelAviso.style.display = "none";
-                let idsVivos = jogosCarregados.map(j => j.id); carrinho = carrinho.filter(c => idsVivos.includes(c.idJogo));
-                salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
-            } catch (erro) { painelAviso.innerHTML = `❌ Erro de conexão. Verifique sua internet.`; }
+                if(jogosCarregados.length === 0) { 
+                    painelAviso.innerHTML = `⚽ Mercado Fechado para ${nomeLigaFoco}.`; 
+                    liberarTravaAPI(btnAtt);
+                    return; 
+                }
+
+                // Salvar em cache
+                localStorage.setItem(cacheKey, JSON.stringify(jogosCarregados));
+                localStorage.setItem(cacheTimeKey, Date.now());
+
+                painelAviso.style.display = "none";
+                processarRenderizacao(btnAtt);
+                
+            } catch (erro) { 
+                painelAviso.innerHTML = `❌ Erro crítico de rede. Nossos servidores tentaram 3 vezes sem sucesso. Verifique sua conexão.`;
+                liberarTravaAPI(btnAtt);
+            }
+        }
+
+        function processarRenderizacao(btnAtt) {
+            jogosCarregados.sort((a, b) => a.dataCrua - b.dataCrua); 
+            let idsVivos = jogosCarregados.map(j => j.id); carrinho = carrinho.filter(c => idsVivos.includes(c.idJogo));
+            salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
+            liberarTravaAPI(btnAtt);
+        }
+
+        function liberarTravaAPI(btnAtt) {
+            isRequisitandoAPI = false;
+            btnAtt.classList.remove('bloqueado');
+            btnAtt.innerText = "🔄 Atualizar";
         }
 
         function pintarJogosNaTela() {
@@ -685,10 +759,6 @@
                 let btnDNBF = j.oddDnbFora > 0 ? `<div class="odd-btn" id="btn-${j.id}-DNBF" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora} (DNB)', ${j.oddDnbFora}, 'DNBF')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddDnbFora.toFixed(2)}</span></div>` : "";
                 let blocoDnb = (btnDNBC || btnDNBF) ? `<div class="mercado-titulo">Empate Anula</div><div class="odds-linha-dupla">${btnDNBC}${btnDNBF}</div>` : "";
 
-                let btnBttsY = j.oddBttsSim > 0 ? `<div class="odd-btn" id="btn-${j.id}-BTTSY" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Ambas - Sim', ${j.oddBttsSim}, 'BTTSY')"><span class="odd-lbl">Sim</span><span class="odd-val">${j.oddBttsSim.toFixed(2)}</span></div>` : "";
-                let btnBttsN = j.oddBttsNao > 0 ? `<div class="odd-btn" id="btn-${j.id}-BTTSN" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Ambas - Não', ${j.oddBttsNao}, 'BTTSN')"><span class="odd-lbl">Não</span><span class="odd-val">${j.oddBttsNao.toFixed(2)}</span></div>` : "";
-                let blocoBtts = (btnBttsY || btnBttsN) ? `<div class="mercado-titulo">Ambas Marcam</div><div class="odds-linha-dupla">${btnBttsY}${btnBttsN}</div>` : "";
-
                 let botoesGols = ((j.oddM15 > 0) ? `<div class="odd-btn" id="btn-${j.id}-M15" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 1.5 Gols', ${j.oddM15}, 'M15')"><span class="odd-lbl">+ 1.5 Gols</span><span class="odd-val">${j.oddM15.toFixed(2)}</span></div>` : "") +
                                  ((j.oddN15 > 0) ? `<div class="odd-btn" id="btn-${j.id}-N15" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 1.5 Gols', ${j.oddN15}, 'N15')"><span class="odd-lbl">- 1.5 Gols</span><span class="odd-val">${j.oddN15.toFixed(2)}</span></div>` : "") +
                                  ((j.oddM25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-M25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 2.5 Gols', ${j.oddM25}, 'M25')"><span class="odd-lbl">+ 2.5 Gols</span><span class="odd-val">${j.oddM25.toFixed(2)}</span></div>` : "") +
@@ -699,12 +769,7 @@
                                     ((j.oddCrtN25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-CN25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 2.5 Cartões', ${j.oddCrtN25}, 'CN25')"><span class="odd-lbl">- 2.5</span><span class="odd-val">${j.oddCrtN25.toFixed(2)}</span></div>` : "");
                 let blocoCartoes = botoesCartoes !== "" ? `<div class="mercado-titulo">Cartões Amarelos</div><div class="odds-linha-dupla">${botoesCartoes}</div>` : "";
 
-                let btn1HT = j.oddC_HT > 0 ? `<div class="odd-btn" id="btn-${j.id}-1HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa} (1ºT)', ${j.oddC_HT}, '1HT')"><span class="odd-lbl">Casa</span><span class="odd-val">${j.oddC_HT.toFixed(2)}</span></div>` : "";
-                let btnXHT = j.oddE_HT > 0 ? `<div class="odd-btn" id="btn-${j.id}-XHT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Empate (1ºT)', ${j.oddE_HT}, 'XHT')"><span class="odd-lbl">Empate</span><span class="odd-val">${j.oddE_HT.toFixed(2)}</span></div>` : "";
-                let btn2HT = j.oddF_HT > 0 ? `<div class="odd-btn" id="btn-${j.id}-2HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora} (1ºT)', ${j.oddF_HT}, '2HT')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddF_HT.toFixed(2)}</span></div>` : "";
-                let blocoHT = (btn1HT || btnXHT || btn2HT) ? `<div class="mercado-titulo">Vencedor - 1º Tempo</div><div class="odds-linha">${btn1HT}${btnXHT}${btn2HT}</div>` : "";
-
-                htmlHTML += `<div class="card-jogo"><div class="card-topo"><span class="liga-tag">${nomeLigaFoco}</span>${badgeDaHora}</div><div class="placar-box"><div class="time-box">${desenharEscudo(j.casa)}<span class="nome-time">${j.casa}</span></div>${centroPlacar}<div class="time-box visitante">${desenharEscudo(j.fora)}<span class="nome-time">${j.fora}</span></div></div>${bloco1X2}${blocoHT}${blocoDuchance}${blocoDnb}${blocoBtts}${blocoGols}${blocoCartoes}</div>`;
+                htmlHTML += `<div class="card-jogo"><div class="card-topo"><span class="liga-tag">${nomeLigaFoco}</span>${badgeDaHora}</div><div class="placar-box"><div class="time-box">${desenharEscudo(j.casa)}<span class="nome-time">${j.casa}</span></div>${centroPlacar}<div class="time-box visitante">${desenharEscudo(j.fora)}<span class="nome-time">${j.fora}</span></div></div>${bloco1X2}${blocoDuchance}${blocoDnb}${blocoGols}${blocoCartoes}</div>`;
             });
             document.getElementById('container-jogos').innerHTML = htmlHTML;
             carrinho.forEach(c => { let b = document.getElementById(`btn-${c.idJogo}-${c.tipoOpcao}`); if(b) b.classList.add('selecionado'); });
@@ -714,7 +779,8 @@
             if(!oddAposta || oddAposta === 0) return;
             let jogoAtual = jogosCarregados.find(j => j.id === idJogo);
             
-            const gruposMercado = { '1': 'pr', 'X': 'pr', '2': 'pr', '1X': 'pr', '12': 'pr', 'X2': 'pr', 'DNBC': 'pr', 'DNBF': 'pr', '1HT': 'pr', 'XHT': 'pr', '2HT': 'pr', 'BTTSY': 'bt', 'BTTSN': 'bt', 'M15': 'go', 'N15': 'go', 'M25': 'go', 'N25': 'go', 'CM25': 'ca', 'CN25': 'ca' };
+            // Removidos os mapeamentos HT e BTTS
+            const gruposMercado = { '1': 'pr', 'X': 'pr', '2': 'pr', '1X': 'pr', '12': 'pr', 'X2': 'pr', 'DNBC': 'pr', 'DNBF': 'pr', 'M15': 'go', 'N15': 'go', 'M25': 'go', 'N25': 'go', 'CM25': 'ca', 'CN25': 'ca' };
             let meuGrupo = gruposMercado[tipoOpcao]; let selecoesNesteJogo = carrinho.filter(c => c.idJogo === idJogo); let jaSelecionado = selecoesNesteJogo.find(c => c.tipoOpcao === tipoOpcao);
 
             if (!jaSelecionado && carrinho.length > 0) {
