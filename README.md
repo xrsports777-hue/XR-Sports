@@ -195,22 +195,38 @@
     </div>
 
     <script>
-        // 🛡️ SISTEMA DE RODÍZIO DE CHAVES (API KEY ROTATION)
-        const CHAVES_API = [
-            "35b7c848a056df19f4e0d58f7a4f32f7", // Chave 1
-            "4d278614388b45ec493b9c2878b52c80", // Chave 2
-            "1667bc4070985e32d4e9c97c51cb02b9"  // Chave 3
+        // 🛡️ SISTEMA DE BLINDAGEM E OFUSCAÇÃO DE API (NÍVEL FRONTEND)
+        const _0xShieldKeys = [
+            atob("MzViN2M4NDhhMDU2ZGYxOWY0ZTBkNThmN2E0ZjMyZjc="), 
+            atob("NGQyNzg2MTQzODhiNDVlYzQ5M2I5YzI4NzhiNTJjODA="), 
+            atob("MTY2N2JjNDA3MDk4NWUzMmQ0ZTljOTdjNTFjYjAyYjk=")  
         ];
         
         let indiceChave = 0;
-        let API_KEY = CHAVES_API[indiceChave];
+        let API_KEY = _0xShieldKeys[indiceChave];
         const NUMERO_WHATSAPP = "5582993729095"; 
+
+        // 🛡️ ANTI-SPAM DE REQUISIÇÕES (Rate Limiter Local)
+        function permissaoParaChamarAPI() {
+            const ultimoAcesso = localStorage.getItem('xrsports_firewall_timer');
+            const agora = new Date().getTime();
+            const COOLDOWN_MS = 12000; 
+            
+            if (ultimoAcesso && (agora - parseInt(ultimoAcesso)) < COOLDOWN_MS) {
+                return false;
+            }
+            return true;
+        }
+
+        function registrarChamadaAPI() {
+            localStorage.setItem('xrsports_firewall_timer', new Date().getTime().toString());
+        }
 
         function trocarChaveAPI() {
             indiceChave++;
-            if (indiceChave < CHAVES_API.length && CHAVES_API[indiceChave].length > 20) {
-                API_KEY = CHAVES_API[indiceChave];
-                console.log("🔄 Chave esgotada! Trocando para a chave: " + (indiceChave + 1));
+            if (indiceChave < _0xShieldKeys.length && _0xShieldKeys[indiceChave].length > 20) {
+                API_KEY = _0xShieldKeys[indiceChave];
+                console.warn("🛡️ Firewall: Rotação de chaves ativada (" + (indiceChave + 1) + ")");
                 return true;
             }
             return false;
@@ -247,74 +263,77 @@
 
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
-        // 🛡️ NÍVEL MÁXIMO DE BLINDAGEM: Motor de concorrência com Auto-Retry
+        // 🚀 MOTOR DE NUVEM BLINDADO 3.0 (Otimizado para iPhone/Safari - Fim do link gigante)
         async function salvarNaNuvem(dados) {
-            const fetchAPI = async (url, method, bodyStr, parseFunc) => {
-                const controller = new AbortController();
-                const id = setTimeout(() => controller.abort(), 8000); // Timeout generoso de 8s
-                
-                // Sistema de auto-cura: Tenta até 3 vezes por servidor se houver falha leve
-                for(let tentativa = 1; tentativa <= 3; tentativa++) {
-                    try {
-                        let res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: bodyStr, signal: controller.signal });
-                        if (res.ok) {
-                            clearTimeout(id);
-                            return await parseFunc(res);
-                        }
-                    } catch (e) {
-                        if (tentativa === 3) {
-                            clearTimeout(id);
-                            throw e; // Desiste deste servidor na 3ª falha
-                        }
-                    }
-                    await new Promise(r => setTimeout(r, 800)); // Espera 800ms antes de tentar de novo
-                }
+            const tentarRestful = async () => {
+                let res = await fetch("https://api.restful-api.dev/objects", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name: "XRSportsTicket", data: dados })
+                });
+                if (!res.ok) throw new Error("Restful API falhou");
+                let json = await res.json();
+                return "RST-" + json.id;
             };
 
-            const jsonStr = JSON.stringify(dados);
-            const p1 = fetchAPI("https://api.npoint.io", "POST", jsonStr, async (r) => "NPT-" + (await r.json()).id);
-            const p2 = fetchAPI("https://jsonblob.com/api/jsonBlob", "POST", jsonStr, async (r) => "BLB-" + (r.headers.get("Location") || r.headers.get("location")).split('/').pop());
-            const p3 = fetchAPI("https://api.restful-api.dev/objects", "POST", JSON.stringify({ name: "XR", data: dados }), async (r) => "RST-" + (await r.json()).id);
-
-            try {
-                return await new Promise((resolve, reject) => {
-                    let erros = 0;
-                    const checarErro = () => { erros++; if (erros === 3) reject(new Error("Todas falharam")); };
-                    p1.then(resolve).catch(checarErro);
-                    p2.then(resolve).catch(checarErro);
-                    p3.then(resolve).catch(checarErro);
-                });
-            } catch (e) {
-                console.warn("🛡️ APIs bloqueadas ou rede oscilando. Acionando cofre offline criptografado.");
+            // Tenta 4 vezes salvar na nuvem com intervalos (Resolve oscilação de 3G/4G e Safari)
+            for (let i = 1; i <= 4; i++) {
                 try {
-                    return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(jsonStr)));
-                } catch(err) {
-                    return null;
+                    return await tentarRestful();
+                } catch (erro) {
+                    if (i === 4) break; 
+                    await new Promise(r => setTimeout(r, 800)); // Espera 800ms e tenta de novo
                 }
             }
+
+            // Fallback extremo: Apenas se o celular do cliente estiver totalmente sem internet
+            try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return null; }
         }
 
         async function lerDaNuvem(blobId) {
             if (!blobId) return null;
-            if (blobId.startsWith("OFF-")) { try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } catch(e) { return null; } }
+            
+            // Lendo Modo Sobrevivência (Link gigante)
+            if (blobId.startsWith("OFF-")) { 
+                try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } 
+                catch(e) { return null; } 
+            }
+            
+            // Lendo Nuvem Oficial (Link curto)
             if (blobId.startsWith("RST-")) {
                 let id = blobId.replace("RST-", "");
-                try { let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { headers: fetchHeaders }); if(res.ok) { let json = await res.json(); return json.data; } } catch(e) {}
-                return null;
+                try { 
+                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { headers: fetchHeaders }); 
+                    if (res.ok) { let json = await res.json(); return json.data; } 
+                } catch(e) { console.error("Erro ao ler da nuvem"); }
             }
-            let finalId = blobId.replace("BLB-", "");
-            try { let res = await fetch(`https://jsonblob.com/api/jsonBlob/${finalId}`, { headers: fetchHeaders }); if(res.ok) return await res.json(); } catch(e) {}
+
+            // Mantendo a compatibilidade para não quebrar bilhetes antigos no seu painel admin
+            if (blobId.startsWith("BLB-")) {
+                let id = blobId.replace("BLB-", "");
+                try { let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`, { headers: fetchHeaders }); if(res.ok) return await res.json(); } catch(e) {}
+            }
             return null;
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            if (blobId.startsWith("OFF-")) { try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return false; } }
+            if (blobId.startsWith("OFF-")) { 
+                try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } 
+                catch(e) { return false; } 
+            }
+            
             if (blobId.startsWith("RST-")) {
                 let id = blobId.replace("RST-", "");
-                try { let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: "XRSportsTicket", data: dados }) }); return res.ok ? blobId : false; } catch(e) { return false; }
+                try { 
+                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { 
+                        method: 'PUT', 
+                        headers: { 'Content-Type': 'application/json' }, 
+                        body: JSON.stringify({ name: "XRSportsTicket", data: dados }) 
+                    }); 
+                    return res.ok ? blobId : false; 
+                } catch(e) { return false; }
             }
-            let finalId = blobId.replace("BLB-", "");
-            try { let res = await fetch(`https://jsonblob.com/api/jsonBlob/${finalId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) }); return res.ok ? blobId : false; } catch(e) { return false; }
+            return false;
         }
 
         function salvarCarrinho() { localStorage.setItem('xrsports_carrinho', JSON.stringify(carrinho)); }
@@ -565,9 +584,14 @@
         function trocarLiga(chave, botao) { document.querySelectorAll('.liga-btn').forEach(b => b.classList.remove('ativo')); botao.classList.add('ativo'); ligaFoco = chave; nomeLigaFoco = botao.innerText; buscarJogosNaAPI(); }
 
         function forcarAtualizacao() {
+            if (!permissaoParaChamarAPI()) {
+                mostrarToast("🛡️ Proteção anti-spam ativa. Aguarde alguns segundos para atualizar novamente.", "erro");
+                return;
+            }
+            
             localStorage.removeItem(`xrsports_cache_${ligaFoco}`);
             buscarJogosNaAPI();
-            mostrarToast("Atualizando dados da liga...");
+            mostrarToast("Buscando dados mais recentes...");
         }
 
         // 🛡️ MOTOR DE JOGOS + SMART CACHE 2.0 (ECONOMIA DE API) + MODO SOBREVIVÊNCIA
@@ -610,6 +634,7 @@
                         fetch(linkOdds, { signal: controller.signal }), 
                         fetch(linkScores, { signal: controller.signal })
                     ]);
+                    registrarChamadaAPI();
                     clearTimeout(timeoutId);
                     
                     if (reqOdds.status === 401 || reqOdds.status === 429 || reqScores.status === 401 || reqScores.status === 429) {
