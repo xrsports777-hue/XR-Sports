@@ -212,7 +212,7 @@
     </div>
 
     <script>
-        // 🛡️ SISTEMA DE BLINDAGEM E OFUSCAÇÃO DE API (NÍVEL FRONTEND)
+        // 🛡️ SISTEMA DE BLINDAGEM E OFUSCAÇÃO DE API
         const _0xShieldKeys = [
             atob("MzViN2M4NDhhMDU2ZGYxOWY0ZTBkNThmN2E0ZjMyZjc="), 
             atob("NGQyNzg2MTQzODhiNDVlYzQ5M2I5YzI4NzhiNTJjODA="), 
@@ -222,9 +222,8 @@
         let indiceChave = 0;
         let API_KEY = _0xShieldKeys[indiceChave];
         const NUMERO_WHATSAPP = "5582993729095"; 
-        const COOLDOWN_MS = 15000; // 15 Segundos de Proteção DDoS Front
+        const COOLDOWN_MS = 15000;
 
-        // 🛡️ ANTI-SPAM DE REQUISIÇÕES COM COOLDOWN VISUAL
         function permissaoParaChamarAPI() {
             const ultimoAcesso = localStorage.getItem('xrsports_firewall_timer');
             const agora = new Date().getTime();
@@ -242,13 +241,11 @@
             indiceChave++;
             if (indiceChave < _0xShieldKeys.length && _0xShieldKeys[indiceChave].length > 20) {
                 API_KEY = _0xShieldKeys[indiceChave];
-                console.warn("🛡️ Firewall: Rotação de chaves ativada (" + (indiceChave + 1) + ")");
                 return true;
             }
             return false;
         }
 
-        // 🛡️ FETCH COM TIMEOUT E EXPONENTIAL BACKOFF (Aumenta a resiliência de rede)
         async function fetchBlindado(url, timeoutMs = 8000, maxRetries = 2) {
             for (let i = 0; i <= maxRetries; i++) {
                 try {
@@ -263,7 +260,7 @@
                     return response;
                 } catch (erro) {
                     if (i === maxRetries) throw erro;
-                    await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i))); // Espera 1s, depois 2s se falhar
+                    await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i))); 
                 }
             }
         }
@@ -272,7 +269,6 @@
         let nomeLigaFoco = "🇧🇷 Brasileirão";
         let jogosCarregados = [];
         let carrinho = [];
-        
         let historicoBilhetes = JSON.parse(localStorage.getItem('xrsports_historico_links')) || [];
 
         let clicksAdmin = 0; let timerAdmin;
@@ -299,43 +295,43 @@
 
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
-        // 🚀 MOTOR DE NUVEM 100% ONLINE (SEM MODO OFFLINE)
+        // 🚀 MOTOR DE NUVEM 100% BLINDADO CONTRA OSCILAÇÕES DE REDE
         async function salvarNaNuvem(dados) {
-            // Assinatura simples de segurança
             dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`); 
 
-            // Tenta o JSONBlob primeiro (Muito rápido e estável)
-            try {
-                let res = await fetch("https://jsonblob.com/api/jsonBlob", {
-                    method: "POST", 
-                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                    body: JSON.stringify(dados)
-                });
-                if (res.ok) {
-                    let location = res.headers.get("Location");
-                    if (location) {
-                        let parts = location.split('/');
-                        return "BLB-" + parts[parts.length - 1];
-                    }
-                }
-            } catch(e) { console.warn("JSONBlob falhou, tentando servidor secundário..."); }
-
-            // Tenta o Restful API como salva-vidas
+            // TENTATIVA 1: RESTFUL (A mais forte, tenta 3 vezes)
             for (let i = 1; i <= 3; i++) {
                 try {
-                    let jsonReq = await fetch("https://api.restful-api.dev/objects", {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 6000);
+                    let req = await fetch("https://api.restful-api.dev/objects", {
                         method: "POST", headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ name: "XRSportsTicket", data: dados })
+                        body: JSON.stringify({ name: "XRSportsTicket", data: dados }),
+                        signal: controller.signal
                     });
-                    if (jsonReq.ok) {
-                        let json = await jsonReq.json();
-                        return "RST-" + json.id;
-                    }
-                } catch (erro) { if (i === 3) break; await new Promise(r => setTimeout(r, 800)); }
+                    clearTimeout(timeoutId);
+                    if (req.ok) { let json = await req.json(); return "RST-" + json.id; }
+                } catch(e) { await new Promise(r => setTimeout(r, 1000)); }
             }
-            
-            // Se as duas nuvens caírem, retorna nulo para dar erro e não gerar link fantasma
-            return null;
+
+            // TENTATIVA 2: JSONBLOB (Secundária, tenta 2 vezes)
+            for (let i = 1; i <= 2; i++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 6000);
+                    let req = await fetch("https://jsonblob.com/api/jsonBlob", {
+                        method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                        body: JSON.stringify(dados),
+                        signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+                    if (req.ok) {
+                        let loc = req.headers.get("Location");
+                        if (loc) { let parts = loc.split('/'); return "BLB-" + parts[parts.length - 1]; }
+                    }
+                } catch(e) { await new Promise(r => setTimeout(r, 1000)); }
+            }
+            return null; // Apenas se a internet da pessoa cair completamente por 20 segundos
         }
 
         async function lerDaNuvem(blobId) {
@@ -343,42 +339,43 @@
             if (blobId.startsWith("OFF-")) { 
                 try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } catch(e) { return null; } 
             }
-            if (blobId.startsWith("RST-")) {
-                let id = blobId.replace("RST-", "");
-                try { 
-                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { headers: fetchHeaders }); 
-                    if (res.ok) { let json = await res.json(); return json.data; } 
-                } catch(e) { console.error("Erro ao ler da nuvem"); }
-            }
-            if (blobId.startsWith("BLB-")) {
-                let id = blobId.replace("BLB-", "");
-                try { let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`, { headers: fetchHeaders }); if(res.ok) return await res.json(); } catch(e) {}
+            
+            let id = blobId.substring(4);
+            let isRST = blobId.startsWith("RST-");
+            let url = isRST ? `https://api.restful-api.dev/objects/${id}` : `https://jsonblob.com/api/jsonBlob/${id}`;
+
+            for(let i=1; i<=3; i++) {
+                try {
+                    let res = await fetch(url, { headers: fetchHeaders });
+                    if (res.ok) {
+                        let json = await res.json();
+                        return isRST ? json.data : json;
+                    }
+                } catch(e) { await new Promise(r => setTimeout(r, 1000)); }
             }
             return null;
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            if (blobId.startsWith("OFF-")) { 
-                mostrarToast("Erro: Esse é um link antigo offline. Peça pro cliente gerar outro.", "erro");
-                return false; 
-            }
-            if (blobId.startsWith("BLB-")) {
-                let id = blobId.replace("BLB-", "");
-                try { 
-                    let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`, { 
-                        method: 'PUT', headers: { 'Content-Type': 'application/json', "Accept": "application/json" }, body: JSON.stringify(dados) 
-                    }); 
-                    return res.ok ? blobId : false; 
-                } catch(e) { return false; }
-            }
-            if (blobId.startsWith("RST-")) {
-                let id = blobId.replace("RST-", "");
-                try { 
-                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { 
-                        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: "XRSportsTicket", data: dados }) 
-                    }); 
-                    return res.ok ? blobId : false; 
-                } catch(e) { return false; }
+            if (!blobId) return false;
+            if (blobId.startsWith("OFF-")) { mostrarToast("Erro: Esse é um link offline antigo.", "erro"); return false; }
+            
+            let id = blobId.substring(4);
+            let isRST = blobId.startsWith("RST-");
+            let url = isRST ? `https://api.restful-api.dev/objects/${id}` : `https://jsonblob.com/api/jsonBlob/${id}`;
+            let bodyPayload = isRST ? JSON.stringify({ name: "XRSportsTicket", data: dados }) : JSON.stringify(dados);
+
+            for (let i = 1; i <= 3; i++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 6000);
+                    let res = await fetch(url, { 
+                        method: 'PUT', headers: { 'Content-Type': 'application/json', "Accept": "application/json" }, 
+                        body: bodyPayload, signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+                    if (res.ok) return blobId;
+                } catch(e) { await new Promise(r => setTimeout(r, 1000)); }
             }
             return false;
         }
@@ -386,8 +383,46 @@
         function salvarCarrinho() { localStorage.setItem('xrsports_carrinho', JSON.stringify(carrinho)); }
         function carregarCarrinho() { let salvo = localStorage.getItem('xrsports_carrinho'); if(salvo) carrinho = JSON.parse(salvo); }
 
-        const bancoDeEscudos={"brazil":"https://upload.wikimedia.org/wikipedia/pt/2/2b/Confedera%C3%A7%C3%A3o_Brasileira_de_Futebol_2019.svg","flamengo":"https://upload.wikimedia.org/wikipedia/commons/2/2e/Flamengo_braz_logo.svg","palmeiras":"https://upload.wikimedia.org/wikipedia/commons/1/10/Palmeiras_logo.svg","corinthians":"https://upload.wikimedia.org/wikipedia/pt/b/b4/Corinthians_simbolo.png","são paulo":"https://upload.wikimedia.org/wikipedia/commons/2/2b/S%C3%A3o_Paulo_Futebol_Clube.svg","fluminense":"https://upload.wikimedia.org/wikipedia/pt/a/a3/Fluminense_FC_escudo.png","crb":"https://upload.wikimedia.org/wikipedia/commons/6/64/CRB_logo.svg","arsenal":"https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg","manchester city":"https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg"};
-        let cacheEscudos = JSON.parse(localStorage.getItem('xrsports_escudos')) || {}; cacheEscudos = { ...cacheEscudos, ...bancoDeEscudos };
+        // 🛡️ NOVO BANCO DE ESCUDOS PREMIUM (Com as maiores equipes e seleções)
+        const bancoDeEscudos = {
+            "brazil": "https://upload.wikimedia.org/wikipedia/pt/2/2b/Confedera%C3%A7%C3%A3o_Brasileira_de_Futebol_2019.svg",
+            "flamengo": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Flamengo_braz_logo.svg",
+            "palmeiras": "https://upload.wikimedia.org/wikipedia/commons/1/10/Palmeiras_logo.svg",
+            "corinthians": "https://upload.wikimedia.org/wikipedia/pt/b/b4/Corinthians_simbolo.png",
+            "sao paulo": "https://upload.wikimedia.org/wikipedia/commons/2/2b/S%C3%A3o_Paulo_Futebol_Clube.svg",
+            "fluminense": "https://upload.wikimedia.org/wikipedia/pt/a/a3/Fluminense_FC_escudo.png",
+            "botafogo": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Escudo_Botafogo.svg",
+            "santos": "https://upload.wikimedia.org/wikipedia/commons/3/35/Santos_logo.svg",
+            "vasco da gama": "https://upload.wikimedia.org/wikipedia/pt/a/ac/CRVascodaGama.png",
+            "cruzeiro": "https://upload.wikimedia.org/wikipedia/commons/9/90/Cruzeiro_Esporte_Clube_%28logo%29.svg",
+            "atletico mineiro": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Atletico_mineiro_galo.png",
+            "gremio": "https://upload.wikimedia.org/wikipedia/commons/a/ac/Escudo_do_Gremio.svg",
+            "internacional": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Escudo_do_Sport_Club_Internacional.svg",
+            "bahia": "https://upload.wikimedia.org/wikipedia/pt/9/90/ECBahia.png",
+            "fortaleza": "https://upload.wikimedia.org/wikipedia/commons/2/29/Fortaleza_Esporte_Clube_logo.svg",
+            "athletico paranaense": "https://upload.wikimedia.org/wikipedia/commons/b/b3/CA_Paranaense.svg",
+            "sport club do recife": "https://upload.wikimedia.org/wikipedia/pt/1/1a/Sport_Club_do_Recife.png",
+            "vitoria": "https://upload.wikimedia.org/wikipedia/pt/4/4e/Esporte_Clube_Vit%C3%B3ria_logo.png",
+            "clube de regatas brasil": "https://upload.wikimedia.org/wikipedia/commons/6/64/CRB_logo.svg",
+            "ceara": "https://upload.wikimedia.org/wikipedia/commons/4/43/Ceara_Sporting_Club_logo.svg",
+            "arsenal": "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
+            "manchester city": "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg",
+            "real madrid": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+            "barcelona": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg",
+            "psg": "https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg",
+            "bayern munich": "https://upload.wikimedia.org/wikipedia/commons/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg",
+            "liverpool": "https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg",
+            "croatia": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Croatia.svg",
+            "ghana": "https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Ghana.svg",
+            "panama": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Flag_of_Panama.svg",
+            "england": "https://upload.wikimedia.org/wikipedia/en/b/be/Flag_of_England.svg",
+            "colombia": "https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Colombia.svg",
+            "portugal": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Portugal.svg",
+            "jordan": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg",
+            "argentina": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg"
+        };
+        let cacheEscudos = JSON.parse(localStorage.getItem('xrsports_escudos')) || {}; 
+        cacheEscudos = { ...cacheEscudos, ...bancoDeEscudos };
 
         function normalizarNomeParaBusca(nome) {
             let n = nome.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/-rj|-sp|-mg|-rs|-pr|-sc|-ba|-ce|-go|-pe/g, "").trim();
@@ -396,9 +431,9 @@
         }
 
         function desenharEscudo(nome) {
-            let n = nome.trim().toLowerCase();
+            let n = normalizarNomeParaBusca(nome);
             if (cacheEscudos[n]) return `<div class="escudo-container"><img src="${cacheEscudos[n]}" class="escudo-img"></div>`;
-            let letra = normalizarNomeParaBusca(nome).substring(0, 1).toUpperCase();
+            let letra = n.substring(0, 1).toUpperCase();
             let cores = ["#ef4444", "#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
             let num = 0; for (let i = 0; i < nome.length; i++) num += nome.charCodeAt(i);
             return `<div class="escudo-container"><div class="escudo-letra" style="background:${cores[num % cores.length]}">${letra}</div></div>`;
@@ -450,7 +485,6 @@
                     let retorno = (b.v * b.o).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
                     let stsTxt = "⏳ Aguardando"; let corB = "var(--amarelo)";
                     
-                    // Validação Criptográfica Básica no Admin
                     let isValidHash = b.hash === btoa(`${b.v}-${b.o}-${b.p}`);
                     let iconeAlerta = isValidHash ? "" : " ⚠️ ALERTA DE FRAUDE";
 
@@ -546,7 +580,7 @@
                 let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
                 window.location.href = `https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`;
             } else { 
-                mostrarToast("Erro Crítico de Conexão. Tente novamente.", "erro"); 
+                mostrarToast("Sua conexão falhou. Tente novamente em alguns segundos.", "erro"); 
             }
         }
 
@@ -604,11 +638,20 @@
             let htmlJogos = "";
             let ligasBilhete = [];
             
+            const miniEscudo = (nome) => desenharEscudo(nome).replace(/36px/g, '22px').replace(/13px/g, '10px');
+
             dados.j.forEach(jogo => { 
                 if(jogo.liga && !ligasBilhete.includes(jogo.liga)) ligasBilhete.push(jogo.liga);
                 
+                let times = jogo.tituloJogo.split(' x ');
+                let escudoCasa = times.length > 0 ? miniEscudo(times[0]) : '';
+                let escudoFora = times.length > 1 ? miniEscudo(times[1]) : '';
+
                 htmlJogos += `<div style="background: rgba(9, 14, 23, 0.6); padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--neon);">
-                    <div style="font-size: 11px; color: var(--texto-secundario); margin-bottom: 4px;">${jogo.tituloJogo}</div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 6px;">
+                        <div style="display: flex; gap: 4px; align-items: center;">${escudoCasa}${escudoFora}</div>
+                        <div style="font-size: 12px; color: var(--texto-secundario); font-weight: 700;">${jogo.tituloJogo}</div>
+                    </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 15px; font-weight: 900;">${jogo.palpite}</span>
                         <span style="color: var(--neon); font-weight: 900;">Odd: ${jogo.oddAposta.toFixed(2)}</span>
@@ -631,7 +674,6 @@
 
         function trocarLiga(chave, botao) { document.querySelectorAll('.liga-btn').forEach(b => b.classList.remove('ativo')); botao.classList.add('ativo'); ligaFoco = chave; nomeLigaFoco = botao.innerText; buscarJogosNaAPI(); }
 
-        // 🛡️ BOTÃO DE SYNC FORTIFICADO (Bloqueia spam do usuário)
         function forcarAtualizacao() {
             let btn = document.getElementById('btn-sync-geral');
             if (!permissaoParaChamarAPI()) {
@@ -648,12 +690,11 @@
                 setTimeout(() => {
                     btn.innerText = "🔄 Atualizar";
                     btn.disabled = false;
-                }, 2000); // Garante que o botão volte ao normal
+                }, 2000); 
             });
             mostrarToast("Buscando dados mais recentes...");
         }
 
-        // 🛡️ MOTOR DE JOGOS + SMART CACHE 2.0 (ECONOMIA DE API) + MODO SOBREVIVÊNCIA
         async function buscarJogosNaAPI() {
             let painelAviso = document.getElementById('status-msg');
             document.getElementById('container-jogos').innerHTML = "";
@@ -684,7 +725,6 @@
                 const linkScores = `https://api.the-odds-api.com/v4/sports/${ligaFoco}/scores/?apiKey=${API_KEY}`;
 
                 try {
-                    // Utiliza o Fetch Blindado no lugar do fetch padrão
                     const [reqOdds, reqScores] = await Promise.all([
                         fetchBlindado(linkOdds, 8000, 2), 
                         fetchBlindado(linkScores, 8000, 2)
@@ -806,7 +846,6 @@
                         jogosCarregados = dadosCache.jogos;
                         salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
                         painelAviso.innerHTML = `⚠️ Conexão perdida ou Limite API atingido.<br>Mostrando jogos em <b>Modo Sobrevivência</b> (Offline).`;
-                        console.log("🛡️ BLINDAGEM ATIVADA: Carregando cache antigo por falha na rede.");
                     } else {
                         painelAviso.innerHTML = `❌ Falha crítica de rede. Verifique sua internet.`; 
                     }
@@ -883,13 +922,10 @@
             let isOpcHT = tipoOpcao.includes('HT');
             let isOpcBTTS = tipoOpcao.includes('BTTS');
             let isOpcDuplaChance = ['1X', '12', 'X2'].includes(tipoOpcao);
-            
-            // 🛡️ CORREÇÃO SOLICITADA: Analisa especificamente o mercado de 1.5 Gols
             let isOpcGols15 = ['M15', 'N15'].includes(tipoOpcao);
 
             if (!jaSelecionado) {
                 
-                // Regra Global: 1º Tempo vs Ambas Marcam
                 let temHTnoCarrinho = carrinho.some(c => c.tipoOpcao.includes('HT'));
                 let temBTTSnoCarrinho = carrinho.some(c => c.tipoOpcao.includes('BTTS'));
                 if ((isOpcHT && temBTTSnoCarrinho) || (isOpcBTTS && temHTnoCarrinho)) {
@@ -898,7 +934,6 @@
                     return;
                 }
 
-                // Dupla Chance NÃO se mistura com nada no mesmo jogo
                 let temDuplaChanceNesteJogo = selecoesNesteJogo.some(c => ['1X', '12', 'X2'].includes(c.tipoOpcao));
                 let outrasOpcoesNesteJogo = selecoesNesteJogo.filter(c => !['1X', '12', 'X2'].includes(c.tipoOpcao));
 
@@ -913,7 +948,6 @@
                     return;
                 }
 
-                // 🛡️ CORREÇÃO SOLICITADA: Bloqueia Ambas Marcam APENAS com ±1.5 Gols
                 let temGols15NesteJogo = selecoesNesteJogo.some(c => ['M15', 'N15'].includes(c.tipoOpcao));
                 let temAmbasNesteJogo = selecoesNesteJogo.some(c => c.tipoOpcao.includes('BTTS'));
 
@@ -921,16 +955,6 @@
                     if(navigator.vibrate) navigator.vibrate(200);
                     mostrarToast("⚠️ Regra da Banca:<br>Ambas Marcam e Total de ±1.5 Gols não podem ser combinados no mesmo jogo!", "erro");
                     return;
-                }
-
-                if (carrinho.length > 0) {
-                    let temLiveCart = false, temPreCart = false;
-                    carrinho.forEach(c => { 
-                        let j = jogosCarregados.find(jg => jg.id === c.idJogo); 
-                        if(j) { 
-                            if(j.isLive) temLiveCart = true; else temPreCart = true; 
-                        }
-                    });
                 }
             }
 
