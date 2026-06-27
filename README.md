@@ -230,27 +230,49 @@
 
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
+        // ==========================================
+        // 🚀 MOTOR DE CONCORRÊNCIA (BLINDAGEM MAX)
+        // ==========================================
         async function salvarNaNuvem(dados) {
+            // Função interna para fazer a requisição com limite de tempo (Timeout)
+            const fetchAPI = async (url, method, bodyStr, parseFunc) => {
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), 6000); // Se passar de 6 segundos, corta!
+                try {
+                    let res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: bodyStr, signal: controller.signal });
+                    clearTimeout(id);
+                    if (res.ok) return await parseFunc(res);
+                    throw new Error("API falhou");
+                } catch (e) {
+                    clearTimeout(id);
+                    throw e;
+                }
+            };
+
+            const jsonStr = JSON.stringify(dados);
+
+            // Prepara as 3 corridas ao mesmo tempo
+            const p1 = fetchAPI("https://api.npoint.io", "POST", jsonStr, async (r) => "NPT-" + (await r.json()).id);
+            const p2 = fetchAPI("https://jsonblob.com/api/jsonBlob", "POST", jsonStr, async (r) => "BLB-" + (r.headers.get("Location") || r.headers.get("location")).split('/').pop());
+            const p3 = fetchAPI("https://api.restful-api.dev/objects", "POST", JSON.stringify({ name: "XR", data: dados }), async (r) => "RST-" + (await r.json()).id);
+
             try {
-                let resNpt = await fetch("https://api.npoint.io", { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) });
-                if(resNpt.ok) { let json = await resNpt.json(); if(json.id) return "NPT-" + json.id; }
-            } catch(e) {}
-            try {
-                let resBlob = await fetch("https://jsonblob.com/api/jsonBlob", { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(dados) });
-                if(resBlob.ok) { let loc = resBlob.headers.get("Location") || resBlob.headers.get("location"); if(loc) return "BLB-" + loc.split('/').pop(); }
-            } catch(e) {}
-            try {
-                let resRst = await fetch("https://api.restful-api.dev/objects", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: "XRSportsTicket", data: dados })
+                // A primeira que responder com sucesso, VENCE e encerra a espera!
+                return await new Promise((resolve, reject) => {
+                    let erros = 0;
+                    const checarErro = () => { erros++; if (erros === 3) reject(new Error("Todas falharam")); };
+                    p1.then(resolve).catch(checarErro);
+                    p2.then(resolve).catch(checarErro);
+                    p3.then(resolve).catch(checarErro);
                 });
-                if(resRst.ok) { let json = await resRst.json(); if(json.id) return "RST-" + json.id; }
-            } catch(e) {}
-            try {
-                return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados))));
-            } catch(e) {
-                return null;
+            } catch (e) {
+                // FALLBACK OFFLINE: Se a internet do cara for de padaria e as 3 falharem/derem timeout, o sistema gera o bilhete direto na URL. Nunca trava!
+                console.warn("APIs bloqueadas. Gerando link local.");
+                try {
+                    return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(jsonStr)));
+                } catch(err) {
+                    return null;
+                }
             }
         }
 
@@ -419,6 +441,9 @@
             esconderLoading();
         }
 
+        // ==========================================
+        // 🛠️ CORREÇÃO DO WHATSAPP (Não Volta Mais pra Tela)
+        // ==========================================
         async function enviarParaAdmin() {
             let valorDep = parseFloat(document.getElementById('input-dinheiro').value);
             if(isNaN(valorDep) || valorDep < 2) { mostrarToast("O valor mínimo é R$ 2,00!", "erro"); return; }
@@ -437,8 +462,13 @@
                 let baseUrl = window.location.href.split('?')[0]; 
                 let linkAcompanhar = baseUrl + "?b=" + blobId;
                 let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
-                window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`, '_blank');
-            } else { mostrarToast("Erro Crítico de Conexão. Tente novamente.", "erro"); }
+                
+                // MUDANÇA AQUI: window.location.href obriga o celular a redirecionar pro WhatsApp
+                // em vez de abrir um "pop-up" que seria bloqueado.
+                window.location.href = `https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`;
+            } else { 
+                mostrarToast("Erro Crítico de Conexão. Tente novamente.", "erro"); 
+            }
         }
 
         async function buscarPlacaresBilhete(ligas, jogosNoBilhete) {
