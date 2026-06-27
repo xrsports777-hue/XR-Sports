@@ -299,42 +299,39 @@
 
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
-        // 🚀 MOTOR DE NUVEM COM ASSINATURA E JSONBLOB
+        // 🚀 MOTOR DE NUVEM COM JSONBLOB + FALLBACK OFFLINE
         async function salvarNaNuvem(dados) {
             // Assinatura simples de segurança
             dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`);
 
-            // Plano A: JSONBlob (Mais rápido e estável para atualizar)
-            const tentarJsonBlob = async () => {
-                let jsonReq = await fetch("https://jsonblob.com/api/jsonBlob", {
-                    method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            try {
+                // Tenta salvar na nuvem real (JSONBlob)
+                let res = await fetch("https://jsonblob.com/api/jsonBlob", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json", 
+                        "Accept": "application/json" 
+                    },
                     body: JSON.stringify(dados)
                 });
-                if (!jsonReq.ok) throw new Error("JSONBlob falhou");
-                let blobUrl = jsonReq.headers.get("Location");
-                let id = blobUrl.split('/').pop();
-                return "BLB-" + id;
-            };
 
-            // Plano B: Restful API (Sem o fetchBlindado que travava)
-            const tentarRestful = async () => {
-                let jsonReq = await fetch("https://api.restful-api.dev/objects", {
-                    method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ name: "XRSportsTicket", data: dados })
-                });
-                if (!jsonReq.ok) throw new Error("Restful API falhou");
-                let json = await jsonReq.json();
-                return "RST-" + json.id;
-            };
-
-            // Tenta as APIs na ordem
-            for (let i = 1; i <= 3; i++) {
-                try { return await tentarJsonBlob(); } catch (e) {}
-                try { return await tentarRestful(); } catch (e) { if (i === 3) break; await new Promise(r => setTimeout(r, 800)); }
+                if (res.ok) {
+                    // Pega a URL do blob salvo no header 'Location' e extrai o ID
+                    let location = res.headers.get("Location");
+                    let blobId = location.split('/').pop();
+                    return "BLB-" + blobId;
+                } else {
+                    throw new Error("Falha no JSONBlob");
+                }
+            } catch(e) {
+                // Se a nuvem falhar, usa o método offline (link grande OFF-) como Plano B
+                console.warn("Nuvem falhou, ativando modo offline (OFF-)");
+                try {
+                    return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados))));
+                } catch(err) {
+                    return null;
+                }
             }
-
-            // Plano C: Offline (Se a internet cair de vez)
-            try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return null; }
         }
 
         async function lerDaNuvem(blobId) {
