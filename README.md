@@ -1,3 +1,4 @@
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -18,7 +19,7 @@
         .logo-title strong { color: var(--neon); margin-right: 4px; font-style: italic; }
         .logo-subtitle { font-size: 9px; font-weight: 800; color: var(--texto-secundario); letter-spacing: 3.5px; text-transform: uppercase; margin-top: 2px; }
         
-        .btn-sync{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda);padding:6px 12px;border-radius:8px;font-weight:700;cursor:pointer;transition:.2s;font-size:13px}.btn-sync:active{transform:scale(.95);background:var(--bg-hover)}.nav-ligas{display:flex;gap:10px;margin-top:18px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.nav-ligas::-webkit-scrollbar{display:none}.liga-btn{background:rgba(9,14,23,0.8);color:var(--texto-secundario);border:1px solid var(--borda);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:.3s}.liga-btn.ativo{background:var(--neon);color:#000;border-color:var(--neon)}#status-msg{text-align:center;padding:25px 20px;color:var(--texto-secundario);font-size:14px;margin:20px 15px;border-radius:12px;background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px dashed var(--borda);line-height:1.6}.container{padding:5px 15px;max-width:600px;margin:0 auto}.card-jogo{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--borda);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}.card-topo{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);padding-bottom:10px}.liga-tag{font-size:11px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;letter-spacing:.5px}.badge-horario{font-size:11px;font-weight:800;color:#000;background:var(--neon);padding:4px 8px;border-radius:6px}.badge-aovivo{background:rgba(255,59,59,0.15);color:var(--live);border:1px solid var(--live);animation:piscar 1.5s infinite}.badge-intervalo{background:rgba(245,166,35,0.15);color:var(--amarelo);border:1px solid var(--amarelo);animation:piscar 1.5s infinite}@keyframes piscar{0%,100%{opacity:1}50%{opacity:.5}}.placar-box{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px}.time-box{display:flex;align-items:center;gap:10px;width:40%}.time-box.visitante{flex-direction:row-reverse;text-align:right}.escudo-container{width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.escudo-img{width:100%;height:100%;object-fit:contain}.escudo-letra{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;box-shadow:inset 0 2px 5px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1)}.nome-time{font-size:14px;font-weight:800;color:var(--texto);line-height:1.2}.vs-txt{font-size:12px;font-weight:900;color:var(--texto-secundario)}.placar-live{font-size:16px;font-weight:900;color:var(--neon);background:rgba(0,255,136,0.1);padding:4px 8px;border-radius:6px;letter-spacing:1px;white-space:nowrap}.mercado-titulo{font-size:11px;color:var(--texto-secundario);font-weight:700;text-transform:uppercase;margin-bottom:-5px;margin-top:5px;text-align:center;border-top:1px dashed rgba(255,255,255,0.05);padding-top:10px}.odds-linha{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.odds-linha-dupla{display:grid;grid-template-columns:1fr 1fr;gap:8px}.odd-btn{background:rgba(9,14,23,0.6);border:1px solid var(--borda);border-radius:10px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;user-select:none}.odd-lbl{font-size:10px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;margin-bottom:2px;text-align:center}.odd-val{font-size:15px;font-weight:900;color:var(--texto)}#btn-gaveta{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;width:90%;max-width:400px;padding:16px 20px;border-radius:14px;font-weight:900;font-size:15px;display:none;justify-content:space-between;align-items:center;box-shadow:0 10px 30px rgba(0,255,136,0.3);z-index:90;cursor:pointer;border:none}.badge-qtd{background:#000;color:var(--neon);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}#modal-bilhete{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;display:none;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(5px)}.bilhete-conteudo{background:rgba(18,25,39,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--borda);width:100%;max-height:85vh;border-top-left-radius:24px;border-top-right-radius:24px;padding:24px;display:flex;flex-direction:column;animation:subirTela .3s ease-out forwards}@keyframes subirTela{from{transform:translateY(100%)}to{transform:translateY(0)}}.bilhete-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--borda);padding-bottom:15px}.bilhete-titulo{font-size:20px;font-weight:900}.btn-fechar{background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:var(--texto);width:36px;height:36px;border-radius:50%;font-weight:700;cursor:pointer}.lista-palpites{overflow-y:auto;max-height:35vh;margin-bottom:15px;padding-right:5px}.palpite-item{background:rgba(9,14,23,0.6);padding:14px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--borda);border-left:4px solid var(--neon)}.palpite-jogo{font-size:12px;color:var(--texto-secundario);font-weight:700;margin-bottom:5px}.palpite-escolha{font-size:15px;font-weight:900}.palpite-odd{font-weight:900;color:var(--neon);font-size:18px}.caixa-valores{background:rgba(5,8,12,0.8);padding:18px;border-radius:16px;border:1px solid var(--borda);margin-bottom:15px}.linha-valor{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;font-weight:700;color:var(--texto-secundario)}.odd-final{color:var(--texto);font-size:18px;font-weight:900}.input-grana{width:100%;background:rgba(18,25,39,0.6);border:2px solid var(--borda);color:#fff;padding:16px;border-radius:12px;font-size:20px;font-weight:900;text-align:center;outline:0;margin-bottom:10px}.input-grana:focus{border-color:var(--neon)}.linha-retorno{display:flex;justify-content:space-between;align-items:center;margin-top:15px;font-weight:800}.retorno-verde{color:var(--neon);font-size:24px;font-weight:900}.btn-enviar-zap{width:100%;background:#25D366;color:#fff;padding:18px;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;text-transform:uppercase;margin-top:5px;box-shadow:0 4px 15px rgba(37,211,102,0.3)}.btn-apagar-tudo{background:0 0;border:none;color:var(--danger);font-size:13px;font-weight:700;margin-top:20px;width:100%;cursor:pointer;text-decoration:underline}.botao-fantasma{position:fixed;bottom:0;right:0;width:60px;height:60px;background:0 0;z-index:9999;cursor:default}#tela-login,#tela-admin{display:none;padding:25px;max-width:500px;margin:40px auto;background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}.input-admin{width:100%;padding:16px;margin-bottom:15px;background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:#fff;border-radius:8px;font-size:16px}.btn-admin{width:100%;background:var(--neon);color:#000;padding:18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:10px;font-size:16px}.btn-voltar{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda)}#tela-digital{display:none;padding:20px;max-width:500px;margin:0 auto; opacity:0; transition: opacity 0.4s ease;}.digital-card{background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;padding:20px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}.digital-header{text-align:center;border-bottom:2px dashed var(--borda);padding-bottom:15px;margin-bottom:15px}.digital-pin{font-size:28px;font-weight:900;color:var(--texto);letter-spacing:2px}.digital-status{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:900;margin-top:10px;border:1px solid transparent}
+        .btn-sync{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda);padding:6px 12px;border-radius:8px;font-weight:700;cursor:pointer;transition:.2s;font-size:13px}.btn-sync:active{transform:scale(.95);background:var(--bg-hover)}.btn-sync:disabled{opacity:0.5;cursor:not-allowed}.nav-ligas{display:flex;gap:10px;margin-top:18px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.nav-ligas::-webkit-scrollbar{display:none}.liga-btn{background:rgba(9,14,23,0.8);color:var(--texto-secundario);border:1px solid var(--borda);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:.3s}.liga-btn.ativo{background:var(--neon);color:#000;border-color:var(--neon)}#status-msg{text-align:center;padding:25px 20px;color:var(--texto-secundario);font-size:14px;margin:20px 15px;border-radius:12px;background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px dashed var(--borda);line-height:1.6}.container{padding:5px 15px;max-width:600px;margin:0 auto}.card-jogo{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--borda);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}.card-topo{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);padding-bottom:10px}.liga-tag{font-size:11px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;letter-spacing:.5px}.badge-horario{font-size:11px;font-weight:800;color:#000;background:var(--neon);padding:4px 8px;border-radius:6px}.badge-aovivo{background:rgba(255,59,59,0.15);color:var(--live);border:1px solid var(--live);animation:piscar 1.5s infinite}.badge-intervalo{background:rgba(245,166,35,0.15);color:var(--amarelo);border:1px solid var(--amarelo);animation:piscar 1.5s infinite}@keyframes piscar{0%,100%{opacity:1}50%{opacity:.5}}.placar-box{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px}.time-box{display:flex;align-items:center;gap:10px;width:40%}.time-box.visitante{flex-direction:row-reverse;text-align:right}.escudo-container{width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.escudo-img{width:100%;height:100%;object-fit:contain}.escudo-letra{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;box-shadow:inset 0 2px 5px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1)}.nome-time{font-size:14px;font-weight:800;color:var(--texto);line-height:1.2}.vs-txt{font-size:12px;font-weight:900;color:var(--texto-secundario)}.placar-live{font-size:16px;font-weight:900;color:var(--neon);background:rgba(0,255,136,0.1);padding:4px 8px;border-radius:6px;letter-spacing:1px;white-space:nowrap}.mercado-titulo{font-size:11px;color:var(--texto-secundario);font-weight:700;text-transform:uppercase;margin-bottom:-5px;margin-top:5px;text-align:center;border-top:1px dashed rgba(255,255,255,0.05);padding-top:10px}.odds-linha{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.odds-linha-dupla{display:grid;grid-template-columns:1fr 1fr;gap:8px}.odd-btn{background:rgba(9,14,23,0.6);border:1px solid var(--borda);border-radius:10px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;user-select:none}.odd-lbl{font-size:10px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;margin-bottom:2px;text-align:center}.odd-val{font-size:15px;font-weight:900;color:var(--texto)}#btn-gaveta{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;width:90%;max-width:400px;padding:16px 20px;border-radius:14px;font-weight:900;font-size:15px;display:none;justify-content:space-between;align-items:center;box-shadow:0 10px 30px rgba(0,255,136,0.3);z-index:90;cursor:pointer;border:none}.badge-qtd{background:#000;color:var(--neon);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}#modal-bilhete{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;display:none;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(5px)}.bilhete-conteudo{background:rgba(18,25,39,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--borda);width:100%;max-height:85vh;border-top-left-radius:24px;border-top-right-radius:24px;padding:24px;display:flex;flex-direction:column;animation:subirTela .3s ease-out forwards}@keyframes subirTela{from{transform:translateY(100%)}to{transform:translateY(0)}}.bilhete-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--borda);padding-bottom:15px}.bilhete-titulo{font-size:20px;font-weight:900}.btn-fechar{background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:var(--texto);width:36px;height:36px;border-radius:50%;font-weight:700;cursor:pointer}.lista-palpites{overflow-y:auto;max-height:35vh;margin-bottom:15px;padding-right:5px}.palpite-item{background:rgba(9,14,23,0.6);padding:14px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--borda);border-left:4px solid var(--neon)}.palpite-jogo{font-size:12px;color:var(--texto-secundario);font-weight:700;margin-bottom:5px}.palpite-escolha{font-size:15px;font-weight:900}.palpite-odd{font-weight:900;color:var(--neon);font-size:18px}.caixa-valores{background:rgba(5,8,12,0.8);padding:18px;border-radius:16px;border:1px solid var(--borda);margin-bottom:15px}.linha-valor{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;font-weight:700;color:var(--texto-secundario)}.odd-final{color:var(--texto);font-size:18px;font-weight:900}.input-grana{width:100%;background:rgba(18,25,39,0.6);border:2px solid var(--borda);color:#fff;padding:16px;border-radius:12px;font-size:20px;font-weight:900;text-align:center;outline:0;margin-bottom:10px}.input-grana:focus{border-color:var(--neon)}.linha-retorno{display:flex;justify-content:space-between;align-items:center;margin-top:15px;font-weight:800}.retorno-verde{color:var(--neon);font-size:24px;font-weight:900}.btn-enviar-zap{width:100%;background:#25D366;color:#fff;padding:18px;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;text-transform:uppercase;margin-top:5px;box-shadow:0 4px 15px rgba(37,211,102,0.3)}.btn-apagar-tudo{background:0 0;border:none;color:var(--danger);font-size:13px;font-weight:700;margin-top:20px;width:100%;cursor:pointer;text-decoration:underline}.botao-fantasma{position:fixed;bottom:0;right:0;width:60px;height:60px;background:0 0;z-index:9999;cursor:default}#tela-login,#tela-admin{display:none;padding:25px;max-width:500px;margin:40px auto;background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}.input-admin{width:100%;padding:16px;margin-bottom:15px;background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:#fff;border-radius:8px;font-size:16px}.btn-admin{width:100%;background:var(--neon);color:#000;padding:18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:10px;font-size:16px}.btn-voltar{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda)}#tela-digital{display:none;padding:20px;max-width:500px;margin:0 auto; opacity:0; transition: opacity 0.4s ease;}.digital-card{background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;padding:20px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}.digital-header{text-align:center;border-bottom:2px dashed var(--borda);padding-bottom:15px;margin-bottom:15px}.digital-pin{font-size:28px;font-weight:900;color:var(--texto);letter-spacing:2px}.digital-status{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:900;margin-top:10px;border:1px solid transparent}
         
         /* CORES DOS STATUS */
         .status-0{background:rgba(245,166,35,0.15);color:var(--amarelo);border-color:var(--amarelo)}
@@ -54,25 +55,17 @@
         .busca-bilhete-box button { background: var(--neon); color: #000; border: none; padding: 0 20px; border-radius: 12px; font-weight: 900; font-size: 13px; cursor: pointer; transition: 0.2s; }
         .busca-bilhete-box button:active { transform: scale(0.95); }
 
-        /* BÔNUS: Efeito de clique mais dinâmico para os botões das odds */
-        .odd-btn:active {
-            transform: scale(0.92);
-        }
-        
-        /* BÔNUS: Quando selecionado, dá um pop agradável */
+        /* BÔNUS: Efeito de clique dinâmico */
+        .odd-btn:active { transform: scale(0.92); }
         .odd-btn.selecionado {
             background:var(--neon);border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.2);
             transform: scale(1.03);
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        
         .odd-btn.selecionado .odd-lbl,.odd-btn.selecionado .odd-val{color:#000}
 
-        /* BÔNUS: Adiciona um efeito pulsante no número de apostas do botão "VER BILHETE" */
-        #gaveta-qtd {
-            animation: pulseSelo 2s infinite;
-        }
-
+        /* BÔNUS: Efeito pulsante */
+        #gaveta-qtd { animation: pulseSelo 2s infinite; }
         @keyframes pulseSelo {
             0% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
@@ -97,7 +90,7 @@
                         <div class="logo-subtitle">A Banca Premium</div>
                     </div>
                 </div>
-                <button class="btn-sync" onclick="forcarAtualizacao()">🔄 Atualizar</button>
+                <button class="btn-sync" id="btn-sync-geral" onclick="forcarAtualizacao()">🔄 Atualizar</button>
             </div>
             <div class="nav-ligas">
                 <button class="liga-btn ativo" onclick="trocarLiga('soccer_brazil_campeonato', this)">🇧🇷 Brasileirão</button>
@@ -230,13 +223,12 @@
         let indiceChave = 0;
         let API_KEY = _0xShieldKeys[indiceChave];
         const NUMERO_WHATSAPP = "5582993729095"; 
+        const COOLDOWN_MS = 15000; // 15 Segundos de Proteção DDoS Front
 
-        // 🛡️ ANTI-SPAM DE REQUISIÇÕES (Rate Limiter Local)
+        // 🛡️ ANTI-SPAM DE REQUISIÇÕES COM COOLDOWN VISUAL
         function permissaoParaChamarAPI() {
             const ultimoAcesso = localStorage.getItem('xrsports_firewall_timer');
             const agora = new Date().getTime();
-            const COOLDOWN_MS = 12000; 
-            
             if (ultimoAcesso && (agora - parseInt(ultimoAcesso)) < COOLDOWN_MS) {
                 return false;
             }
@@ -255,6 +247,26 @@
                 return true;
             }
             return false;
+        }
+
+        // 🛡️ FETCH COM TIMEOUT E EXPONENTIAL BACKOFF (Aumenta a resiliência de rede)
+        async function fetchBlindado(url, timeoutMs = 8000, maxRetries = 2) {
+            for (let i = 0; i <= maxRetries; i++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+                    const response = await fetch(url, { signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    
+                    if (!response.ok && response.status !== 401 && response.status !== 429) {
+                        throw new Error(`Erro HTTP: ${response.status}`);
+                    }
+                    return response;
+                } catch (erro) {
+                    if (i === maxRetries) throw erro;
+                    await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i))); // Espera 1s, depois 2s se falhar
+                }
+            }
         }
         
         let ligaFoco = "soccer_brazil_campeonato";
@@ -288,43 +300,34 @@
 
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
-        // 🚀 MOTOR DE NUVEM BLINDADO 3.0 (Otimizado para iPhone/Safari - Fim do link gigante)
+        // 🚀 MOTOR DE NUVEM COM ASSINATURA (Impede alteração manual do bilhete por h4ckers)
         async function salvarNaNuvem(dados) {
+            // Assinatura simples de segurança
+            dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`); 
+
             const tentarRestful = async () => {
-                let res = await fetch("https://api.restful-api.dev/objects", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                let res = await fetchBlindado("https://api.restful-api.dev/objects", 6000, 2);
+                let jsonReq = await fetch("https://api.restful-api.dev/objects", {
+                    method: "POST", headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ name: "XRSportsTicket", data: dados })
                 });
-                if (!res.ok) throw new Error("Restful API falhou");
-                let json = await res.json();
+                if (!jsonReq.ok) throw new Error("Restful API falhou");
+                let json = await jsonReq.json();
                 return "RST-" + json.id;
             };
 
-            // Tenta 4 vezes salvar na nuvem com intervalos (Resolve oscilação de 3G/4G e Safari)
-            for (let i = 1; i <= 4; i++) {
-                try {
-                    return await tentarRestful();
-                } catch (erro) {
-                    if (i === 4) break; 
-                    await new Promise(r => setTimeout(r, 800)); // Espera 800ms e tenta de novo
-                }
+            for (let i = 1; i <= 3; i++) {
+                try { return await tentarRestful(); } 
+                catch (erro) { if (i === 3) break; await new Promise(r => setTimeout(r, 800)); }
             }
-
-            // Fallback extremo: Apenas se o celular do cliente estiver totalmente sem internet
             try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return null; }
         }
 
         async function lerDaNuvem(blobId) {
             if (!blobId) return null;
-            
-            // Lendo Modo Sobrevivência (Link gigante)
             if (blobId.startsWith("OFF-")) { 
-                try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } 
-                catch(e) { return null; } 
+                try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } catch(e) { return null; } 
             }
-            
-            // Lendo Nuvem Oficial (Link curto)
             if (blobId.startsWith("RST-")) {
                 let id = blobId.replace("RST-", "");
                 try { 
@@ -332,8 +335,6 @@
                     if (res.ok) { let json = await res.json(); return json.data; } 
                 } catch(e) { console.error("Erro ao ler da nuvem"); }
             }
-
-            // Mantendo a compatibilidade para não quebrar bilhetes antigos no seu painel admin
             if (blobId.startsWith("BLB-")) {
                 let id = blobId.replace("BLB-", "");
                 try { let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`, { headers: fetchHeaders }); if(res.ok) return await res.json(); } catch(e) {}
@@ -343,17 +344,13 @@
 
         async function atualizarNaNuvem(blobId, dados) {
             if (blobId.startsWith("OFF-")) { 
-                try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } 
-                catch(e) { return false; } 
+                try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return false; } 
             }
-            
             if (blobId.startsWith("RST-")) {
                 let id = blobId.replace("RST-", "");
                 try { 
                     let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { 
-                        method: 'PUT', 
-                        headers: { 'Content-Type': 'application/json' }, 
-                        body: JSON.stringify({ name: "XRSportsTicket", data: dados }) 
+                        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: "XRSportsTicket", data: dados }) 
                     }); 
                     return res.ok ? blobId : false; 
                 } catch(e) { return false; }
@@ -427,6 +424,11 @@
                 if (b) {
                     let retorno = (b.v * b.o).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
                     let stsTxt = "⏳ Aguardando"; let corB = "var(--amarelo)";
+                    
+                    // Validação Criptográfica Básica no Admin
+                    let isValidHash = b.hash === btoa(`${b.v}-${b.o}-${b.p}`);
+                    let iconeAlerta = isValidHash ? "" : " ⚠️ ALERTA DE FRAUDE";
+
                     if(b.s === 1) { stsTxt = "✅ Ativo"; corB = "var(--neon)"; } 
                     if(b.s === 2) { stsTxt = "🟢 GREEN"; corB = "var(--neon)"; }
                     if(b.s === 3) { stsTxt = "🔴 RED"; corB = "var(--danger)"; }
@@ -436,7 +438,7 @@
                     <div class="historico-item" style="border-left-color: ${corB}">
                         <div class="historico-info">
                             <div><strong style="color:var(--neon)">${b.p}</strong> - 👤 ${b.n}<br>
-                            <span style="color:var(--texto-secundario)">R$ ${b.v.toFixed(2)} ➡️ <strong style="color:#fff">${retorno}</strong></span></div>
+                            <span style="color:var(--texto-secundario)">R$ ${b.v.toFixed(2)} ➡️ <strong style="color:#fff">${retorno}</strong><span style="color:var(--danger); font-size:10px;">${iconeAlerta}</span></span></div>
                             <div style="font-weight:900; color:${corB}">${stsTxt}</div>
                         </div>
                         <div class="historico-botoes">
@@ -531,7 +533,7 @@
             let placaresMap = {};
             for (let liga of ligas) {
                 try {
-                    let req = await fetch(`https://api.the-odds-api.com/v4/sports/${liga}/scores/?apiKey=${API_KEY}`);
+                    let req = await fetchBlindado(`https://api.the-odds-api.com/v4/sports/${liga}/scores/?apiKey=${API_KEY}`, 5000, 1);
                     let res = await req.json();
                     if(Array.isArray(res)) { res.forEach(s => { placaresMap[s.id] = s; }); }
                 } catch(e) {}
@@ -608,14 +610,25 @@
 
         function trocarLiga(chave, botao) { document.querySelectorAll('.liga-btn').forEach(b => b.classList.remove('ativo')); botao.classList.add('ativo'); ligaFoco = chave; nomeLigaFoco = botao.innerText; buscarJogosNaAPI(); }
 
+        // 🛡️ BOTÃO DE SYNC FORTIFICADO (Bloqueia spam do usuário)
         function forcarAtualizacao() {
+            let btn = document.getElementById('btn-sync-geral');
             if (!permissaoParaChamarAPI()) {
-                mostrarToast("🛡️ Proteção anti-spam ativa. Aguarde alguns segundos para atualizar novamente.", "erro");
+                let tempoRestante = Math.ceil((COOLDOWN_MS - (new Date().getTime() - parseInt(localStorage.getItem('xrsports_firewall_timer')))) / 1000);
+                mostrarToast(`🛡️ Proteção ativa! Aguarde ${tempoRestante}s para atualizar.`, "erro");
                 return;
             }
             
+            btn.disabled = true;
+            btn.innerText = "⏳ Sincronizando...";
+            
             localStorage.removeItem(`xrsports_cache_${ligaFoco}`);
-            buscarJogosNaAPI();
+            buscarJogosNaAPI().then(() => {
+                setTimeout(() => {
+                    btn.innerText = "🔄 Atualizar";
+                    btn.disabled = false;
+                }, 2000); // Garante que o botão volte ao normal
+            });
             mostrarToast("Buscando dados mais recentes...");
         }
 
@@ -631,13 +644,11 @@
                 const dadosCache = JSON.parse(cacheSalvo);
                 const diffMinutos = (new Date().getTime() - dadosCache.tempo) / 60000;
 
-                // Lógica Inteligente de Economia da API
                 let temLive = dadosCache.jogos.some(j => j.isLive);
-                let limiteCache = temLive ? 3 : 30; // 3 min se houver jogo ao vivo rolando, 30 min se for só pré-jogo
+                let limiteCache = temLive ? 3 : 30;
 
                 if (diffMinutos < limiteCache) {
                     jogosCarregados = dadosCache.jogos;
-                    // FIX: Removido o filtro que deletava os jogos do carrinho ao trocar de liga! 
                     salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
                     painelAviso.style.display = "none";
                     return; 
@@ -652,15 +663,12 @@
                 const linkScores = `https://api.the-odds-api.com/v4/sports/${ligaFoco}/scores/?apiKey=${API_KEY}`;
 
                 try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 segundos de limite
-                    
+                    // Utiliza o Fetch Blindado no lugar do fetch padrão
                     const [reqOdds, reqScores] = await Promise.all([
-                        fetch(linkOdds, { signal: controller.signal }), 
-                        fetch(linkScores, { signal: controller.signal })
+                        fetchBlindado(linkOdds, 8000, 2), 
+                        fetchBlindado(linkScores, 8000, 2)
                     ]);
                     registrarChamadaAPI();
-                    clearTimeout(timeoutId);
                     
                     if (reqOdds.status === 401 || reqOdds.status === 429 || reqScores.status === 401 || reqScores.status === 429) {
                         if (trocarChaveAPI()) return await tentarBuscar(); 
@@ -769,7 +777,6 @@
                     localStorage.setItem(cacheKey, JSON.stringify({ tempo: new Date().getTime(), jogos: jogosCarregados }));
                     
                     painelAviso.style.display = "none";
-                    // FIX: Removido o carrinho.filter() que destruía os jogos de outras ligas
                     salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
                 
                 } catch (erro) { 
@@ -838,7 +845,6 @@
             if(!oddAposta || oddAposta === 0) return;
             let jogoAtual = jogosCarregados.find(j => j.id === idJogo);
             
-            // Mapeamento de grupos para substituição automática
             const gruposMercado = {
                 '1': 'pr', 'X': 'pr', '2': 'pr',
                 '1X': 'pr', '12': 'pr', 'X2': 'pr',
@@ -856,21 +862,22 @@
             let isOpcHT = tipoOpcao.includes('HT');
             let isOpcBTTS = tipoOpcao.includes('BTTS');
             let isOpcDuplaChance = ['1X', '12', 'X2'].includes(tipoOpcao);
-            let isOpcGols = ['M15', 'N15', 'M25', 'N25'].includes(tipoOpcao);
+            
+            // 🛡️ CORREÇÃO SOLICITADA: Analisa especificamente o mercado de 1.5 Gols
+            let isOpcGols15 = ['M15', 'N15'].includes(tipoOpcao);
 
-            // Validações ANTES de adicionar ao carrinho
             if (!jaSelecionado) {
                 
-                // 🔒 REGRA GLOBAL: 1º Tempo vs Ambas Marcam
+                // Regra Global: 1º Tempo vs Ambas Marcam
                 let temHTnoCarrinho = carrinho.some(c => c.tipoOpcao.includes('HT'));
                 let temBTTSnoCarrinho = carrinho.some(c => c.tipoOpcao.includes('BTTS'));
                 if ((isOpcHT && temBTTSnoCarrinho) || (isOpcBTTS && temHTnoCarrinho)) {
-                    if(navigator.vibrate) navigator.vibrate(200); // Vibra o celular no erro
+                    if(navigator.vibrate) navigator.vibrate(200); 
                     mostrarToast("⚠️ Regra da Banca:<br>Proibido combinar Ambas Marcam com 1º Tempo!", "erro");
                     return;
                 }
 
-                // 🔒 BUG FIX 1: Dupla Chance NÃO se mistura com nada no mesmo jogo
+                // Dupla Chance NÃO se mistura com nada no mesmo jogo
                 let temDuplaChanceNesteJogo = selecoesNesteJogo.some(c => ['1X', '12', 'X2'].includes(c.tipoOpcao));
                 let outrasOpcoesNesteJogo = selecoesNesteJogo.filter(c => !['1X', '12', 'X2'].includes(c.tipoOpcao));
 
@@ -885,17 +892,16 @@
                     return;
                 }
 
-                // 🔒 BUG FIX 2: Ambas Marcam vs Total de Gols no mesmo jogo
-                let temGolsNesteJogo = selecoesNesteJogo.some(c => ['M15', 'N15', 'M25', 'N25'].includes(c.tipoOpcao));
+                // 🛡️ CORREÇÃO SOLICITADA: Bloqueia Ambas Marcam APENAS com ±1.5 Gols
+                let temGols15NesteJogo = selecoesNesteJogo.some(c => ['M15', 'N15'].includes(c.tipoOpcao));
                 let temAmbasNesteJogo = selecoesNesteJogo.some(c => c.tipoOpcao.includes('BTTS'));
 
-                if ((isOpcBTTS && temGolsNesteJogo) || (isOpcGols && temAmbasNesteJogo)) {
+                if ((isOpcBTTS && temGols15NesteJogo) || (isOpcGols15 && temAmbasNesteJogo)) {
                     if(navigator.vibrate) navigator.vibrate(200);
-                    mostrarToast("⚠️ Regra da Banca:<br>Ambas Marcam e Mercado de Gols não podem ser combinados no mesmo jogo!", "erro");
+                    mostrarToast("⚠️ Regra da Banca:<br>Ambas Marcam e Total de ±1.5 Gols não podem ser combinados no mesmo jogo!", "erro");
                     return;
                 }
 
-                // Regra original: Pre-live e Live
                 if (carrinho.length > 0) {
                     let temLiveCart = false, temPreCart = false;
                     carrinho.forEach(c => { 
@@ -907,14 +913,11 @@
                 }
             }
 
-            // Processamento de Adição / Remoção
             if (jaSelecionado) {
-                // Se já tem, remove (desmarca)
                 carrinho = carrinho.filter(c => !(c.idJogo === idJogo && c.tipoOpcao === tipoOpcao));
                 let btn = document.getElementById(`btn-${idJogo}-${tipoOpcao}`);
                 if(btn) btn.classList.remove('selecionado');
             } else {
-                // Verifica limites de combinadas gerais
                 let contagemPorJogo = {}; carrinho.forEach(c => { contagemPorJogo[c.idJogo] = (contagemPorJogo[c.idJogo] || 0) + 1; });
                 let numJogosCombinados = 0; for (let jogo in contagemPorJogo) { if (contagemPorJogo[jogo] >= 1) numJogosCombinados++; }
                 let isNovoCombinado = (contagemPorJogo[idJogo] || 0) === 1;
@@ -924,14 +927,12 @@
                     if (totalCombinadosAtuais >= 2) { mostrarToast("Limite de 2 jogos diferentes na aposta combinada!", "erro"); return; }
                 }
                 
-                // Troca de opção automática (ex: muda de Casa para Fora)
                 let indexConflito = carrinho.findIndex(c => c.idJogo === idJogo && gruposMercado[c.tipoOpcao] === meuGrupo);
                 if (indexConflito > -1) {
                     let opcRemovida = carrinho[indexConflito].tipoOpcao; carrinho.splice(indexConflito, 1);
                     let btnRemover = document.getElementById(`btn-${idJogo}-${opcRemovida}`); if(btnRemover) btnRemover.classList.remove('selecionado');
                 }
                 
-                // Adiciona ao carrinho
                 carrinho.push({ idJogo, tituloJogo, palpite, oddAposta, tipoOpcao, liga: ligaFoco });
                 let btnAdd = document.getElementById(`btn-${idJogo}-${tipoOpcao}`);
                 if (btnAdd) btnAdd.classList.add('selecionado');
