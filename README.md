@@ -462,8 +462,7 @@
                     if (minutosCorridos >= 46 && minutosCorridos <= 60) { isIntervalo = true; }
 
                     let oddC = 0, oddE = 0, oddF = 0, oddM15 = 0, oddN15 = 0, oddM25 = 0, oddN25 = 0, oddBttsSim = 0, oddBttsNao = 0;
-                    let oddCC = 0, oddXC = 0, oddFC = 0, oddCX = 0, oddXX = 0, oddFX = 0, oddCF = 0, oddXF = 0, oddFF = 0;
-                    let oddCrtM25 = 0, oddCrtN25 = 0; // Novas odds de cartões
+                    let oddCrtM25 = 0, oddCrtN25 = 0; 
 
                     jogo.bookmakers.forEach(bm => {
                         let mH2H = bm.markets.find(m => m.key === 'h2h');
@@ -482,10 +481,6 @@
                         oddDnbCasa = (1 / (probC / (probC + probF))) * juice; oddDnbFora = (1 / (probF / (probC + probF))) * juice;
                         let probE_HT = Math.min(0.55, probE * 1.45); let probRestante = 1 - probE_HT; let pesoCasa = probC / (probC + probF);
                         oddC_HT = (1 / (probRestante * pesoCasa)) * juice; oddE_HT = (1 / probE_HT) * juice; oddF_HT = (1 / (probRestante * (1 - pesoCasa))) * juice;
-                        
-                        oddCC = oddC * 1.5 * juice; oddXC = oddC * 4.5 * juice; oddFC = oddC * 25.0 * juice;
-                        oddCX = oddE * 4.5 * juice; oddXX = oddE * 1.45 * juice; oddFX = oddE * 4.5 * juice;
-                        oddCF = oddF * 25.0 * juice; oddXF = oddF * 4.5 * juice; oddFF = oddF * 1.5 * juice;
 
                         // Criando odds sintéticas dinâmicas para Cartões Amarelos (+/- 2.5)
                         let variacaoCartao = (Math.random() * 0.1); 
@@ -497,13 +492,13 @@
                     if (oddM25 > 0) { let pBttsSim = Math.min(0.88, (1 / oddM25) * 1.05); oddBttsSim = (1 / pBttsSim) * juice; oddBttsNao = (1 / (1 - pBttsSim)) * juice; } else if (oddC > 0) { oddBttsSim = 1.85 * juice; oddBttsNao = 1.85 * juice; }
 
                     const clampOdd = (val) => val > 0 ? Math.max(1.05, val) : 0;
-                    odd1X = clampOdd(odd1X); odd12 = clampOdd(odd12); oddX2 = clampOdd(oddX2); oddDnbCasa = clampOdd(oddDnbCasa); oddDnbFora = clampOdd(oddDnbFora); oddC_HT = clampOdd(oddC_HT); oddE_HT = clampOdd(oddE_HT); oddF_HT = clampOdd(oddF_HT); oddBttsSim = clampOdd(oddBttsSim); oddBttsNao = clampOdd(oddBttsNao); oddCC = clampOdd(oddCC); oddXC = clampOdd(oddXC); oddFC = clampOdd(oddFC); oddCX = clampOdd(oddCX); oddXX = clampOdd(oddXX); oddFX = clampOdd(oddFX); oddCF = clampOdd(oddCF); oddXF = clampOdd(oddXF); oddFF = clampOdd(oddFF);
+                    odd1X = clampOdd(odd1X); odd12 = clampOdd(odd12); oddX2 = clampOdd(oddX2); oddDnbCasa = clampOdd(oddDnbCasa); oddDnbFora = clampOdd(oddDnbFora); oddC_HT = clampOdd(oddC_HT); oddE_HT = clampOdd(oddE_HT); oddF_HT = clampOdd(oddF_HT); oddBttsSim = clampOdd(oddBttsSim); oddBttsNao = clampOdd(oddBttsNao); 
                     if(oddM15 > 0) { oddM15 = clampOdd(oddM15); oddN15 = clampOdd(oddN15); }
                     if(oddCrtM25 > 0) { oddCrtM25 = clampOdd(oddCrtM25); oddCrtN25 = clampOdd(oddCrtN25); }
 
                     if(oddC > 0 && oddF > 0) {
                         jogosCarregados.push({
-                            id: jogo.id, casa: jogo.home_team, fora: jogo.away_team, oddC, oddE, oddF, odd1X, odd12, oddX2, oddDnbCasa, oddDnbFora, oddBttsSim, oddBttsNao, oddM15, oddN15, oddM25, oddN25, oddC_HT, oddE_HT, oddF_HT, oddCC, oddXC, oddFC, oddCX, oddXX, oddFX, oddCF, oddXF, oddFF, oddCrtM25, oddCrtN25, dataCrua: horaDoJogo, dataVisual: arrumarData(jogo.commence_time), isLive, isIntervalo, minutosCorridos, placarC, placarF
+                            id: jogo.id, casa: jogo.home_team, fora: jogo.away_team, oddC, oddE, oddF, odd1X, odd12, oddX2, oddDnbCasa, oddDnbFora, oddBttsSim, oddBttsNao, oddM15, oddN15, oddM25, oddN25, oddC_HT, oddE_HT, oddF_HT, oddCrtM25, oddCrtN25, dataCrua: horaDoJogo, dataVisual: arrumarData(jogo.commence_time), isLive, isIntervalo, minutosCorridos, placarC, placarF
                         });
                     }
                 });
@@ -531,9 +526,8 @@
                 let botoesCartoes = ((j.oddCrtM25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-CM25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 2.5 Cartões', ${j.oddCrtM25}, 'CM25')"><span class="odd-lbl">+ 2.5</span><span class="odd-val">${j.oddCrtM25.toFixed(2)}</span></div>` : "") + ((j.oddCrtN25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-CN25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 2.5 Cartões', ${j.oddCrtN25}, 'CN25')"><span class="odd-lbl">- 2.5</span><span class="odd-val">${j.oddCrtN25.toFixed(2)}</span></div>` : "");
                 let blocoCartoes = botoesCartoes !== "" ? `<div class="mercado-titulo">Cartões Amarelos</div><div class="odds-linha-dupla">${botoesCartoes}</div>` : "";
                 let blocoHT = j.oddC_HT > 0 ? `<div class="mercado-titulo">Vencedor - 1º Tempo</div><div class="odds-linha"><div class="odd-btn" id="btn-${j.id}-1HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa} (1ºT)', ${j.oddC_HT}, '1HT')"><span class="odd-lbl">Casa</span><span class="odd-val">${j.oddC_HT.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-XHT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Empate (1ºT)', ${j.oddE_HT}, 'XHT')"><span class="odd-lbl">Empate</span><span class="odd-val">${j.oddE_HT.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-2HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora} (1ºT)', ${j.oddF_HT}, '2HT')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddF_HT.toFixed(2)}</span></div></div>` : "";
-                let blocoHTFT = j.oddCC > 0 ? `<div class="mercado-titulo">Intervalo / Final (HT/FT)</div><div class="odds-linha"><div class="odd-btn" id="btn-${j.id}-CC" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Casa/Casa', ${j.oddCC}, 'CC')"><span class="odd-lbl">C/C</span><span class="odd-val">${j.oddCC.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-XC" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Emp/Casa', ${j.oddXC}, 'XC')"><span class="odd-lbl">E/C</span><span class="odd-val">${j.oddXC.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-FC" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Fora/Casa', ${j.oddFC}, 'FC')"><span class="odd-lbl">F/C</span><span class="odd-val">${j.oddFC.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-CX" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Casa/Emp', ${j.oddCX}, 'CX')"><span class="odd-lbl">C/E</span><span class="odd-val">${j.oddCX.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-XX" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Emp/Emp', ${j.oddXX}, 'XX')"><span class="odd-lbl">E/E</span><span class="odd-val">${j.oddXX.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-FX" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Fora/Emp', ${j.oddFX}, 'FX')"><span class="odd-lbl">F/E</span><span class="odd-val">${j.oddFX.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-CF" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Casa/Fora', ${j.oddCF}, 'CF')"><span class="odd-lbl">C/F</span><span class="odd-val">${j.oddCF.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-XF" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Emp/Fora', ${j.oddXF}, 'XF')"><span class="odd-lbl">E/F</span><span class="odd-val">${j.oddXF.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-FF" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Fora/Fora', ${j.oddFF}, 'FF')"><span class="odd-lbl">F/F</span><span class="odd-val">${j.oddFF.toFixed(2)}</span></div></div>` : "";
 
-                htmlHTML += `<div class="card-jogo"><div class="card-topo"><span class="liga-tag">${nomeLigaFoco}</span>${badgeDaHora}</div><div class="placar-box"><div class="time-box">${desenharEscudo(j.casa)}<span class="nome-time">${j.casa}</span></div>${centroPlacar}<div class="time-box visitante">${desenharEscudo(j.fora)}<span class="nome-time">${j.fora}</span></div></div><div class="mercado-titulo">Vencedor Final</div><div class="odds-linha"><div class="odd-btn" id="btn-${j.id}-1" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa}', ${j.oddC}, '1')"><span class="odd-lbl">Casa</span><span class="odd-val">${j.oddC.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-X" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Empate', ${j.oddE}, 'X')"><span class="odd-lbl">Empate</span><span class="odd-val">${j.oddE > 0 ? j.oddE.toFixed(2) : '-'}</span></div><div class="odd-btn" id="btn-${j.id}-2" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora}', ${j.oddF}, '2')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddF.toFixed(2)}</span></div></div>${blocoHT}${blocoDuchance}${blocoDnb}${blocoBtts}${blocoGols}${blocoCartoes}${blocoHTFT}</div>`;
+                htmlHTML += `<div class="card-jogo"><div class="card-topo"><span class="liga-tag">${nomeLigaFoco}</span>${badgeDaHora}</div><div class="placar-box"><div class="time-box">${desenharEscudo(j.casa)}<span class="nome-time">${j.casa}</span></div>${centroPlacar}<div class="time-box visitante">${desenharEscudo(j.fora)}<span class="nome-time">${j.fora}</span></div></div><div class="mercado-titulo">Vencedor Final</div><div class="odds-linha"><div class="odd-btn" id="btn-${j.id}-1" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa}', ${j.oddC}, '1')"><span class="odd-lbl">Casa</span><span class="odd-val">${j.oddC.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-X" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Empate', ${j.oddE}, 'X')"><span class="odd-lbl">Empate</span><span class="odd-val">${j.oddE > 0 ? j.oddE.toFixed(2) : '-'}</span></div><div class="odd-btn" id="btn-${j.id}-2" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora}', ${j.oddF}, '2')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddF.toFixed(2)}</span></div></div>${blocoHT}${blocoDuchance}${blocoDnb}${blocoBtts}${blocoGols}${blocoCartoes}</div>`;
             });
             document.getElementById('container-jogos').innerHTML = htmlHTML;
             carrinho.forEach(c => { let b = document.getElementById(`btn-${c.idJogo}-${c.tipoOpcao}`); if(b) b.classList.add('selecionado'); });
@@ -543,8 +537,7 @@
             if(!oddAposta || oddAposta === 0) return;
             let jogoAtual = jogosCarregados.find(j => j.id === idJogo);
             
-            // Adicionado o grupo de mercado "ca" (cartões amarelos)
-            const gruposMercado = { '1': 'pr', 'X': 'pr', '2': 'pr', '1X': 'pr', '12': 'pr', 'X2': 'pr', 'DNBC': 'pr', 'DNBF': 'pr', '1HT': 'pr', 'XHT': 'pr', '2HT': 'pr', 'BTTSY': 'bt', 'BTTSN': 'bt', 'M15': 'go', 'N15': 'go', 'M25': 'go', 'N25': 'go', 'CM25': 'ca', 'CN25': 'ca', 'CC': 'hf', 'XC': 'hf', 'FC': 'hf', 'CX': 'hf', 'XX': 'hf', 'FX': 'hf', 'CF': 'hf', 'XF': 'hf', 'FF': 'hf' };
+            const gruposMercado = { '1': 'pr', 'X': 'pr', '2': 'pr', '1X': 'pr', '12': 'pr', 'X2': 'pr', 'DNBC': 'pr', 'DNBF': 'pr', '1HT': 'pr', 'XHT': 'pr', '2HT': 'pr', 'BTTSY': 'bt', 'BTTSN': 'bt', 'M15': 'go', 'N15': 'go', 'M25': 'go', 'N25': 'go', 'CM25': 'ca', 'CN25': 'ca' };
             let meuGrupo = gruposMercado[tipoOpcao]; let selecoesNesteJogo = carrinho.filter(c => c.idJogo === idJogo); let jaSelecionado = selecoesNesteJogo.find(c => c.tipoOpcao === tipoOpcao);
 
             if (!jaSelecionado && carrinho.length > 0) {
