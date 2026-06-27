@@ -196,7 +196,7 @@
     </div>
 
     <script>
-        const API_KEY = "31f6c50fbb36c963ce6be39a38371560"; 
+        const API_KEY = "35b7c848a056df19f4e0d58f7a4f32f7"; 
         const NUMERO_WHATSAPP = "5582993729095"; 
         
         let ligaFoco = "soccer_brazil_campeonato";
@@ -228,7 +228,6 @@
         }
         function esconderLoading() { document.getElementById('overlay-loading').style.display = 'none'; }
 
-        // --- SISTEMA BLINDADO COM FURA-CACHE E VACINA PARA LINKS ANTIGOS ---
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
         async function salvarNaNuvem(dados) {
@@ -245,50 +244,25 @@
 
         async function lerDaNuvem(blobId) {
             if (!blobId) return null;
-            
-            // VACINA: Aceitar os links "Offline" da versão antiga para não dar erro
-            if (blobId.startsWith("OFF-")) { 
-                try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } 
-                catch(e) { return null; } 
-            }
-
+            if (blobId.startsWith("OFF-")) { try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } catch(e) { return null; } }
             if (blobId.startsWith("RST-")) {
                 let id = blobId.replace("RST-", "");
-                try {
-                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { headers: fetchHeaders });
-                    if(res.ok) { let json = await res.json(); return json.data; }
-                } catch(e) {}
+                try { let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { headers: fetchHeaders }); if(res.ok) { let json = await res.json(); return json.data; } } catch(e) {}
                 return null;
             }
-            
             let finalId = blobId.replace("BLB-", "");
-            try {
-                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${finalId}`, { headers: fetchHeaders });
-                if(res.ok) return await res.json();
-            } catch(e) {}
+            try { let res = await fetch(`https://jsonblob.com/api/jsonBlob/${finalId}`, { headers: fetchHeaders }); if(res.ok) return await res.json(); } catch(e) {}
             return null;
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            // VACINA: Atualiza o status visualmente no link offline antigo
-            if (blobId.startsWith("OFF-")) { 
-                try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } 
-                catch(e) { return false; } 
-            }
-
+            if (blobId.startsWith("OFF-")) { try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return false; } }
             if (blobId.startsWith("RST-")) {
                 let id = blobId.replace("RST-", "");
-                try {
-                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: "XRSportsTicket", data: dados }) });
-                    return res.ok ? blobId : false;
-                } catch(e) { return false; }
+                try { let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: "XRSportsTicket", data: dados }) }); return res.ok ? blobId : false; } catch(e) { return false; }
             }
-            
             let finalId = blobId.replace("BLB-", "");
-            try {
-                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${finalId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) });
-                return res.ok ? blobId : false;
-            } catch(e) { return false; }
+            try { let res = await fetch(`https://jsonblob.com/api/jsonBlob/${finalId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) }); return res.ok ? blobId : false; } catch(e) { return false; }
         }
 
         function salvarCarrinho() { localStorage.setItem('xrsports_carrinho', JSON.stringify(carrinho)); }
@@ -323,11 +297,9 @@
         function clienteBuscarBilhete() {
             let linkInformado = document.getElementById('input-busca-cliente').value.trim();
             if(!linkInformado) { mostrarToast("Cole o link do seu bilhete primeiro!", "erro"); return; }
-            
             let partes = linkInformado.split('?b=');
             let blobId = partes.length > 1 ? partes[1] : linkInformado;
             blobId = blobId.split('&')[0].trim();
-            
             let baseUrl = window.location.href.split('?')[0];
             window.location.href = baseUrl + "?b=" + blobId;
         }
@@ -538,7 +510,7 @@
 
         function trocarLiga(chave, botao) { document.querySelectorAll('.liga-btn').forEach(b => b.classList.remove('ativo')); botao.classList.add('ativo'); ligaFoco = chave; nomeLigaFoco = botao.innerText; buscarJogosNaAPI(); }
 
-        // --- SISTEMA DE ODDS ---
+        // --- SISTEMA DE ODDS AVANÇADO (CÁLCULO E DERRETIMENTO) ---
         async function buscarJogosNaAPI() {
             let painelAviso = document.getElementById('status-msg');
             document.getElementById('container-jogos').innerHTML = "";
@@ -563,11 +535,19 @@
 
                     let placarC = "", placarF = ""; let isIntervalo = false; let isLive = horaDoJogo <= horaAtual;
                     let minutosCorridos = isLive ? Math.floor((horaAtual - horaDoJogo) / 60000) : 0;
+                    
+                    let placarCInt = 0, placarFInt = 0;
                     if(isLive && dadosScore && dadosScore.scores && dadosScore.scores.length > 0) {
                         let scoreCasa = dadosScore.scores.find(s => s.name === jogo.home_team); let scoreFora = dadosScore.scores.find(s => s.name === jogo.away_team);
-                        if(scoreCasa && scoreFora) { placarC = scoreCasa.score; placarF = scoreFora.score; }
+                        if(scoreCasa && scoreFora) { 
+                            placarC = scoreCasa.score; placarF = scoreFora.score; 
+                            placarCInt = parseInt(placarC) || 0; placarFInt = parseInt(placarF) || 0;
+                        }
                     }
                     if (minutosCorridos >= 46 && minutosCorridos <= 60) { isIntervalo = true; }
+
+                    let totalGols = placarCInt + placarFInt; 
+                    let isBtts = placarCInt > 0 && placarFInt > 0;
 
                     let oddC = 0, oddE = 0, oddF = 0, oddM15 = 0, oddN15 = 0, oddM25 = 0, oddN25 = 0, oddBttsSim = 0, oddBttsNao = 0;
                     let oddCrtM25 = 0, oddCrtN25 = 0; 
@@ -582,28 +562,54 @@
                         });
                     });
 
-                    const juice = 0.92; let odd1X = 0, odd12 = 0, oddX2 = 0, oddDnbCasa = 0, oddDnbFora = 0, oddC_HT = 0, oddE_HT = 0, oddF_HT = 0;
+                    // Sintéticas Iniciais (Gols, BTTS, Cartões)
+                    if (oddM25 > 0 && oddM15 === 0) { let pM25 = 1 / oddM25; let pM15 = Math.min(0.95, pM25 * 1.35); oddM15 = (1 / pM15) * 0.92; oddN15 = (1 / (1-pM15)) * 0.92; }
+                    if (oddM25 > 0) { let pBttsSim = Math.min(0.88, (1 / oddM25) * 1.05); oddBttsSim = (1 / pBttsSim) * 0.92; oddBttsNao = (1 / (1 - pBttsSim)) * 0.92; } else if (oddC > 0) { oddBttsSim = 1.85 * 0.92; oddBttsNao = 1.85 * 0.92; }
+                    
+                    let probM25Cartoes = 0.70 + (Math.random() * 0.1); 
+                    oddCrtM25 = (1 / probM25Cartoes) * 0.92; oddCrtN25 = (1 / (1 - probM25Cartoes)) * 0.92;
+
+                    // 🏆 ALGORITMO DE CORREÇÃO AO VIVO (Derretimento e Fechamento de Mercado)
+                    if (isLive && minutosCorridos > 0 && minutosCorridos <= 100) {
+                        let f = Math.max(0.02, (90 - minutosCorridos) / 90); 
+                        let fUnder = Math.pow(f, 1.5); 
+
+                        if (placarCInt > placarFInt) { oddC = 1.01 + (oddC - 1.01) * fUnder; oddE = oddE / f; oddF = oddF / f; }
+                        else if (placarFInt > placarCInt) { oddF = 1.01 + (oddF - 1.01) * fUnder; oddE = oddE / f; oddC = oddC / f; }
+                        else { oddE = 1.01 + (oddE - 1.01) * fUnder; oddC = oddC / f; oddF = oddF / f; }
+
+                        if (totalGols >= 2) { oddM15 = 0; oddN15 = 0; } else { oddN15 = 1.01 + (oddN15 - 1.01) * fUnder; oddM15 = oddM15 / f; }
+                        if (totalGols >= 3) { oddM25 = 0; oddN25 = 0; } else { oddN25 = 1.01 + (oddN25 - 1.01) * fUnder; oddM25 = oddM25 / f; }
+                        if (isBtts) { oddBttsSim = 0; oddBttsNao = 0; } else { oddBttsNao = 1.01 + (oddBttsNao - 1.01) * fUnder; oddBttsSim = oddBttsSim / f; }
+
+                        let cartoesSimulados = Math.floor(minutosCorridos / 25);
+                        if (cartoesSimulados >= 3) { oddCrtM25 = 0; oddCrtN25 = 0; } else { oddCrtN25 = 1.01 + (oddCrtN25 - 1.01) * fUnder; oddCrtM25 = oddCrtM25 / f; }
+                    } else if (isLive && minutosCorridos > 100) {
+                        oddC=0; oddE=0; oddF=0; oddM15=0; oddN15=0; oddM25=0; oddN25=0; oddBttsSim=0; oddBttsNao=0; oddCrtM25=0; oddCrtN25=0;
+                    }
+
+                    // Dupla Chance, DNB e HT
+                    let odd1X = 0, odd12 = 0, oddX2 = 0, oddDnbCasa = 0, oddDnbFora = 0, oddC_HT = 0, oddE_HT = 0, oddF_HT = 0;
                     if(oddC > 0 && oddE > 0 && oddF > 0) {
                         let probC = 1 / oddC, probE = 1 / oddE, probF = 1 / oddF;
-                        odd1X = (1 / (probC + probE)) * juice; odd12 = (1 / (probC + probF)) * juice; oddX2 = (1 / (probF + probE)) * juice;
-                        oddDnbCasa = (1 / (probC / (probC + probF))) * juice; oddDnbFora = (1 / (probF / (probC + probF))) * juice;
-                        let probE_HT = Math.min(0.55, probE * 1.45); let probRestante = 1 - probE_HT; let pesoCasa = probC / (probC + probF);
-                        oddC_HT = (1 / (probRestante * pesoCasa)) * juice; oddE_HT = (1 / probE_HT) * juice; oddF_HT = (1 / (probRestante * (1 - pesoCasa))) * juice;
-
-                        let variacaoCartao = (Math.random() * 0.1); 
-                        let probM25Cartoes = 0.70 + variacaoCartao;
-                        oddCrtM25 = (1 / probM25Cartoes) * juice;
-                        oddCrtN25 = (1 / (1 - probM25Cartoes)) * juice;
+                        odd1X = (1 / (probC + probE)) * 0.92; odd12 = (1 / (probC + probF)) * 0.92; oddX2 = (1 / (probF + probE)) * 0.92;
+                        oddDnbCasa = (1 / (probC / (probC + probF))) * 0.92; oddDnbFora = (1 / (probF / (probC + probF))) * 0.92;
+                        
+                        if(minutosCorridos < 45) { oddC_HT = oddC * 1.15; oddE_HT = oddE * 0.85; oddF_HT = oddF * 1.15; }
                     }
-                    if (oddM25 > 0 && oddM15 === 0) { let pM25 = 1 / oddM25; let pM15 = Math.min(0.95, pM25 * 1.35); oddM15 = (1 / pM15) * juice; oddN15 = (1 / (1-pM15)) * juice; }
-                    if (oddM25 > 0) { let pBttsSim = Math.min(0.88, (1 / oddM25) * 1.05); oddBttsSim = (1 / pBttsSim) * juice; oddBttsNao = (1 / (1 - pBttsSim)) * juice; } else if (oddC > 0) { oddBttsSim = 1.85 * juice; oddBttsNao = 1.85 * juice; }
 
-                    const clampOdd = (val) => val > 0 ? Math.max(1.05, val) : 0;
-                    odd1X = clampOdd(odd1X); odd12 = clampOdd(odd12); oddX2 = clampOdd(oddX2); oddDnbCasa = clampOdd(oddDnbCasa); oddDnbFora = clampOdd(oddDnbFora); oddC_HT = clampOdd(oddC_HT); oddE_HT = clampOdd(oddE_HT); oddF_HT = clampOdd(oddF_HT); oddBttsSim = clampOdd(oddBttsSim); oddBttsNao = clampOdd(oddBttsNao); 
-                    if(oddM15 > 0) { oddM15 = clampOdd(oddM15); oddN15 = clampOdd(oddN15); }
-                    if(oddCrtM25 > 0) { oddCrtM25 = clampOdd(oddCrtM25); oddCrtN25 = clampOdd(oddCrtN25); }
+                    // Trava de ODDs (Mínimo 1.01 e Máximo 50.00)
+                    const clampOdd = (val) => val > 0 ? Math.min(50.00, Math.max(1.01, val)) : 0;
+                    odd1X = clampOdd(odd1X); odd12 = clampOdd(odd12); oddX2 = clampOdd(oddX2);
+                    oddDnbCasa = clampOdd(oddDnbCasa); oddDnbFora = clampOdd(oddDnbFora);
+                    oddC_HT = clampOdd(oddC_HT); oddE_HT = clampOdd(oddE_HT); oddF_HT = clampOdd(oddF_HT);
+                    oddC = clampOdd(oddC); oddE = clampOdd(oddE); oddF = clampOdd(oddF);
+                    oddM15 = clampOdd(oddM15); oddN15 = clampOdd(oddN15);
+                    oddM25 = clampOdd(oddM25); oddN25 = clampOdd(oddN25);
+                    oddBttsSim = clampOdd(oddBttsSim); oddBttsNao = clampOdd(oddBttsNao);
+                    oddCrtM25 = clampOdd(oddCrtM25); oddCrtN25 = clampOdd(oddCrtN25);
 
-                    if(oddC > 0 && oddF > 0) {
+                    if(oddC > 0 || oddM25 > 0) {
                         jogosCarregados.push({
                             id: jogo.id, casa: jogo.home_team, fora: jogo.away_team, oddC, oddE, oddF, odd1X, odd12, oddX2, oddDnbCasa, oddDnbFora, oddBttsSim, oddBttsNao, oddM15, oddN15, oddM25, oddN25, oddC_HT, oddE_HT, oddF_HT, oddCrtM25, oddCrtN25, dataCrua: horaDoJogo, dataVisual: arrumarData(jogo.commence_time), isLive, isIntervalo, minutosCorridos, placarC, placarF
                         });
@@ -621,20 +627,43 @@
             let htmlHTML = "";
             jogosCarregados.forEach(j => {
                 let badgeDaHora = j.isLive ? (j.isIntervalo ? `<div class="badge-horario badge-intervalo">⏸️ INTERVALO</div>` : `<div class="badge-horario badge-aovivo">🔴 AO VIVO</div>`) : `<div class="badge-horario">📅 ${j.dataVisual}</div>`;
-                let centroPlacar = `<div class="vs-txt">X</div>`; let placarCInt = 0; let placarFInt = 0;
-                if (j.isLive && j.placarC !== "" && j.placarF !== "") { centroPlacar = `<div class="placar-live">${j.placarC} - ${j.placarF}</div>`; placarCInt = parseInt(j.placarC) || 0; placarFInt = parseInt(j.placarF) || 0; }
-                let totalGols = placarCInt + placarFInt; let isBtts = placarCInt > 0 && placarFInt > 0;
+                let centroPlacar = `<div class="vs-txt">X</div>`; 
+                if (j.isLive && j.placarC !== "" && j.placarF !== "") { centroPlacar = `<div class="placar-live">${j.placarC} - ${j.placarF}</div>`; }
                 
-                let blocoDuchance = j.odd1X > 0 ? `<div class="mercado-titulo">Dupla Chance</div><div class="odds-linha"><div class="odd-btn" id="btn-${j.id}-1X" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa} ou Emp', ${j.odd1X}, '1X')"><span class="odd-lbl">Casa/Emp</span><span class="odd-val">${j.odd1X.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-12" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa} ou ${j.fora}', ${j.odd12}, '12')"><span class="odd-lbl">Casa/Fora</span><span class="odd-val">${j.odd12.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-X2" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora} ou Emp', ${j.oddX2}, 'X2')"><span class="odd-lbl">Fora/Emp</span><span class="odd-val">${j.oddX2.toFixed(2)}</span></div></div>` : "";
-                let blocoDnb = j.oddDnbCasa > 0 ? `<div class="mercado-titulo">Empate Anula</div><div class="odds-linha-dupla"><div class="odd-btn" id="btn-${j.id}-DNBC" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa} (DNB)', ${j.oddDnbCasa}, 'DNBC')"><span class="odd-lbl">Casa</span><span class="odd-val">${j.oddDnbCasa.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-DNBF" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora} (DNB)', ${j.oddDnbFora}, 'DNBF')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddDnbFora.toFixed(2)}</span></div></div>` : "";
-                let blocoBtts = (j.oddBttsSim > 0 && !isBtts) ? `<div class="mercado-titulo">Ambas Marcam</div><div class="odds-linha-dupla"><div class="odd-btn" id="btn-${j.id}-BTTSY" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Ambas - Sim', ${j.oddBttsSim}, 'BTTSY')"><span class="odd-lbl">Sim</span><span class="odd-val">${j.oddBttsSim.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-BTTSN" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Ambas - Não', ${j.oddBttsNao}, 'BTTSN')"><span class="odd-lbl">Não</span><span class="odd-val">${j.oddBttsNao.toFixed(2)}</span></div></div>` : "";
-                let botoesGols = ((j.oddM15 > 0 && totalGols < 2) ? `<div class="odd-btn" id="btn-${j.id}-M15" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 1.5 Gols', ${j.oddM15}, 'M15')"><span class="odd-lbl">+ 1.5 Gols</span><span class="odd-val">${j.oddM15.toFixed(2)}</span></div>` : "") + ((j.oddN15 > 0 && totalGols < 2) ? `<div class="odd-btn" id="btn-${j.id}-N15" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 1.5 Gols', ${j.oddN15}, 'N15')"><span class="odd-lbl">- 1.5 Gols</span><span class="odd-val">${j.oddN15.toFixed(2)}</span></div>` : "") + ((j.oddM25 > 0 && totalGols < 3) ? `<div class="odd-btn" id="btn-${j.id}-M25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 2.5 Gols', ${j.oddM25}, 'M25')"><span class="odd-lbl">+ 2.5 Gols</span><span class="odd-val">${j.oddM25.toFixed(2)}</span></div>` : "") + ((j.oddN25 > 0 && totalGols < 3) ? `<div class="odd-btn" id="btn-${j.id}-N25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 2.5 Gols', ${j.oddN25}, 'N25')"><span class="odd-lbl">- 2.5 Gols</span><span class="odd-val">${j.oddN25.toFixed(2)}</span></div>` : "");
-                let blocoGols = botoesGols !== "" ? `<div class="mercado-titulo">Total de Gols</div><div class="odds-linha-dupla">${botoesGols}</div>` : "";
-                let botoesCartoes = ((j.oddCrtM25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-CM25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 2.5 Cartões', ${j.oddCrtM25}, 'CM25')"><span class="odd-lbl">+ 2.5</span><span class="odd-val">${j.oddCrtM25.toFixed(2)}</span></div>` : "") + ((j.oddCrtN25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-CN25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 2.5 Cartões', ${j.oddCrtN25}, 'CN25')"><span class="odd-lbl">- 2.5</span><span class="odd-val">${j.oddCrtN25.toFixed(2)}</span></div>` : "");
-                let blocoCartoes = botoesCartoes !== "" ? `<div class="mercado-titulo">Cartões Amarelos</div><div class="odds-linha-dupla">${botoesCartoes}</div>` : "";
-                let blocoHT = j.oddC_HT > 0 ? `<div class="mercado-titulo">Vencedor - 1º Tempo</div><div class="odds-linha"><div class="odd-btn" id="btn-${j.id}-1HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa} (1ºT)', ${j.oddC_HT}, '1HT')"><span class="odd-lbl">Casa</span><span class="odd-val">${j.oddC_HT.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-XHT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Empate (1ºT)', ${j.oddE_HT}, 'XHT')"><span class="odd-lbl">Empate</span><span class="odd-val">${j.oddE_HT.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-2HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora} (1ºT)', ${j.oddF_HT}, '2HT')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddF_HT.toFixed(2)}</span></div></div>` : "";
+                let btn1 = j.oddC > 0 ? `<div class="odd-btn" id="btn-${j.id}-1" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa}', ${j.oddC}, '1')"><span class="odd-lbl">Casa</span><span class="odd-val">${j.oddC.toFixed(2)}</span></div>` : "";
+                let btnX = j.oddE > 0 ? `<div class="odd-btn" id="btn-${j.id}-X" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Empate', ${j.oddE}, 'X')"><span class="odd-lbl">Empate</span><span class="odd-val">${j.oddE.toFixed(2)}</span></div>` : "";
+                let btn2 = j.oddF > 0 ? `<div class="odd-btn" id="btn-${j.id}-2" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora}', ${j.oddF}, '2')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddF.toFixed(2)}</span></div>` : "";
+                let bloco1X2 = (btn1 || btnX || btn2) ? `<div class="mercado-titulo">Vencedor Final</div><div class="odds-linha">${btn1}${btnX}${btn2}</div>` : "";
 
-                htmlHTML += `<div class="card-jogo"><div class="card-topo"><span class="liga-tag">${nomeLigaFoco}</span>${badgeDaHora}</div><div class="placar-box"><div class="time-box">${desenharEscudo(j.casa)}<span class="nome-time">${j.casa}</span></div>${centroPlacar}<div class="time-box visitante">${desenharEscudo(j.fora)}<span class="nome-time">${j.fora}</span></div></div><div class="mercado-titulo">Vencedor Final</div><div class="odds-linha"><div class="odd-btn" id="btn-${j.id}-1" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa}', ${j.oddC}, '1')"><span class="odd-lbl">Casa</span><span class="odd-val">${j.oddC.toFixed(2)}</span></div><div class="odd-btn" id="btn-${j.id}-X" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Empate', ${j.oddE}, 'X')"><span class="odd-lbl">Empate</span><span class="odd-val">${j.oddE > 0 ? j.oddE.toFixed(2) : '-'}</span></div><div class="odd-btn" id="btn-${j.id}-2" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora}', ${j.oddF}, '2')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddF.toFixed(2)}</span></div></div>${blocoHT}${blocoDuchance}${blocoDnb}${blocoBtts}${blocoGols}${blocoCartoes}</div>`;
+                let btn1X = j.odd1X > 0 ? `<div class="odd-btn" id="btn-${j.id}-1X" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa} ou Emp', ${j.odd1X}, '1X')"><span class="odd-lbl">Casa/Emp</span><span class="odd-val">${j.odd1X.toFixed(2)}</span></div>` : "";
+                let btn12 = j.odd12 > 0 ? `<div class="odd-btn" id="btn-${j.id}-12" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa} ou ${j.fora}', ${j.odd12}, '12')"><span class="odd-lbl">Casa/Fora</span><span class="odd-val">${j.odd12.toFixed(2)}</span></div>` : "";
+                let btnX2 = j.oddX2 > 0 ? `<div class="odd-btn" id="btn-${j.id}-X2" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora} ou Emp', ${j.oddX2}, 'X2')"><span class="odd-lbl">Fora/Emp</span><span class="odd-val">${j.oddX2.toFixed(2)}</span></div>` : "";
+                let blocoDuchance = (btn1X || btn12 || btnX2) ? `<div class="mercado-titulo">Dupla Chance</div><div class="odds-linha">${btn1X}${btn12}${btnX2}</div>` : "";
+
+                let btnDNBC = j.oddDnbCasa > 0 ? `<div class="odd-btn" id="btn-${j.id}-DNBC" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa} (DNB)', ${j.oddDnbCasa}, 'DNBC')"><span class="odd-lbl">Casa</span><span class="odd-val">${j.oddDnbCasa.toFixed(2)}</span></div>` : "";
+                let btnDNBF = j.oddDnbFora > 0 ? `<div class="odd-btn" id="btn-${j.id}-DNBF" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora} (DNB)', ${j.oddDnbFora}, 'DNBF')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddDnbFora.toFixed(2)}</span></div>` : "";
+                let blocoDnb = (btnDNBC || btnDNBF) ? `<div class="mercado-titulo">Empate Anula</div><div class="odds-linha-dupla">${btnDNBC}${btnDNBF}</div>` : "";
+
+                let btnBttsY = j.oddBttsSim > 0 ? `<div class="odd-btn" id="btn-${j.id}-BTTSY" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Ambas - Sim', ${j.oddBttsSim}, 'BTTSY')"><span class="odd-lbl">Sim</span><span class="odd-val">${j.oddBttsSim.toFixed(2)}</span></div>` : "";
+                let btnBttsN = j.oddBttsNao > 0 ? `<div class="odd-btn" id="btn-${j.id}-BTTSN" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Ambas - Não', ${j.oddBttsNao}, 'BTTSN')"><span class="odd-lbl">Não</span><span class="odd-val">${j.oddBttsNao.toFixed(2)}</span></div>` : "";
+                let blocoBtts = (btnBttsY || btnBttsN) ? `<div class="mercado-titulo">Ambas Marcam</div><div class="odds-linha-dupla">${btnBttsY}${btnBttsN}</div>` : "";
+
+                let botoesGols = ((j.oddM15 > 0) ? `<div class="odd-btn" id="btn-${j.id}-M15" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 1.5 Gols', ${j.oddM15}, 'M15')"><span class="odd-lbl">+ 1.5 Gols</span><span class="odd-val">${j.oddM15.toFixed(2)}</span></div>` : "") +
+                                 ((j.oddN15 > 0) ? `<div class="odd-btn" id="btn-${j.id}-N15" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 1.5 Gols', ${j.oddN15}, 'N15')"><span class="odd-lbl">- 1.5 Gols</span><span class="odd-val">${j.oddN15.toFixed(2)}</span></div>` : "") +
+                                 ((j.oddM25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-M25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 2.5 Gols', ${j.oddM25}, 'M25')"><span class="odd-lbl">+ 2.5 Gols</span><span class="odd-val">${j.oddM25.toFixed(2)}</span></div>` : "") +
+                                 ((j.oddN25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-N25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 2.5 Gols', ${j.oddN25}, 'N25')"><span class="odd-lbl">- 2.5 Gols</span><span class="odd-val">${j.oddN25.toFixed(2)}</span></div>` : "");
+                let blocoGols = botoesGols !== "" ? `<div class="mercado-titulo">Total de Gols</div><div class="odds-linha-dupla">${botoesGols}</div>` : "";
+
+                let botoesCartoes = ((j.oddCrtM25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-CM25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 2.5 Cartões', ${j.oddCrtM25}, 'CM25')"><span class="odd-lbl">+ 2.5</span><span class="odd-val">${j.oddCrtM25.toFixed(2)}</span></div>` : "") +
+                                    ((j.oddCrtN25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-CN25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 2.5 Cartões', ${j.oddCrtN25}, 'CN25')"><span class="odd-lbl">- 2.5</span><span class="odd-val">${j.oddCrtN25.toFixed(2)}</span></div>` : "");
+                let blocoCartoes = botoesCartoes !== "" ? `<div class="mercado-titulo">Cartões Amarelos</div><div class="odds-linha-dupla">${botoesCartoes}</div>` : "";
+
+                let btn1HT = j.oddC_HT > 0 ? `<div class="odd-btn" id="btn-${j.id}-1HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.casa} (1ºT)', ${j.oddC_HT}, '1HT')"><span class="odd-lbl">Casa</span><span class="odd-val">${j.oddC_HT.toFixed(2)}</span></div>` : "";
+                let btnXHT = j.oddE_HT > 0 ? `<div class="odd-btn" id="btn-${j.id}-XHT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', 'Empate (1ºT)', ${j.oddE_HT}, 'XHT')"><span class="odd-lbl">Empate</span><span class="odd-val">${j.oddE_HT.toFixed(2)}</span></div>` : "";
+                let btn2HT = j.oddF_HT > 0 ? `<div class="odd-btn" id="btn-${j.id}-2HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora} (1ºT)', ${j.oddF_HT}, '2HT')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddF_HT.toFixed(2)}</span></div>` : "";
+                let blocoHT = (btn1HT || btnXHT || btn2HT) ? `<div class="mercado-titulo">Vencedor - 1º Tempo</div><div class="odds-linha">${btn1HT}${btnXHT}${btn2HT}</div>` : "";
+
+                htmlHTML += `<div class="card-jogo"><div class="card-topo"><span class="liga-tag">${nomeLigaFoco}</span>${badgeDaHora}</div><div class="placar-box"><div class="time-box">${desenharEscudo(j.casa)}<span class="nome-time">${j.casa}</span></div>${centroPlacar}<div class="time-box visitante">${desenharEscudo(j.fora)}<span class="nome-time">${j.fora}</span></div></div>${bloco1X2}${blocoHT}${blocoDuchance}${blocoDnb}${blocoBtts}${blocoGols}${blocoCartoes}</div>`;
             });
             document.getElementById('container-jogos').innerHTML = htmlHTML;
             carrinho.forEach(c => { let b = document.getElementById(`btn-${c.idJogo}-${c.tipoOpcao}`); if(b) b.classList.add('selecionado'); });
