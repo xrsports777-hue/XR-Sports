@@ -236,10 +236,22 @@
                 if(resNpt.ok) { let json = await resNpt.json(); if(json.id) return "NPT-" + json.id; }
             } catch(e) {}
             try {
-                let resBlob = await fetch("https://jsonblob.com/api/jsonBlob", { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) });
+                let resBlob = await fetch("https://jsonblob.com/api/jsonBlob", { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(dados) });
                 if(resBlob.ok) { let loc = resBlob.headers.get("Location") || resBlob.headers.get("location"); if(loc) return "BLB-" + loc.split('/').pop(); }
             } catch(e) {}
-            return null;
+            try {
+                let resRst = await fetch("https://api.restful-api.dev/objects", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: "XRSportsTicket", data: dados })
+                });
+                if(resRst.ok) { let json = await resRst.json(); if(json.id) return "RST-" + json.id; }
+            } catch(e) {}
+            try {
+                return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados))));
+            } catch(e) {
+                return null;
+            }
         }
 
         async function lerDaNuvem(blobId) {
