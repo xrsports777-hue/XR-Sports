@@ -21,7 +21,7 @@
         
         .btn-sync{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda);padding:6px 12px;border-radius:8px;font-weight:700;cursor:pointer;transition:.2s;font-size:13px}.btn-sync:active{transform:scale(.95);background:var(--bg-hover)}.nav-ligas{display:flex;gap:10px;margin-top:18px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.nav-ligas::-webkit-scrollbar{display:none}.liga-btn{background:rgba(9,14,23,0.8);color:var(--texto-secundario);border:1px solid var(--borda);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:.3s}.liga-btn.ativo{background:var(--neon);color:#000;border-color:var(--neon)}#status-msg{text-align:center;padding:25px 20px;color:var(--texto-secundario);font-size:14px;margin:20px 15px;border-radius:12px;background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px dashed var(--borda);line-height:1.6}.container{padding:5px 15px;max-width:600px;margin:0 auto}.card-jogo{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--borda);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}.card-topo{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);padding-bottom:10px}.liga-tag{font-size:11px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;letter-spacing:.5px}.badge-horario{font-size:11px;font-weight:800;color:#000;background:var(--neon);padding:4px 8px;border-radius:6px}.badge-aovivo{background:rgba(255,59,59,0.15);color:var(--live);border:1px solid var(--live);animation:piscar 1.5s infinite}.badge-intervalo{background:rgba(245,166,35,0.15);color:var(--amarelo);border:1px solid var(--amarelo);animation:piscar 1.5s infinite}@keyframes piscar{0%,100%{opacity:1}50%{opacity:.5}}.placar-box{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px}.time-box{display:flex;align-items:center;gap:10px;width:40%}.time-box.visitante{flex-direction:row-reverse;text-align:right}.escudo-container{width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.escudo-img{width:100%;height:100%;object-fit:contain}.escudo-letra{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;box-shadow:inset 0 2px 5px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1)}.nome-time{font-size:14px;font-weight:800;color:var(--texto);line-height:1.2}.vs-txt{font-size:12px;font-weight:900;color:var(--texto-secundario)}.placar-live{font-size:16px;font-weight:900;color:var(--neon);background:rgba(0,255,136,0.1);padding:4px 8px;border-radius:6px;letter-spacing:1px;white-space:nowrap}.mercado-titulo{font-size:11px;color:var(--texto-secundario);font-weight:700;text-transform:uppercase;margin-bottom:-5px;margin-top:5px;text-align:center;border-top:1px dashed rgba(255,255,255,0.05);padding-top:10px}.odds-linha{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.odds-linha-dupla{display:grid;grid-template-columns:1fr 1fr;gap:8px}.odd-btn{background:rgba(9,14,23,0.6);border:1px solid var(--borda);border-radius:10px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;user-select:none}.odd-btn.selecionado{background:var(--neon);border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.2)}.odd-btn.selecionado .odd-lbl,.odd-btn.selecionado .odd-val{color:#000}.odd-lbl{font-size:10px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;margin-bottom:2px;text-align:center}.odd-val{font-size:15px;font-weight:900;color:var(--texto)}#btn-gaveta{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;width:90%;max-width:400px;padding:16px 20px;border-radius:14px;font-weight:900;font-size:15px;display:none;justify-content:space-between;align-items:center;box-shadow:0 10px 30px rgba(0,255,136,0.3);z-index:90;cursor:pointer;border:none}.badge-qtd{background:#000;color:var(--neon);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}#modal-bilhete{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;display:none;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(5px)}.bilhete-conteudo{background:rgba(18,25,39,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--borda);width:100%;max-height:85vh;border-top-left-radius:24px;border-top-right-radius:24px;padding:24px;display:flex;flex-direction:column;animation:subirTela .3s ease-out forwards}@keyframes subirTela{from{transform:translateY(100%)}to{transform:translateY(0)}}.bilhete-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--borda);padding-bottom:15px}.bilhete-titulo{font-size:20px;font-weight:900}.btn-fechar{background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:var(--texto);width:36px;height:36px;border-radius:50%;font-weight:700;cursor:pointer}.lista-palpites{overflow-y:auto;max-height:35vh;margin-bottom:15px;padding-right:5px}.palpite-item{background:rgba(9,14,23,0.6);padding:14px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--borda);border-left:4px solid var(--neon)}.palpite-jogo{font-size:12px;color:var(--texto-secundario);font-weight:700;margin-bottom:5px}.palpite-escolha{font-size:15px;font-weight:900}.palpite-odd{font-weight:900;color:var(--neon);font-size:18px}.caixa-valores{background:rgba(5,8,12,0.8);padding:18px;border-radius:16px;border:1px solid var(--borda);margin-bottom:15px}.linha-valor{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;font-weight:700;color:var(--texto-secundario)}.odd-final{color:var(--texto);font-size:18px;font-weight:900}.input-grana{width:100%;background:rgba(18,25,39,0.6);border:2px solid var(--borda);color:#fff;padding:16px;border-radius:12px;font-size:20px;font-weight:900;text-align:center;outline:0;margin-bottom:10px}.input-grana:focus{border-color:var(--neon)}.linha-retorno{display:flex;justify-content:space-between;align-items:center;margin-top:15px;font-weight:800}.retorno-verde{color:var(--neon);font-size:24px;font-weight:900}.btn-enviar-zap{width:100%;background:#25D366;color:#fff;padding:18px;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;text-transform:uppercase;margin-top:5px;box-shadow:0 4px 15px rgba(37,211,102,0.3)}.btn-apagar-tudo{background:0 0;border:none;color:var(--danger);font-size:13px;font-weight:700;margin-top:20px;width:100%;cursor:pointer;text-decoration:underline}.botao-fantasma{position:fixed;bottom:0;right:0;width:60px;height:60px;background:0 0;z-index:9999;cursor:default}#tela-login,#tela-admin{display:none;padding:25px;max-width:500px;margin:40px auto;background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}.input-admin{width:100%;padding:16px;margin-bottom:15px;background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:#fff;border-radius:8px;font-size:16px}.btn-admin{width:100%;background:var(--neon);color:#000;padding:18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:10px;font-size:16px}.btn-voltar{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda)}#tela-digital{display:none;padding:20px;max-width:500px;margin:0 auto}.digital-card{background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;padding:20px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}.digital-header{text-align:center;border-bottom:2px dashed var(--borda);padding-bottom:15px;margin-bottom:15px}.digital-pin{font-size:28px;font-weight:900;color:var(--texto);letter-spacing:2px}.digital-status{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:900;margin-top:10px;border:1px solid transparent}
         
-        /* CORES DOS STATUS */
+        /* CORES DOS STATUS - ATUALIZADO PARA VERDE NO STATUS 1 */
         .status-0{background:rgba(245,166,35,0.15);color:var(--amarelo);border-color:var(--amarelo)}
         .status-1{background:rgba(0,255,136,0.15);color:var(--neon);border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.2)}
         .status-2{background:rgba(0,255,136,0.25);color:var(--neon);border-color:var(--neon);box-shadow:0 0 20px rgba(0,255,136,0.4)}
@@ -230,34 +230,94 @@
         }
         function esconderLoading() { document.getElementById('overlay-loading').style.display = 'none'; }
 
-        // --- SISTEMA BLINDADO COM 3 CAMADAS ---
+        // --- SISTEMA BLINDADO COM API RESTFUL (100% NUVEM E TEMPO REAL) ---
         async function salvarNaNuvem(dados) {
+            // TENTATIVA 1: RESTful API (Super Estável, sem block de CORS)
             try {
-                let resNpt = await fetch("https://api.npoint.io", { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(dados) });
-                if(resNpt.ok) { let json = await resNpt.json(); if(json.id) return "NPT-" + json.id; }
-            } catch(e) {}
+                let res = await fetch("https://api.restful-api.dev/objects", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: "XRSportsTicket", data: dados })
+                });
+                if(res.ok) { let json = await res.json(); return "RST-" + json.id; }
+            } catch(e) { console.log("RST falhou"); }
+
+            // TENTATIVA 2: JSONBlob
             try {
-                let resBlob = await fetch("https://jsonblob.com/api/jsonBlob", { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(dados) });
-                if(resBlob.ok) { let loc = resBlob.headers.get("Location"); if(loc) return loc.split('/').pop(); }
-            } catch(e) {}
-            try {
-                let dadosCompactados = encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados))));
-                return "OFF-" + dadosCompactados;
-            } catch(e) { return null; }
+                let res = await fetch("https://jsonblob.com/api/jsonBlob", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                let loc = res.headers.get("Location") || res.headers.get("location");
+                if(loc) return "BLB-" + loc.split('/').pop();
+            } catch(e) { console.log("BLB falhou"); }
+
+            return null; // Força a ter conexão
         }
 
         async function lerDaNuvem(blobId) {
             if (!blobId) return null;
-            if (blobId.startsWith("OFF-")) { try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } catch(e) { return null; } }
-            if (blobId.startsWith("NPT-")) { try { let res = await fetch(`https://api.npoint.io/${blobId.replace("NPT-", "")}`); if(res.ok) return await res.json(); } catch(e) {} return null; }
-            try { let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`); if(res.ok) return await res.json(); } catch(e) {}
+            
+            if (blobId.startsWith("RST-")) {
+                let id = blobId.replace("RST-", "");
+                try {
+                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`);
+                    if(res.ok) { let json = await res.json(); return json.data; }
+                } catch(e) {}
+                return null;
+            }
+            
+            if (blobId.startsWith("BLB-")) {
+                let id = blobId.replace("BLB-", "");
+                try {
+                    let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`);
+                    if(res.ok) return await res.json();
+                } catch(e) {}
+                return null;
+            }
+
+            // Suporte para bilhetes antigos que usavam só os números do JSONBlob
+            try {
+                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`);
+                if(res.ok) return await res.json();
+            } catch(e) {}
             return null;
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            if (blobId.startsWith("OFF-")) { try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return false; } }
-            if (blobId.startsWith("NPT-")) { try { let res = await fetch(`https://api.npoint.io/${blobId.replace("NPT-", "")}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) }); return res.ok ? blobId : false; } catch(e) { return false; } }
-            try { let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(dados) }); return res.ok ? blobId : false; } catch(e) { return false; }
+            if (blobId.startsWith("RST-")) {
+                let id = blobId.replace("RST-", "");
+                try {
+                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: "XRSportsTicket", data: dados })
+                    });
+                    return res.ok ? blobId : false;
+                } catch(e) { return false; }
+            }
+            
+            if (blobId.startsWith("BLB-")) {
+                let id = blobId.replace("BLB-", "");
+                try {
+                    let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+                    return res.ok ? blobId : false;
+                } catch(e) { return false; }
+            }
+
+            try {
+                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                return res.ok ? blobId : false;
+            } catch(e) { return false; }
         }
 
         function salvarCarrinho() { localStorage.setItem('xrsports_carrinho', JSON.stringify(carrinho)); }
@@ -358,11 +418,7 @@
             let dados = await lerDaNuvem(blobId);
             if (dados) {
                 dados.s = novoStatus;
-                let novoBlobId = await atualizarNaNuvem(blobId, dados);
-                if (novoBlobId && typeof novoBlobId === 'string' && novoBlobId.startsWith("OFF-")) {
-                    let index = historicoBilhetes.indexOf(blobId);
-                    if (index > -1) { historicoBilhetes[index] = novoBlobId; localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes)); }
-                }
+                await atualizarNaNuvem(blobId, dados);
                 mostrarToast("Status atualizado com sucesso!");
                 carregarHistoricoAdmin();
             }
@@ -386,11 +442,10 @@
                 dados.n = nomeClienteAdmin; 
                 let agora = new Date(); dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                 
-                let idSalvo = await atualizarNaNuvem(blobId, dados);
-                let idParaHistorico = (idSalvo && typeof idSalvo === 'string') ? idSalvo : blobId;
+                await atualizarNaNuvem(blobId, dados);
                 
-                if(!historicoBilhetes.includes(idParaHistorico)) {
-                    historicoBilhetes.unshift(idParaHistorico);
+                if(!historicoBilhetes.includes(blobId)) {
+                    historicoBilhetes.unshift(blobId);
                     localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
                 }
                 
@@ -421,7 +476,7 @@
                 let linkAcompanhar = baseUrl + "?b=" + blobId;
                 let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
                 window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`, '_blank');
-            } else { mostrarToast("Erro crítico. Verifique sua conexão.", "erro"); }
+            } else { mostrarToast("Erro de Conexão. Tente novamente.", "erro"); }
         }
 
         async function buscarPlacaresBilhete(ligas, jogosNoBilhete) {
