@@ -299,42 +299,43 @@
 
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
-        // 🚀 MOTOR DE NUVEM COM ASSINATURA E JSONBLOB
+        // 🚀 MOTOR DE NUVEM 100% ONLINE (SEM MODO OFFLINE)
         async function salvarNaNuvem(dados) {
             // Assinatura simples de segurança
-            dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`);
+            dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`); 
 
-            // Plano A: JSONBlob (Mais rápido e estável para atualizar)
-            const tentarJsonBlob = async () => {
-                let jsonReq = await fetch("https://jsonblob.com/api/jsonBlob", {
-                    method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            // Tenta o JSONBlob primeiro (Muito rápido e estável)
+            try {
+                let res = await fetch("https://jsonblob.com/api/jsonBlob", {
+                    method: "POST", 
+                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
                     body: JSON.stringify(dados)
                 });
-                if (!jsonReq.ok) throw new Error("JSONBlob falhou");
-                let blobUrl = jsonReq.headers.get("Location");
-                let id = blobUrl.split('/').pop();
-                return "BLB-" + id;
-            };
+                if (res.ok) {
+                    let location = res.headers.get("Location");
+                    if (location) {
+                        let parts = location.split('/');
+                        return "BLB-" + parts[parts.length - 1];
+                    }
+                }
+            } catch(e) { console.warn("JSONBlob falhou, tentando servidor secundário..."); }
 
-            // Plano B: Restful API (Sem o fetchBlindado que travava)
-            const tentarRestful = async () => {
-                let jsonReq = await fetch("https://api.restful-api.dev/objects", {
-                    method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ name: "XRSportsTicket", data: dados })
-                });
-                if (!jsonReq.ok) throw new Error("Restful API falhou");
-                let json = await jsonReq.json();
-                return "RST-" + json.id;
-            };
-
-            // Tenta as APIs na ordem
+            // Tenta o Restful API como salva-vidas
             for (let i = 1; i <= 3; i++) {
-                try { return await tentarJsonBlob(); } catch (e) {}
-                try { return await tentarRestful(); } catch (e) { if (i === 3) break; await new Promise(r => setTimeout(r, 800)); }
+                try {
+                    let jsonReq = await fetch("https://api.restful-api.dev/objects", {
+                        method: "POST", headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ name: "XRSportsTicket", data: dados })
+                    });
+                    if (jsonReq.ok) {
+                        let json = await jsonReq.json();
+                        return "RST-" + json.id;
+                    }
+                } catch (erro) { if (i === 3) break; await new Promise(r => setTimeout(r, 800)); }
             }
-
-            // Plano C: Offline (Se a internet cair de vez)
-            try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return null; }
+            
+            // Se as duas nuvens caírem, retorna nulo para dar erro e não gerar link fantasma
+            return null;
         }
 
         async function lerDaNuvem(blobId) {
@@ -357,25 +358,26 @@
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            if (blobId.startsWith("OFF-")) {
-                try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } catch(e) { return false; }
+            if (blobId.startsWith("OFF-")) { 
+                mostrarToast("Erro: Esse é um link antigo offline. Peça pro cliente gerar outro.", "erro");
+                return false; 
             }
             if (blobId.startsWith("BLB-")) {
                 let id = blobId.replace("BLB-", "");
-                try {
-                    let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`, {
-                        method: 'PUT', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(dados)
-                    });
-                    return res.ok ? blobId : false;
+                try { 
+                    let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`, { 
+                        method: 'PUT', headers: { 'Content-Type': 'application/json', "Accept": "application/json" }, body: JSON.stringify(dados) 
+                    }); 
+                    return res.ok ? blobId : false; 
                 } catch(e) { return false; }
             }
             if (blobId.startsWith("RST-")) {
                 let id = blobId.replace("RST-", "");
-                try {
-                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, {
-                        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: "XRSportsTicket", data: dados })
-                    });
-                    return res.ok ? blobId : false;
+                try { 
+                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { 
+                        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: "XRSportsTicket", data: dados }) 
+                    }); 
+                    return res.ok ? blobId : false; 
                 } catch(e) { return false; }
             }
             return false;
@@ -483,10 +485,6 @@
                 dados.s = novoStatus;
                 let isSuccess = await atualizarNaNuvem(blobId, dados);
                 if (isSuccess) {
-                    if (typeof isSuccess === 'string' && isSuccess.startsWith("OFF-")) {
-                        let index = historicoBilhetes.indexOf(blobId);
-                        if (index > -1) { historicoBilhetes[index] = isSuccess; localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes)); }
-                    }
                     mostrarToast("Status atualizado com sucesso!");
                     carregarHistoricoAdmin();
                 } else { mostrarToast("Falha na atualização. Verifique a internet.", "erro"); }
@@ -505,7 +503,7 @@
             let blobId = partes.length > 1 ? partes[1] : codigoLink;
             blobId = blobId.split('&')[0].trim();
             
-            mostrarLoading("Buscando Bilhete...");
+            mostrarLoading("Validando na Nuvem...");
             let dados = await lerDaNuvem(blobId);
             if(dados) {
                 dados.s = 1; 
@@ -514,23 +512,16 @@
                 
                 let isSuccess = await atualizarNaNuvem(blobId, dados);
                 if(isSuccess) {
-                    let idParaHistorico = (typeof isSuccess === 'string') ? isSuccess : blobId;
-                    if(!historicoBilhetes.includes(idParaHistorico)) {
-                        historicoBilhetes.unshift(idParaHistorico);
+                    if(!historicoBilhetes.includes(blobId)) {
+                        historicoBilhetes.unshift(blobId);
                         localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
                     }
-
-                    // Bônus: Avisa você se o bilhete salvo for offline (OFF-)
-                    if (idParaHistorico.startsWith("OFF-")) {
-                        let linkNovo = window.location.href.split('?')[0] + "?b=" + idParaHistorico;
-                        prompt("⚠️ AVISO: Bilhete Offline! O link do cliente não atualiza sozinho. Copie o link validado abaixo e envie pra ele:", linkNovo);
-                    }
-
                     document.getElementById('codigo-recebido').value = '';
                     document.getElementById('nome-cliente-admin').value = '';
+                    
                     mostrarToast("Bilhete Validado Oficialmente!");
                     carregarHistoricoAdmin();
-                } else { mostrarToast("Erro ao validar na nuvem! Tente novamente.", "erro"); }
+                } else { mostrarToast("Erro de conexão ao validar. Tente novamente.", "erro"); }
             } else { mostrarToast("Bilhete não encontrado na nuvem!", "erro"); }
             esconderLoading();
         }
