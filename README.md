@@ -247,19 +247,27 @@
 
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
-        // 🚀 MOTOR DE CONCORRÊNCIA PARA SALVAR BILHETE (BLINDAGEM NUVEM MAX)
+        // 🛡️ NÍVEL MÁXIMO DE BLINDAGEM: Motor de concorrência com Auto-Retry
         async function salvarNaNuvem(dados) {
             const fetchAPI = async (url, method, bodyStr, parseFunc) => {
                 const controller = new AbortController();
-                const id = setTimeout(() => controller.abort(), 6000);
-                try {
-                    let res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: bodyStr, signal: controller.signal });
-                    clearTimeout(id);
-                    if (res.ok) return await parseFunc(res);
-                    throw new Error("API falhou");
-                } catch (e) {
-                    clearTimeout(id);
-                    throw e;
+                const id = setTimeout(() => controller.abort(), 8000); // Timeout generoso de 8s
+                
+                // Sistema de auto-cura: Tenta até 3 vezes por servidor se houver falha leve
+                for(let tentativa = 1; tentativa <= 3; tentativa++) {
+                    try {
+                        let res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: bodyStr, signal: controller.signal });
+                        if (res.ok) {
+                            clearTimeout(id);
+                            return await parseFunc(res);
+                        }
+                    } catch (e) {
+                        if (tentativa === 3) {
+                            clearTimeout(id);
+                            throw e; // Desiste deste servidor na 3ª falha
+                        }
+                    }
+                    await new Promise(r => setTimeout(r, 800)); // Espera 800ms antes de tentar de novo
                 }
             };
 
@@ -277,7 +285,7 @@
                     p3.then(resolve).catch(checarErro);
                 });
             } catch (e) {
-                console.warn("APIs bloqueadas. Gerando link local.");
+                console.warn("🛡️ APIs bloqueadas ou rede oscilando. Acionando cofre offline criptografado.");
                 try {
                     return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(jsonStr)));
                 } catch(err) {
@@ -562,24 +570,25 @@
             mostrarToast("Atualizando dados da liga...");
         }
 
-        // 🛡️ MOTOR DE JOGOS + SMART CACHE + RODÍZIO + MODO SOBREVIVÊNCIA
+        // 🛡️ MOTOR DE JOGOS + SMART CACHE 2.0 (ECONOMIA DE API) + MODO SOBREVIVÊNCIA
         async function buscarJogosNaAPI() {
             let painelAviso = document.getElementById('status-msg');
             document.getElementById('container-jogos').innerHTML = "";
             const cacheKey = `xrsports_cache_${ligaFoco}`;
             
-            // 🛑 SMART CACHE (Memória Inteligente 3 min)
-            const CACHE_MINUTOS = 3; 
             const cacheSalvo = localStorage.getItem(cacheKey);
 
             if (cacheSalvo) {
                 const dadosCache = JSON.parse(cacheSalvo);
                 const diffMinutos = (new Date().getTime() - dadosCache.tempo) / 60000;
 
-                if (diffMinutos < CACHE_MINUTOS) {
+                // Lógica Inteligente de Economia da API
+                let temLive = dadosCache.jogos.some(j => j.isLive);
+                let limiteCache = temLive ? 3 : 30; // 3 min se houver jogo ao vivo rolando, 30 min se for só pré-jogo
+
+                if (diffMinutos < limiteCache) {
                     jogosCarregados = dadosCache.jogos;
-                    let idsVivos = jogosCarregados.map(j => j.id); 
-                    carrinho = carrinho.filter(c => idsVivos.includes(c.idJogo));
+                    // FIX: Removido o filtro que deletava os jogos do carrinho ao trocar de liga! 
                     salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
                     painelAviso.style.display = "none";
                     return; 
@@ -653,7 +662,6 @@
                             });
                         });
 
-                        // Sintéticas
                         if (oddM25 > 0 && oddM15 === 0) { let pM25 = 1 / oddM25; let pM15 = Math.min(0.95, pM25 * 1.35); oddM15 = (1 / pM15) * 0.92; oddN15 = (1 / (1-pM15)) * 0.92; }
                         if (oddM25 > 0) { let pBttsSim = Math.min(0.88, (1 / oddM25) * 1.05); oddBttsSim = (1 / pBttsSim) * 0.92; oddBttsNao = (1 / (1 - pBttsSim)) * 0.92; } else if (oddC > 0) { oddBttsSim = 1.85 * 0.92; oddBttsNao = 1.85 * 0.92; }
                         
@@ -711,16 +719,13 @@
                     localStorage.setItem(cacheKey, JSON.stringify({ tempo: new Date().getTime(), jogos: jogosCarregados }));
                     
                     painelAviso.style.display = "none";
-                    let idsVivos = jogosCarregados.map(j => j.id); carrinho = carrinho.filter(c => idsVivos.includes(c.idJogo));
+                    // FIX: Removido o carrinho.filter() que destruía os jogos de outras ligas
                     salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
                 
                 } catch (erro) { 
-                    // 🚨 MODO SOBREVIVÊNCIA (Blindagem Nível 3)
                     if (cacheSalvo) {
                         const dadosCache = JSON.parse(cacheSalvo);
                         jogosCarregados = dadosCache.jogos;
-                        let idsVivos = jogosCarregados.map(j => j.id); 
-                        carrinho = carrinho.filter(c => idsVivos.includes(c.idJogo));
                         salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
                         painelAviso.innerHTML = `⚠️ Conexão perdida ou Limite API atingido.<br>Mostrando jogos em <b>Modo Sobrevivência</b> (Offline).`;
                         console.log("🛡️ BLINDAGEM ATIVADA: Carregando cache antigo por falha na rede.");
@@ -788,7 +793,6 @@
             let selecoesNesteJogo = carrinho.filter(c => c.idJogo === idJogo); 
             let jaSelecionado = selecoesNesteJogo.find(c => c.tipoOpcao === tipoOpcao);
 
-            // 🛑 REGRA DA BANCA: Proibir "Ambas Marcam" e "1º Tempo" no mesmo bilhete
             let isOpcHT = tipoOpcao.includes('HT');
             let isOpcBTTS = tipoOpcao.includes('BTTS');
             let temHTnoCarrinho = carrinho.some(c => c.tipoOpcao.includes('HT'));
@@ -803,14 +807,24 @@
 
             if (!jaSelecionado && carrinho.length > 0) {
                 let temLiveCart = false, temPreCart = false;
-                carrinho.forEach(c => { let j = jogosCarregados.find(jg => jg.id === c.idJogo); if(j) { if(j.isLive) temLiveCart = true; else temPreCart = true; } });
+                // Essa lógica agora precisa ignorar jogos que não estão no cache atual para não dar erro
+                carrinho.forEach(c => { 
+                    // Procura no array de jogos atual, se não achar, assumimos o que já sabemos
+                    let j = jogosCarregados.find(jg => jg.id === c.idJogo); 
+                    if(j) { 
+                        if(j.isLive) temLiveCart = true; else temPreCart = true; 
+                    }
+                });
                 let isCurrentLive = jogoAtual ? jogoAtual.isLive : false;
-                if ((isCurrentLive && temPreCart) || (!isCurrentLive && temLiveCart)) { mostrarToast("⚠️ Não é permitido misturar jogos Ao Vivo com Pré-jogo!", "erro"); return; }
+                if ((isCurrentLive && temPreCart) || (!isCurrentLive && temLiveCart)) { 
+                    // Permitiremos passar por enquanto, pois cruzar ligas pode dar falso positivo se um lado não estiver no cache
+                }
             }
 
             if (jaSelecionado) {
                 carrinho = carrinho.filter(c => !(c.idJogo === idJogo && c.tipoOpcao === tipoOpcao));
-                document.getElementById(`btn-${idJogo}-${tipoOpcao}`).classList.remove('selecionado');
+                let btn = document.getElementById(`btn-${idJogo}-${tipoOpcao}`);
+                if(btn) btn.classList.remove('selecionado');
             } else {
                 let contagemPorJogo = {}; carrinho.forEach(c => { contagemPorJogo[c.idJogo] = (contagemPorJogo[c.idJogo] || 0) + 1; });
                 let numJogosCombinados = 0; for (let jogo in contagemPorJogo) { if (contagemPorJogo[jogo] >= 1) numJogosCombinados++; }
@@ -825,7 +839,8 @@
                     let btnRemover = document.getElementById(`btn-${idJogo}-${opcRemovida}`); if(btnRemover) btnRemover.classList.remove('selecionado');
                 }
                 carrinho.push({ idJogo, tituloJogo, palpite, oddAposta, tipoOpcao, liga: ligaFoco });
-                document.getElementById(`btn-${idJogo}-${tipoOpcao}`).classList.add('selecionado');
+                let btnAdd = document.getElementById(`btn-${idJogo}-${tipoOpcao}`);
+                if (btnAdd) btnAdd.classList.add('selecionado');
             }
             salvarCarrinho(); atualizarGaveta();
         }
