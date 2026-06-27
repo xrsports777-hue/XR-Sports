@@ -227,9 +227,7 @@
         function permissaoParaChamarAPI() {
             const ultimoAcesso = localStorage.getItem('xrsports_firewall_timer');
             const agora = new Date().getTime();
-            if (ultimoAcesso && (agora - parseInt(ultimoAcesso)) < COOLDOWN_MS) {
-                return false;
-            }
+            if (ultimoAcesso && (agora - parseInt(ultimoAcesso)) < COOLDOWN_MS) { return false; }
             return true;
         }
 
@@ -291,58 +289,58 @@
             document.getElementById('loading-txt').innerText = texto;
             document.getElementById('overlay-loading').style.display = 'flex';
         }
-        function esconderLoading() { document.getElementById('overlay-loading').style.display = 'none'; }
+        function esconderLoading() { 
+            document.getElementById('overlay-loading').style.display = 'none'; 
+        }
 
-        const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
+        const fetchHeaders = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
 
-        // 🚀 MOTOR DE NUVEM 100% BLINDADO CONTRA OSCILAÇÕES DE REDE
+        // 🚀 MOTOR DE NUVEM BLINDADO COM TIMEOUTS CURTOS
         async function salvarNaNuvem(dados) {
             dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`); 
 
-            // TENTATIVA 1: RESTFUL (A mais forte, tenta 3 vezes)
-            for (let i = 1; i <= 3; i++) {
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 6000);
-                    let req = await fetch("https://api.restful-api.dev/objects", {
-                        method: "POST", headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ name: "XRSportsTicket", data: dados }),
-                        signal: controller.signal
-                    });
-                    clearTimeout(timeoutId);
-                    if (req.ok) { let json = await req.json(); return "RST-" + json.id; }
-                } catch(e) { await new Promise(r => setTimeout(r, 1000)); }
-            }
-
-            // TENTATIVA 2: JSONBLOB (Secundária, tenta 2 vezes)
+            // TENTATIVA 1: JSONBLOB
             for (let i = 1; i <= 2; i++) {
                 try {
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 6000);
+                    const timeoutId = setTimeout(() => controller.abort(), 4000); // 4 seg
                     let req = await fetch("https://jsonblob.com/api/jsonBlob", {
                         method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                        body: JSON.stringify(dados),
-                        signal: controller.signal
+                        body: JSON.stringify(dados), signal: controller.signal
                     });
                     clearTimeout(timeoutId);
                     if (req.ok) {
                         let loc = req.headers.get("Location");
                         if (loc) { let parts = loc.split('/'); return "BLB-" + parts[parts.length - 1]; }
                     }
-                } catch(e) { await new Promise(r => setTimeout(r, 1000)); }
+                } catch(e) { await new Promise(r => setTimeout(r, 800)); }
             }
-            return null; // Apenas se a internet da pessoa cair completamente por 20 segundos
+
+            // TENTATIVA 2: RESTFUL
+            for (let i = 1; i <= 2; i++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 4000);
+                    let req = await fetch("https://api.restful-api.dev/objects", {
+                        method: "POST", headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ name: "XRSportsTicket", data: dados }), signal: controller.signal
+                    });
+                    clearTimeout(timeoutId);
+                    if (req.ok) { let json = await req.json(); return "RST-" + json.id; }
+                } catch(e) { await new Promise(r => setTimeout(r, 800)); }
+            }
+            return null; 
         }
 
         async function lerDaNuvem(blobId) {
-            if (!blobId) return null;
-            if (blobId.startsWith("OFF-")) { 
-                try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } catch(e) { return null; } 
-            }
+            if (!blobId || blobId.startsWith("OFF-")) return null;
             
             let id = blobId.substring(4);
             let isRST = blobId.startsWith("RST-");
+            
+            // TRUQUE ANTI-CACHE: Adiciona a data no final pro celular baixar a versão nova sempre
             let url = isRST ? `https://api.restful-api.dev/objects/${id}` : `https://jsonblob.com/api/jsonBlob/${id}`;
+            url += `?nocache=${new Date().getTime()}`;
 
             for(let i=1; i<=3; i++) {
                 try {
@@ -351,14 +349,13 @@
                         let json = await res.json();
                         return isRST ? json.data : json;
                     }
-                } catch(e) { await new Promise(r => setTimeout(r, 1000)); }
+                } catch(e) { await new Promise(r => setTimeout(r, 800)); }
             }
             return null;
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            if (!blobId) return false;
-            if (blobId.startsWith("OFF-")) { mostrarToast("Erro: Esse é um link offline antigo.", "erro"); return false; }
+            if (!blobId || blobId.startsWith("OFF-")) return false; 
             
             let id = blobId.substring(4);
             let isRST = blobId.startsWith("RST-");
@@ -368,7 +365,7 @@
             for (let i = 1; i <= 3; i++) {
                 try {
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 6000);
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
                     let res = await fetch(url, { 
                         method: 'PUT', headers: { 'Content-Type': 'application/json', "Accept": "application/json" }, 
                         body: bodyPayload, signal: controller.signal
@@ -383,7 +380,7 @@
         function salvarCarrinho() { localStorage.setItem('xrsports_carrinho', JSON.stringify(carrinho)); }
         function carregarCarrinho() { let salvo = localStorage.getItem('xrsports_carrinho'); if(salvo) carrinho = JSON.parse(salvo); }
 
-        // 🛡️ NOVO BANCO DE ESCUDOS PREMIUM (Com as maiores equipes e seleções)
+        // 🛡️ BANCO DE ESCUDOS PREMIUM
         const bancoDeEscudos = {
             "brazil": "https://upload.wikimedia.org/wikipedia/pt/2/2b/Confedera%C3%A7%C3%A3o_Brasileira_de_Futebol_2019.svg",
             "flamengo": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Flamengo_braz_logo.svg",
@@ -443,7 +440,8 @@
             const urlParams = new URLSearchParams(window.location.search);
             if(urlParams.has('b')) {
                 document.getElementById('tela-principal').style.display = 'none';
-                montarBilheteDigital(urlParams.get('b'));
+                let blobTratado = urlParams.get('b').trim().split('&')[0];
+                montarBilheteDigital(blobTratado);
             } else { carregarCarrinho(); buscarJogosNaAPI(); }
         };
 
@@ -514,16 +512,21 @@
 
         async function alterarStatusAdmin(blobId, novoStatus) {
             mostrarLoading("Atualizando Nuvem...");
-            let dados = await lerDaNuvem(blobId);
-            if (dados) {
-                dados.s = novoStatus;
-                let isSuccess = await atualizarNaNuvem(blobId, dados);
-                if (isSuccess) {
-                    mostrarToast("Status atualizado com sucesso!");
-                    carregarHistoricoAdmin();
-                } else { mostrarToast("Falha na atualização. Verifique a internet.", "erro"); }
+            try {
+                let dados = await lerDaNuvem(blobId);
+                if (dados) {
+                    dados.s = novoStatus;
+                    let isSuccess = await atualizarNaNuvem(blobId, dados);
+                    if (isSuccess) {
+                        mostrarToast("Status atualizado com sucesso!");
+                        carregarHistoricoAdmin();
+                    } else { mostrarToast("Falha na atualização. Tente novamente.", "erro"); }
+                }
+            } catch(e) {
+                mostrarToast("Erro de rede ao atualizar.", "erro");
+            } finally {
+                esconderLoading();
             }
-            esconderLoading();
         }
 
         async function gerarBilheteValidado() {
@@ -538,26 +541,31 @@
             blobId = blobId.split('&')[0].trim();
             
             mostrarLoading("Validando na Nuvem...");
-            let dados = await lerDaNuvem(blobId);
-            if(dados) {
-                dados.s = 1; 
-                dados.n = nomeClienteAdmin; 
-                let agora = new Date(); dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-                
-                let isSuccess = await atualizarNaNuvem(blobId, dados);
-                if(isSuccess) {
-                    if(!historicoBilhetes.includes(blobId)) {
-                        historicoBilhetes.unshift(blobId);
-                        localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
-                    }
-                    document.getElementById('codigo-recebido').value = '';
-                    document.getElementById('nome-cliente-admin').value = '';
+            try {
+                let dados = await lerDaNuvem(blobId);
+                if(dados) {
+                    dados.s = 1; 
+                    dados.n = nomeClienteAdmin; 
+                    let agora = new Date(); dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                     
-                    mostrarToast("Bilhete Validado Oficialmente!");
-                    carregarHistoricoAdmin();
-                } else { mostrarToast("Erro de conexão ao validar. Tente novamente.", "erro"); }
-            } else { mostrarToast("Bilhete não encontrado na nuvem!", "erro"); }
-            esconderLoading();
+                    let isSuccess = await atualizarNaNuvem(blobId, dados);
+                    if(isSuccess) {
+                        if(!historicoBilhetes.includes(blobId)) {
+                            historicoBilhetes.unshift(blobId);
+                            localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
+                        }
+                        document.getElementById('codigo-recebido').value = '';
+                        document.getElementById('nome-cliente-admin').value = '';
+                        
+                        mostrarToast("Bilhete Validado Oficialmente!");
+                        carregarHistoricoAdmin();
+                    } else { mostrarToast("Erro de conexão ao validar. Tente novamente.", "erro"); }
+                } else { mostrarToast("Bilhete não encontrado na nuvem!", "erro"); }
+            } catch(e) {
+                mostrarToast("Erro ao comunicar com a nuvem.", "erro");
+            } finally {
+                esconderLoading();
+            }
         }
 
         async function enviarParaAdmin() {
@@ -571,16 +579,21 @@
             let pacoteDados = { p: codigoPIN, n: "Aguardando Validação...", v: valorDep, o: oddNumerica, j: carrinho, s: 0, d: "" };
             
             mostrarLoading("Gerando Link Seguro...");
-            let blobId = await salvarNaNuvem(pacoteDados);
-            esconderLoading();
-
-            if (blobId) {
-                let baseUrl = window.location.href.split('?')[0]; 
-                let linkAcompanhar = baseUrl + "?b=" + blobId;
-                let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
-                window.location.href = `https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`;
-            } else { 
-                mostrarToast("Sua conexão falhou. Tente novamente em alguns segundos.", "erro"); 
+            try {
+                let blobId = await salvarNaNuvem(pacoteDados);
+                if (blobId) {
+                    let baseUrl = window.location.href.split('?')[0]; 
+                    let linkAcompanhar = baseUrl + "?b=" + blobId;
+                    let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
+                    window.location.href = `https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`;
+                } else { 
+                    mostrarToast("Servidor da nuvem indisponível. Tente novamente.", "erro"); 
+                }
+            } catch(e) {
+                mostrarToast("Erro no sistema. Tente de novo.", "erro");
+            } finally {
+                // BLINDAGEM: Essa linha garante que o "Carregando..." vai sumir de qualquer jeito!
+                esconderLoading();
             }
         }
 
@@ -611,62 +624,66 @@
             mostrarLoading("Abrindo Bilhete...");
             document.getElementById('tela-digital').style.display = 'block';
             
-            let dados = await lerDaNuvem(blobId);
-            
-            if (!dados) { 
-                esconderLoading();
-                document.getElementById('tela-digital').innerHTML = `<div style="text-align:center; padding: 50px 20px;"><div style="font-size: 40px; margin-bottom: 15px;">⚠️</div><h3 style="color:var(--danger); margin-bottom: 10px;">Link Inválido ou Expirado</h3><p style="color:var(--texto-secundario); font-size: 14px; margin-bottom: 30px;">O bilhete que você tentou acessar não foi encontrado no banco de dados.</p><button class="btn-voltar-home" onclick="window.location.href=window.location.href.split('?')[0]">🏠 Voltar para a Home</button></div>`;
-                document.getElementById('tela-digital').style.opacity = '1';
-                return; 
-            }
-
-            document.getElementById('dig-pin').innerText = dados.p; 
-            document.getElementById('dig-cliente').innerText = `👤 Jogador: ${dados.n}`;
-            document.getElementById('dig-aposta').innerText = `R$ ${dados.v.toFixed(2)}`; 
-            document.getElementById('dig-odd').innerText = dados.o.toFixed(2);
-            document.getElementById('dig-retorno').innerText = (dados.v * dados.o).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            
-            let selo = document.getElementById('dig-status');
-            selo.className = `digital-status status-${dados.s}`;
-            
-            if (dados.s === 0) { selo.innerText = "⏳ Pendente de Validação"; document.getElementById('dig-data').innerText = "Aguarde o cambista aprovar."; }
-            else if (dados.s === 1) { selo.innerText = "✅ BILHETE ATIVO (VALIDADO)"; document.getElementById('dig-data').innerText = `📅 Validado em: ${dados.d}`; }
-            else if (dados.s === 2) { selo.innerText = "🟢 BILHETE PREMIADO (GREEN)"; document.getElementById('dig-data').innerText = "🏆 Parabéns! Procure o cambista para receber."; }
-            else if (dados.s === 3) { selo.innerText = "🔴 NÃO BATEU (RED)"; document.getElementById('dig-data').innerText = "Mais sorte na próxima vez!"; }
-            else if (dados.s === 4) { selo.innerText = "⚪ BILHETE CANCELADO / DEVOLVIDO"; document.getElementById('dig-data').innerText = "Aposta anulada."; }
-
-            let htmlJogos = "";
-            let ligasBilhete = [];
-            
-            const miniEscudo = (nome) => desenharEscudo(nome).replace(/36px/g, '22px').replace(/13px/g, '10px');
-
-            dados.j.forEach(jogo => { 
-                if(jogo.liga && !ligasBilhete.includes(jogo.liga)) ligasBilhete.push(jogo.liga);
+            try {
+                let dados = await lerDaNuvem(blobId);
                 
-                let times = jogo.tituloJogo.split(' x ');
-                let escudoCasa = times.length > 0 ? miniEscudo(times[0]) : '';
-                let escudoFora = times.length > 1 ? miniEscudo(times[1]) : '';
+                if (!dados) { 
+                    document.getElementById('tela-digital').innerHTML = `<div style="text-align:center; padding: 50px 20px;"><div style="font-size: 40px; margin-bottom: 15px;">⚠️</div><h3 style="color:var(--danger); margin-bottom: 10px;">Link Inválido ou Expirado</h3><p style="color:var(--texto-secundario); font-size: 14px; margin-bottom: 30px;">O bilhete que você tentou acessar não foi encontrado no banco de dados.</p><button class="btn-voltar-home" onclick="window.location.href=window.location.href.split('?')[0]">🏠 Voltar para a Home</button></div>`;
+                    document.getElementById('tela-digital').style.opacity = '1';
+                    return; 
+                }
 
-                htmlJogos += `<div style="background: rgba(9, 14, 23, 0.6); padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--neon);">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 6px;">
-                        <div style="display: flex; gap: 4px; align-items: center;">${escudoCasa}${escudoFora}</div>
-                        <div style="font-size: 12px; color: var(--texto-secundario); font-weight: 700;">${jogo.tituloJogo}</div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 15px; font-weight: 900;">${jogo.palpite}</span>
-                        <span style="color: var(--neon); font-weight: 900;">Odd: ${jogo.oddAposta.toFixed(2)}</span>
-                    </div>
-                    <div id="placar-bilhete-${jogo.idJogo}"></div>
-                </div>`; 
-            });
-            document.getElementById('dig-jogos').innerHTML = htmlJogos;
+                document.getElementById('dig-pin').innerText = dados.p; 
+                document.getElementById('dig-cliente').innerText = `👤 Jogador: ${dados.n}`;
+                document.getElementById('dig-aposta').innerText = `R$ ${dados.v.toFixed(2)}`; 
+                document.getElementById('dig-odd').innerText = dados.o.toFixed(2);
+                document.getElementById('dig-retorno').innerText = (dados.v * dados.o).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                
+                let selo = document.getElementById('dig-status');
+                selo.className = `digital-status status-${dados.s}`;
+                
+                if (dados.s === 0) { selo.innerText = "⏳ Pendente de Validação"; document.getElementById('dig-data').innerText = "Aguarde o cambista aprovar."; }
+                else if (dados.s === 1) { selo.innerText = "✅ BILHETE ATIVO (VALIDADO)"; document.getElementById('dig-data').innerText = `📅 Validado em: ${dados.d}`; }
+                else if (dados.s === 2) { selo.innerText = "🟢 BILHETE PREMIADO (GREEN)"; document.getElementById('dig-data').innerText = "🏆 Parabéns! Procure o cambista para receber."; }
+                else if (dados.s === 3) { selo.innerText = "🔴 NÃO BATEU (RED)"; document.getElementById('dig-data').innerText = "Mais sorte na próxima vez!"; }
+                else if (dados.s === 4) { selo.innerText = "⚪ BILHETE CANCELADO / DEVOLVIDO"; document.getElementById('dig-data').innerText = "Aposta anulada."; }
 
-            document.getElementById('tela-digital').style.opacity = '1';
-            esconderLoading();
+                let htmlJogos = "";
+                let ligasBilhete = [];
+                
+                const miniEscudo = (nome) => desenharEscudo(nome).replace(/36px/g, '22px').replace(/13px/g, '10px');
 
-            if(ligasBilhete.length > 0 && dados.s === 1) {
-                buscarPlacaresBilhete(ligasBilhete, dados.j);
-                setInterval(() => buscarPlacaresBilhete(ligasBilhete, dados.j), 30000);
+                dados.j.forEach(jogo => { 
+                    if(jogo.liga && !ligasBilhete.includes(jogo.liga)) ligasBilhete.push(jogo.liga);
+                    
+                    let times = jogo.tituloJogo.split(' x ');
+                    let escudoCasa = times.length > 0 ? miniEscudo(times[0]) : '';
+                    let escudoFora = times.length > 1 ? miniEscudo(times[1]) : '';
+
+                    htmlJogos += `<div style="background: rgba(9, 14, 23, 0.6); padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--neon);">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 6px;">
+                            <div style="display: flex; gap: 4px; align-items: center;">${escudoCasa}${escudoFora}</div>
+                            <div style="font-size: 12px; color: var(--texto-secundario); font-weight: 700;">${jogo.tituloJogo}</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 15px; font-weight: 900;">${jogo.palpite}</span>
+                            <span style="color: var(--neon); font-weight: 900;">Odd: ${jogo.oddAposta.toFixed(2)}</span>
+                        </div>
+                        <div id="placar-bilhete-${jogo.idJogo}"></div>
+                    </div>`; 
+                });
+                document.getElementById('dig-jogos').innerHTML = htmlJogos;
+
+                document.getElementById('tela-digital').style.opacity = '1';
+
+                if(ligasBilhete.length > 0 && dados.s === 1) {
+                    buscarPlacaresBilhete(ligasBilhete, dados.j);
+                    setInterval(() => buscarPlacaresBilhete(ligasBilhete, dados.j), 30000);
+                }
+            } catch(e) {
+                mostrarToast("Falha ao montar o bilhete.", "erro");
+            } finally {
+                esconderLoading();
             }
         }
 
