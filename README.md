@@ -234,10 +234,9 @@
         // 🚀 MOTOR DE CONCORRÊNCIA (BLINDAGEM MAX)
         // ==========================================
         async function salvarNaNuvem(dados) {
-            // Função interna para fazer a requisição com limite de tempo (Timeout)
             const fetchAPI = async (url, method, bodyStr, parseFunc) => {
                 const controller = new AbortController();
-                const id = setTimeout(() => controller.abort(), 6000); // Se passar de 6 segundos, corta!
+                const id = setTimeout(() => controller.abort(), 6000);
                 try {
                     let res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: bodyStr, signal: controller.signal });
                     clearTimeout(id);
@@ -251,13 +250,11 @@
 
             const jsonStr = JSON.stringify(dados);
 
-            // Prepara as 3 corridas ao mesmo tempo
             const p1 = fetchAPI("https://api.npoint.io", "POST", jsonStr, async (r) => "NPT-" + (await r.json()).id);
             const p2 = fetchAPI("https://jsonblob.com/api/jsonBlob", "POST", jsonStr, async (r) => "BLB-" + (r.headers.get("Location") || r.headers.get("location")).split('/').pop());
             const p3 = fetchAPI("https://api.restful-api.dev/objects", "POST", JSON.stringify({ name: "XR", data: dados }), async (r) => "RST-" + (await r.json()).id);
 
             try {
-                // A primeira que responder com sucesso, VENCE e encerra a espera!
                 return await new Promise((resolve, reject) => {
                     let erros = 0;
                     const checarErro = () => { erros++; if (erros === 3) reject(new Error("Todas falharam")); };
@@ -266,7 +263,6 @@
                     p3.then(resolve).catch(checarErro);
                 });
             } catch (e) {
-                // FALLBACK OFFLINE: Se a internet do cara for de padaria e as 3 falharem/derem timeout, o sistema gera o bilhete direto na URL. Nunca trava!
                 console.warn("APIs bloqueadas. Gerando link local.");
                 try {
                     return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(jsonStr)));
@@ -442,7 +438,7 @@
         }
 
         // ==========================================
-        // 🛠️ CORREÇÃO DO WHATSAPP (Não Volta Mais pra Tela)
+        // 🛠️ CORREÇÃO DO WHATSAPP
         // ==========================================
         async function enviarParaAdmin() {
             let valorDep = parseFloat(document.getElementById('input-dinheiro').value);
@@ -462,9 +458,6 @@
                 let baseUrl = window.location.href.split('?')[0]; 
                 let linkAcompanhar = baseUrl + "?b=" + blobId;
                 let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
-                
-                // MUDANÇA AQUI: window.location.href obriga o celular a redirecionar pro WhatsApp
-                // em vez de abrir um "pop-up" que seria bloqueado.
                 window.location.href = `https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`;
             } else { 
                 mostrarToast("Erro Crítico de Conexão. Tente novamente.", "erro"); 
@@ -640,8 +633,14 @@
                         if(minutosCorridos < 45) { oddC_HT = oddC * 1.15; oddE_HT = oddE * 0.85; oddF_HT = oddF * 1.15; }
                     }
 
-                    // Trava de ODDs (Mínimo 1.01 e Máximo 50.00)
-                    const clampOdd = (val) => val > 0 ? Math.min(50.00, Math.max(1.01, val)) : 0;
+                    // 💸 CONFIGURAÇÃO DO SEU LUCRO (MARGEM DA CASA)
+                    // 0.85 significa que você corta 15% da odd original para a banca.
+                    // Se quiser lucrar mais, diminua o valor (ex: 0.80). Se quiser pagar mais, aumente (ex: 0.90).
+                    const MARGEM_CASA = 0.85; 
+
+                    // Aplica a sua margem e Trava as ODDs (Mínimo 1.01 e Máximo 50.00)
+                    const clampOdd = (val) => val > 0 ? Math.min(50.00, Math.max(1.01, val * MARGEM_CASA)) : 0;
+
                     odd1X = clampOdd(odd1X); odd12 = clampOdd(odd12); oddX2 = clampOdd(oddX2);
                     oddDnbCasa = clampOdd(oddDnbCasa); oddDnbFora = clampOdd(oddDnbFora);
                     oddC_HT = clampOdd(oddC_HT); oddE_HT = clampOdd(oddE_HT); oddF_HT = clampOdd(oddF_HT);
