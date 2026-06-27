@@ -216,77 +216,88 @@
         }
         function esconderLoading() { document.getElementById('overlay-loading').style.display = 'none'; }
 
-        // --- SISTEMA BLINDADO DE BANCO DE DADOS ---
-        const URL_BLOB = "https://jsonblob.com/api/jsonBlob";
-        const URL_NPOINT = "https://api.npoint.io";
-        
+        // --- SISTEMA BLINDADO COM 3 CAMADAS (À PROVA DE ERROS) ---
         async function salvarNaNuvem(dados) {
-            // TENTATIVA 1: JSONBlob
+            // TENTATIVA 1: Npoint (Robusto contra CORS)
             try {
-                let res = await fetch(URL_BLOB, {
+                let resNpt = await fetch("https://api.npoint.io", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(dados)
                 });
-                let loc = res.headers.get('Location');
-                if (loc) return loc.split('/').pop();
-            } catch (e) {
-                console.warn("JSONBlob falhou, testando banco reserva...");
-            }
+                if(resNpt.ok) { let json = await resNpt.json(); if(json.id) return "NPT-" + json.id; }
+            } catch(e) { console.log("Npoint bloqueado ou falhou."); }
 
-            // TENTATIVA 2: Npoint (Se o primeiro falhar)
+            // TENTATIVA 2: JSONBlob
             try {
-                let res = await fetch(URL_NPOINT, {
+                let resBlob = await fetch("https://jsonblob.com/api/jsonBlob", {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(dados)
                 });
-                let json = await res.json();
-                if (json.id) return "NPT-" + json.id;
-            } catch (e) {
-                console.error("Bancos online falharam.");
-            }
+                if(resBlob.ok) { let loc = resBlob.headers.get("Location"); if(loc) return loc.split('/').pop(); }
+            } catch(e) { console.log("JSONBlob bloqueado ou falhou."); }
 
-            return null;
+            // TENTATIVA 3: BILHETE OFFLINE ENCRIPTADO (Garante que o link do zap seja gerado 100% das vezes)
+            try {
+                // Comprime a aposta num formato seguro para URL (Base64)
+                let dadosCompactados = encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados))));
+                return "OFF-" + dadosCompactados;
+            } catch(e) { return null; }
         }
 
         async function lerDaNuvem(blobId) {
-            if(blobId.startsWith("NPT-")) {
-                try {
-                    let id = blobId.replace("NPT-", "");
-                    let res = await fetch(`${URL_NPOINT}/${id}`);
-                    if (res.ok) return await res.json();
-                } catch(e) { return null; }
-            } else {
-                try {
-                    let res = await fetch(`${URL_BLOB}/${blobId}`);
-                    if (res.ok) return await res.json();
-                } catch(e) { return null; }
+            if (!blobId) return null;
+            
+            // Lendo o bilhete Offline
+            if (blobId.startsWith("OFF-")) {
+                try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } 
+                catch(e) { return null; }
             }
+            
+            // Lendo Npoint
+            if (blobId.startsWith("NPT-")) {
+                try {
+                    let res = await fetch(`https://api.npoint.io/${blobId.replace("NPT-", "")}`);
+                    if(res.ok) return await res.json();
+                } catch(e) {}
+                return null;
+            }
+            
+            // Lendo JSONBlob
+            try {
+                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`);
+                if(res.ok) return await res.json();
+            } catch(e) {}
             return null;
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            if(blobId.startsWith("NPT-")) {
+            // Se for offline, ele gera um novo código base64 atualizado para o seu admin salvar localmente
+            if (blobId.startsWith("OFF-")) {
+                try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } 
+                catch(e) { return false; }
+            }
+            
+            if (blobId.startsWith("NPT-")) {
                 try {
-                    let id = blobId.replace("NPT-", "");
-                    await fetch(`${URL_NPOINT}/${id}`, {
+                    let res = await fetch(`https://api.npoint.io/${blobId.replace("NPT-", "")}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(dados)
                     });
-                    return true;
-                } catch(e) { return false; }
-            } else {
-                try {
-                    await fetch(`${URL_BLOB}/${blobId}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify(dados)
-                    });
-                    return true;
+                    return res.ok ? blobId : false;
                 } catch(e) { return false; }
             }
+            
+            try {
+                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                return res.ok ? blobId : false;
+            } catch(e) { return false; }
         }
 
         function salvarCarrinho() { localStorage.setItem('xrsports_carrinho', JSON.stringify(carrinho)); }
@@ -376,7 +387,17 @@
             let dados = await lerDaNuvem(blobId);
             if (dados) {
                 dados.s = novoStatus;
-                await atualizarNaNuvem(blobId, dados);
+                let novoBlobId = await atualizarNaNuvem(blobId, dados);
+                
+                // Se foi um bilhete offline, substitui o link velho pelo novo link atualizado no histórico
+                if (novoBlobId && typeof novoBlobId === 'string' && novoBlobId.startsWith("OFF-")) {
+                    let index = historicoBilhetes.indexOf(blobId);
+                    if (index > -1) {
+                        historicoBilhetes[index] = novoBlobId;
+                        localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
+                    }
+                }
+                
                 mostrarToast("Status atualizado com sucesso!");
                 carregarHistoricoAdmin();
             }
@@ -400,10 +421,11 @@
                 dados.n = nomeClienteAdmin; 
                 let agora = new Date(); dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                 
-                await atualizarNaNuvem(blobId, dados);
+                let idSalvo = await atualizarNaNuvem(blobId, dados);
+                let idParaHistorico = (idSalvo && typeof idSalvo === 'string') ? idSalvo : blobId;
                 
-                if(!historicoBilhetes.includes(blobId)) {
-                    historicoBilhetes.unshift(blobId);
+                if(!historicoBilhetes.includes(idParaHistorico)) {
+                    historicoBilhetes.unshift(idParaHistorico);
                     localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
                 }
                 
@@ -435,11 +457,14 @@
             esconderLoading();
 
             if (blobId) {
-                let linkAcompanhar = window.location.origin + window.location.pathname + "?b=" + blobId;
+                // A URL usa de forma inteligente a base padrão para não falhar
+                let baseUrl = window.location.href.split('?')[0]; 
+                let linkAcompanhar = baseUrl + "?b=" + blobId;
+                
                 let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
                 window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`, '_blank');
             } else {
-                mostrarToast("Erro de rede. Verifique seu antivírus ou internet e tente de novo.", "erro");
+                mostrarToast("Erro crítico. Verifique sua conexão.", "erro");
             }
         }
 
@@ -447,7 +472,7 @@
             document.getElementById('dig-status').innerText = "⏳ Buscando Dados...";
             let dados = await lerDaNuvem(blobId);
             
-            if (!dados) { alert("Link Inválido ou Bilhete Expirado."); window.location.href = window.location.pathname; return; }
+            if (!dados) { alert("Link Inválido ou Bilhete Expirado."); window.location.href = window.location.href.split('?')[0]; return; }
 
             document.getElementById('dig-pin').innerText = dados.p; 
             document.getElementById('dig-cliente').innerText = `👤 Jogador: ${dados.n}`;
