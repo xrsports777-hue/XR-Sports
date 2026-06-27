@@ -49,7 +49,6 @@
         .spinner { border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--neon); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* NOVA BARRA DE BUSCA DE BILHETE */
         .busca-bilhete-box { display: flex; gap: 8px; margin: 15px auto 5px auto; max-width: 600px; padding: 0 15px; }
         .busca-bilhete-box input { flex: 1; background: rgba(9,14,23,0.8); border: 1px solid var(--borda); color: #fff; padding: 14px 15px; border-radius: 12px; font-size: 14px; outline: none; transition: 0.2s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
         .busca-bilhete-box input:focus { border-color: var(--neon); }
@@ -229,45 +228,66 @@
         }
         function esconderLoading() { document.getElementById('overlay-loading').style.display = 'none'; }
 
-        // --- SISTEMA DE BANCO DE DADOS (AGORA COM ANTI-CACHE PARA RESOLVER O ATRASO) ---
+        // --- SISTEMA BLINDADO COM FURA-CACHE E VACINA PARA LINKS ANTIGOS ---
+        const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
+
         async function salvarNaNuvem(dados) {
             try {
-                let resBlob = await fetch("https://jsonblob.com/api/jsonBlob", { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
-                    body: JSON.stringify(dados) 
-                });
-                if(resBlob.ok) { 
-                    let loc = resBlob.headers.get("Location") || resBlob.headers.get("location"); 
-                    if(loc) return loc.split('/').pop(); 
-                }
-            } catch(e) { console.error("Erro na nuvem: ", e); }
+                let resNpt = await fetch("https://api.npoint.io", { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) });
+                if(resNpt.ok) { let json = await resNpt.json(); if(json.id) return "NPT-" + json.id; }
+            } catch(e) {}
+            try {
+                let resBlob = await fetch("https://jsonblob.com/api/jsonBlob", { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) });
+                if(resBlob.ok) { let loc = resBlob.headers.get("Location") || resBlob.headers.get("location"); if(loc) return "BLB-" + loc.split('/').pop(); }
+            } catch(e) {}
             return null;
         }
 
         async function lerDaNuvem(blobId) {
             if (!blobId) return null;
-            // Limpa qualquer coisa que o WhatsApp colocar a mais no link
-            blobId = blobId.split('&')[0].trim();
-            // Esse é o Fura-Cache! Impede o navegador do cliente de puxar a versão velha
-            let furaCache = new Date().getTime();
             
-            try { 
-                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}?_cb=${furaCache}`, { cache: 'no-store' }); 
-                if(res.ok) return await res.json(); 
+            // VACINA: Aceitar os links "Offline" da versão antiga para não dar erro
+            if (blobId.startsWith("OFF-")) { 
+                try { return JSON.parse(decodeURIComponent(atob(decodeURIComponent(blobId.replace("OFF-", ""))))); } 
+                catch(e) { return null; } 
+            }
+
+            if (blobId.startsWith("RST-")) {
+                let id = blobId.replace("RST-", "");
+                try {
+                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { headers: fetchHeaders });
+                    if(res.ok) { let json = await res.json(); return json.data; }
+                } catch(e) {}
+                return null;
+            }
+            
+            let finalId = blobId.replace("BLB-", "");
+            try {
+                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${finalId}`, { headers: fetchHeaders });
+                if(res.ok) return await res.json();
             } catch(e) {}
             return null;
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            blobId = blobId.split('&')[0].trim();
-            try { 
-                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, { 
-                    method: 'PUT', 
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
-                    body: JSON.stringify(dados) 
-                }); 
-                return res.ok ? blobId : false; 
+            // VACINA: Atualiza o status visualmente no link offline antigo
+            if (blobId.startsWith("OFF-")) { 
+                try { return "OFF-" + encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(dados)))); } 
+                catch(e) { return false; } 
+            }
+
+            if (blobId.startsWith("RST-")) {
+                let id = blobId.replace("RST-", "");
+                try {
+                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: "XRSportsTicket", data: dados }) });
+                    return res.ok ? blobId : false;
+                } catch(e) { return false; }
+            }
+            
+            let finalId = blobId.replace("BLB-", "");
+            try {
+                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${finalId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dados) });
+                return res.ok ? blobId : false;
             } catch(e) { return false; }
         }
 
@@ -370,11 +390,13 @@
                 dados.s = novoStatus;
                 let isSuccess = await atualizarNaNuvem(blobId, dados);
                 if (isSuccess) {
+                    if (typeof isSuccess === 'string' && isSuccess.startsWith("OFF-")) {
+                        let index = historicoBilhetes.indexOf(blobId);
+                        if (index > -1) { historicoBilhetes[index] = isSuccess; localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes)); }
+                    }
                     mostrarToast("Status atualizado com sucesso!");
                     carregarHistoricoAdmin();
-                } else {
-                    mostrarToast("Falha na atualização. Verifique a internet.", "erro");
-                }
+                } else { mostrarToast("Falha na atualização. Verifique a internet.", "erro"); }
             }
             esconderLoading();
         }
@@ -398,20 +420,17 @@
                 let agora = new Date(); dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                 
                 let isSuccess = await atualizarNaNuvem(blobId, dados);
-                
                 if(isSuccess) {
-                    if(!historicoBilhetes.includes(blobId)) {
-                        historicoBilhetes.unshift(blobId);
+                    let idParaHistorico = (typeof isSuccess === 'string') ? isSuccess : blobId;
+                    if(!historicoBilhetes.includes(idParaHistorico)) {
+                        historicoBilhetes.unshift(idParaHistorico);
                         localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
                     }
-                    
                     document.getElementById('codigo-recebido').value = '';
                     document.getElementById('nome-cliente-admin').value = '';
                     mostrarToast("Bilhete Validado Oficialmente!");
                     carregarHistoricoAdmin();
-                } else {
-                    mostrarToast("Erro ao validar na nuvem! Tente novamente.", "erro");
-                }
+                } else { mostrarToast("Erro ao validar na nuvem! Tente novamente.", "erro"); }
             } else { mostrarToast("Bilhete não encontrado na nuvem!", "erro"); }
             esconderLoading();
         }
@@ -435,7 +454,7 @@
                 let linkAcompanhar = baseUrl + "?b=" + blobId;
                 let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
                 window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`, '_blank');
-            } else { mostrarToast("Erro Crítico de Conexão. Desative o Adblock/VPN e tente novamente.", "erro"); }
+            } else { mostrarToast("Erro Crítico de Conexão. Tente novamente.", "erro"); }
         }
 
         async function buscarPlacaresBilhete(ligas, jogosNoBilhete) {
@@ -469,8 +488,8 @@
             
             if (!dados) { 
                 esconderLoading();
-                alert("Link Inválido ou Bilhete Expirado."); 
-                window.location.href = window.location.href.split('?')[0]; 
+                document.getElementById('tela-digital').innerHTML = `<div style="text-align:center; padding: 50px 20px;"><div style="font-size: 40px; margin-bottom: 15px;">⚠️</div><h3 style="color:var(--danger); margin-bottom: 10px;">Link Inválido ou Expirado</h3><p style="color:var(--texto-secundario); font-size: 14px; margin-bottom: 30px;">O bilhete que você tentou acessar não foi encontrado no banco de dados.</p><button class="btn-voltar-home" onclick="window.location.href=window.location.href.split('?')[0]">🏠 Voltar para a Home</button></div>`;
+                document.getElementById('tela-digital').style.opacity = '1';
                 return; 
             }
 
