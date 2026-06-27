@@ -137,7 +137,6 @@
         <p style="color: var(--texto-secundario); font-size: 14px; margin-bottom: 15px;">Cole o link que o cliente te enviou para validar a aposta na nuvem.</p>
         
         <input type="text" id="codigo-recebido" class="input-admin" placeholder="Ex: seusite.com/?b=123456">
-        
         <input type="text" id="nome-cliente-admin" class="input-admin" placeholder="👤 Nome do Cliente (Você define)">
         
         <button class="btn-admin" onclick="gerarBilheteValidado()">VALIDAR NOVO BILHETE ✅</button>
@@ -217,13 +216,13 @@
         }
         function esconderLoading() { document.getElementById('overlay-loading').style.display = 'none'; }
 
-        // --- SISTEMA DE BANCO DE DADOS HÍBRIDO (Correção definitiva para não dar erro) ---
+        // --- SISTEMA BLINDADO DE BANCO DE DADOS ---
         const URL_BLOB = "https://jsonblob.com/api/jsonBlob";
         const URL_NPOINT = "https://api.npoint.io";
         
         async function salvarNaNuvem(dados) {
+            // TENTATIVA 1: JSONBlob
             try {
-                // TENTATIVA 1: Usar JSONBlob normal
                 let res = await fetch(URL_BLOB, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -231,50 +230,63 @@
                 });
                 let loc = res.headers.get('Location');
                 if (loc) return loc.split('/').pop();
-                
-                // FALLBACK: Se o Location falhar pelo bloqueio do navegador (CORS), salva no Npoint
-                let nres = await fetch(URL_NPOINT, {
+            } catch (e) {
+                console.warn("JSONBlob falhou, testando banco reserva...");
+            }
+
+            // TENTATIVA 2: Npoint (Se o primeiro falhar)
+            try {
+                let res = await fetch(URL_NPOINT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dados)
                 });
-                let njson = await nres.json();
-                return "NPT-" + njson.id; 
-            } catch(e) { return null; }
+                let json = await res.json();
+                if (json.id) return "NPT-" + json.id;
+            } catch (e) {
+                console.error("Bancos online falharam.");
+            }
+
+            return null;
         }
 
         async function lerDaNuvem(blobId) {
-            try {
-                if(blobId.startsWith("NPT-")) {
+            if(blobId.startsWith("NPT-")) {
+                try {
                     let id = blobId.replace("NPT-", "");
                     let res = await fetch(`${URL_NPOINT}/${id}`);
-                    return await res.json();
-                } else {
+                    if (res.ok) return await res.json();
+                } catch(e) { return null; }
+            } else {
+                try {
                     let res = await fetch(`${URL_BLOB}/${blobId}`);
-                    return await res.json();
-                }
-            } catch(e) { return null; }
+                    if (res.ok) return await res.json();
+                } catch(e) { return null; }
+            }
+            return null;
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            try {
-                if(blobId.startsWith("NPT-")) {
+            if(blobId.startsWith("NPT-")) {
+                try {
                     let id = blobId.replace("NPT-", "");
                     await fetch(`${URL_NPOINT}/${id}`, {
-                        method: 'POST', // Npoint aceita POST para atualizar
+                        method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(dados)
                     });
                     return true;
-                } else {
+                } catch(e) { return false; }
+            } else {
+                try {
                     await fetch(`${URL_BLOB}/${blobId}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                         body: JSON.stringify(dados)
                     });
                     return true;
-                }
-            } catch(e) { return false; }
+                } catch(e) { return false; }
+            }
         }
 
         function salvarCarrinho() { localStorage.setItem('xrsports_carrinho', JSON.stringify(carrinho)); }
@@ -319,7 +331,7 @@
             } else { mostrarToast("Usuário ou senha incorretos!", "erro"); }
         }
 
-        // --- DASHBOARD ADMIN (LENDO DA NUVEM) ---
+        // --- DASHBOARD ADMIN ---
         async function carregarHistoricoAdmin() {
             let container = document.getElementById('lista-historico-admin');
             if (historicoBilhetes.length === 0) {
@@ -385,7 +397,7 @@
             let dados = await lerDaNuvem(blobId);
             if(dados) {
                 dados.s = 1; 
-                dados.n = nomeClienteAdmin; // O cambista define o nome do cliente
+                dados.n = nomeClienteAdmin; 
                 let agora = new Date(); dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                 
                 await atualizarNaNuvem(blobId, dados);
@@ -405,7 +417,7 @@
             esconderLoading();
         }
 
-        // --- SISTEMA CLIENTE (MONTAR E ACOMPANHAR) ---
+        // --- SISTEMA CLIENTE ---
         async function enviarParaAdmin() {
             let valorDep = parseFloat(document.getElementById('input-dinheiro').value);
             if(isNaN(valorDep) || valorDep < 2) { mostrarToast("O valor mínimo é R$ 2,00!", "erro"); return; }
@@ -416,7 +428,6 @@
             let l1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(Math.floor(Math.random() * 26)), l2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(Math.floor(Math.random() * 26));
             let codigoPIN = `PIN-${l1}${l2}${Math.floor(1000 + Math.random() * 9000)}`;
             
-            // Vai como aguardando pois o nome será colocado pelo cambista no painel admin
             let pacoteDados = { p: codigoPIN, n: "Aguardando Validação...", v: valorDep, o: oddNumerica, j: carrinho, s: 0, d: "" };
             
             mostrarLoading("Gerando Link Seguro...");
@@ -428,7 +439,7 @@
                 let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
                 window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`, '_blank');
             } else {
-                mostrarToast("Erro ao conectar no banco de dados. Tente novamente.", "erro");
+                mostrarToast("Erro de rede. Verifique seu antivírus ou internet e tente de novo.", "erro");
             }
         }
 
