@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -198,9 +197,9 @@
     <script>
         // 🛡️ SISTEMA DE RODÍZIO DE CHAVES (API KEY ROTATION)
         const CHAVES_API = [
-            "35b7c848a056df19f4e0d58f7a4f32f7", // Chave 1 
-            "4d278614388b45ec493b9c2878b52c80", // Chave 2 
-            "1667bc4070985e32d4e9c97c51cb02b9"  // Chave 3 
+            "35b7c848a056df19f4e0d58f7a4f32f7", // Chave 1
+            "4d278614388b45ec493b9c2878b52c80", // Chave 2
+            "1667bc4070985e32d4e9c97c51cb02b9"  // Chave 3
         ];
         
         let indiceChave = 0;
@@ -235,9 +234,9 @@
             let container = document.getElementById('toast-container');
             let toast = document.createElement('div');
             toast.className = `toast ${tipo}`;
-            toast.innerText = mensagem;
+            toast.innerHTML = mensagem;
             container.appendChild(toast);
-            setTimeout(() => { toast.style.animation = 'deslizarOut 0.3s ease-in forwards'; setTimeout(() => toast.remove(), 300); }, 3000);
+            setTimeout(() => { toast.style.animation = 'deslizarOut 0.3s ease-in forwards'; setTimeout(() => toast.remove(), 300); }, 3500);
         }
 
         function mostrarLoading(texto) {
@@ -248,7 +247,7 @@
 
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
-        // 🚀 MOTOR DE CONCORRÊNCIA (BLINDAGEM NUVEM MAX)
+        // 🚀 MOTOR DE CONCORRÊNCIA PARA SALVAR BILHETE (BLINDAGEM NUVEM MAX)
         async function salvarNaNuvem(dados) {
             const fetchAPI = async (url, method, bodyStr, parseFunc) => {
                 const controller = new AbortController();
@@ -265,7 +264,6 @@
             };
 
             const jsonStr = JSON.stringify(dados);
-
             const p1 = fetchAPI("https://api.npoint.io", "POST", jsonStr, async (r) => "NPT-" + (await r.json()).id);
             const p2 = fetchAPI("https://jsonblob.com/api/jsonBlob", "POST", jsonStr, async (r) => "BLB-" + (r.headers.get("Location") || r.headers.get("location")).split('/').pop());
             const p3 = fetchAPI("https://api.restful-api.dev/objects", "POST", JSON.stringify({ name: "XR", data: dados }), async (r) => "RST-" + (await r.json()).id);
@@ -453,7 +451,6 @@
             esconderLoading();
         }
 
-        // 🛠️ CORREÇÃO DO WHATSAPP
         async function enviarParaAdmin() {
             let valorDep = parseFloat(document.getElementById('input-dinheiro').value);
             if(isNaN(valorDep) || valorDep < 2) { mostrarToast("O valor mínimo é R$ 2,00!", "erro"); return; }
@@ -559,27 +556,25 @@
 
         function trocarLiga(chave, botao) { document.querySelectorAll('.liga-btn').forEach(b => b.classList.remove('ativo')); botao.classList.add('ativo'); ligaFoco = chave; nomeLigaFoco = botao.innerText; buscarJogosNaAPI(); }
 
-        // Botão de Forçar Atualização Ignorando o Cache
         function forcarAtualizacao() {
             localStorage.removeItem(`xrsports_cache_${ligaFoco}`);
             buscarJogosNaAPI();
             mostrarToast("Atualizando dados da liga...");
         }
 
-        // 🛡️ MOTOR DE JOGOS + SMART CACHE + RODÍZIO DE CHAVES AUTOMÁTICO
+        // 🛡️ MOTOR DE JOGOS + SMART CACHE + RODÍZIO + MODO SOBREVIVÊNCIA
         async function buscarJogosNaAPI() {
             let painelAviso = document.getElementById('status-msg');
             document.getElementById('container-jogos').innerHTML = "";
-            
-            // 🛑 INÍCIO DO SMART CACHE (Proteção Nível 1)
-            const CACHE_MINUTOS = 3; // Tempo que os jogos ficam salvos sem gastar API
             const cacheKey = `xrsports_cache_${ligaFoco}`;
+            
+            // 🛑 SMART CACHE (Memória Inteligente 3 min)
+            const CACHE_MINUTOS = 3; 
             const cacheSalvo = localStorage.getItem(cacheKey);
 
             if (cacheSalvo) {
                 const dadosCache = JSON.parse(cacheSalvo);
-                const agora = new Date().getTime();
-                const diffMinutos = (agora - dadosCache.tempo) / 60000;
+                const diffMinutos = (new Date().getTime() - dadosCache.tempo) / 60000;
 
                 if (diffMinutos < CACHE_MINUTOS) {
                     jogosCarregados = dadosCache.jogos;
@@ -587,11 +582,9 @@
                     carrinho = carrinho.filter(c => idsVivos.includes(c.idJogo));
                     salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
                     painelAviso.style.display = "none";
-                    console.log("🟢 Jogos puxados da Memória Cache (Sua API não foi gasta!)");
-                    return; // Sai da função sem bater na The Odds API
+                    return; 
                 }
             }
-            // 🛑 FIM DO SMART CACHE
 
             painelAviso.style.display = "block";
             painelAviso.innerHTML = `⏳ Analisando mercados e placares ao vivo para:<br><strong style="color:var(--neon)">${nomeLigaFoco}</strong>...`;
@@ -601,15 +594,18 @@
                 const linkScores = `https://api.the-odds-api.com/v4/sports/${ligaFoco}/scores/?apiKey=${API_KEY}`;
 
                 try {
-                    const [reqOdds, reqScores] = await Promise.all([fetch(linkOdds), fetch(linkScores)]);
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 segundos de limite
+                    
+                    const [reqOdds, reqScores] = await Promise.all([
+                        fetch(linkOdds, { signal: controller.signal }), 
+                        fetch(linkScores, { signal: controller.signal })
+                    ]);
+                    clearTimeout(timeoutId);
                     
                     if (reqOdds.status === 401 || reqOdds.status === 429 || reqScores.status === 401 || reqScores.status === 429) {
-                        if (trocarChaveAPI()) {
-                            return await tentarBuscar(); 
-                        } else {
-                            painelAviso.innerHTML = `❌ Erro Crítico: Limite de buscas excedido. O Cambista precisa adicionar novas chaves da The Odds API no código.`;
-                            return;
-                        }
+                        if (trocarChaveAPI()) return await tentarBuscar(); 
+                        throw new Error("Limite API Esgotado");
                     }
 
                     const resOdds = await reqOdds.json(); 
@@ -617,8 +613,7 @@
                     
                     if(resOdds.message) { 
                         if (trocarChaveAPI()) return await tentarBuscar();
-                        painelAviso.innerHTML = `⚠️ Aviso da API: ${resOdds.message}`; 
-                        return; 
+                        throw new Error(resOdds.message);
                     }
 
                     let horaAtual = new Date(); let horaLimiteSumir = new Date(horaAtual.getTime() - (2 * 60 * 60 * 1000));
@@ -658,14 +653,13 @@
                             });
                         });
 
-                        // Sintéticas Iniciais (Gols, BTTS, Cartões)
+                        // Sintéticas
                         if (oddM25 > 0 && oddM15 === 0) { let pM25 = 1 / oddM25; let pM15 = Math.min(0.95, pM25 * 1.35); oddM15 = (1 / pM15) * 0.92; oddN15 = (1 / (1-pM15)) * 0.92; }
                         if (oddM25 > 0) { let pBttsSim = Math.min(0.88, (1 / oddM25) * 1.05); oddBttsSim = (1 / pBttsSim) * 0.92; oddBttsNao = (1 / (1 - pBttsSim)) * 0.92; } else if (oddC > 0) { oddBttsSim = 1.85 * 0.92; oddBttsNao = 1.85 * 0.92; }
                         
                         let probM25Cartoes = 0.70 + (Math.random() * 0.1); 
                         oddCrtM25 = (1 / probM25Cartoes) * 0.92; oddCrtN25 = (1 / (1 - probM25Cartoes)) * 0.92;
 
-                        // 🏆 ALGORITMO DE CORREÇÃO AO VIVO (Derretimento e Fechamento de Mercado)
                         if (isLive && minutosCorridos > 0 && minutosCorridos <= 100) {
                             let f = Math.max(0.02, (90 - minutosCorridos) / 90); 
                             let fUnder = Math.pow(f, 1.5); 
@@ -684,20 +678,15 @@
                             oddC=0; oddE=0; oddF=0; oddM15=0; oddN15=0; oddM25=0; oddN25=0; oddBttsSim=0; oddBttsNao=0; oddCrtM25=0; oddCrtN25=0;
                         }
 
-                        // Dupla Chance, DNB e HT
                         let odd1X = 0, odd12 = 0, oddX2 = 0, oddDnbCasa = 0, oddDnbFora = 0, oddC_HT = 0, oddE_HT = 0, oddF_HT = 0;
                         if(oddC > 0 && oddE > 0 && oddF > 0) {
                             let probC = 1 / oddC, probE = 1 / oddE, probF = 1 / oddF;
                             odd1X = (1 / (probC + probE)) * 0.92; odd12 = (1 / (probC + probF)) * 0.92; oddX2 = (1 / (probF + probE)) * 0.92;
                             oddDnbCasa = (1 / (probC / (probC + probF))) * 0.92; oddDnbFora = (1 / (probF / (probC + probF))) * 0.92;
-                            
                             if(minutosCorridos < 45) { oddC_HT = oddC * 1.15; oddE_HT = oddE * 0.85; oddF_HT = oddF * 1.15; }
                         }
 
-                        // 💸 CONFIGURAÇÃO DO SEU LUCRO (MARGEM DA CASA)
                         const MARGEM_CASA = 0.85; 
-
-                        // Aplica a sua margem e Trava as ODDs (Mínimo 1.01 e Máximo 50.00)
                         const clampOdd = (val) => val > 0 ? Math.min(50.00, Math.max(1.01, val * MARGEM_CASA)) : 0;
 
                         odd1X = clampOdd(odd1X); odd12 = clampOdd(odd12); oddX2 = clampOdd(oddX2);
@@ -719,19 +708,25 @@
                     if(jogosCarregados.length === 0) { painelAviso.innerHTML = `⚽ Mercado Fechado para ${nomeLigaFoco}.`; return; }
                     
                     jogosCarregados.sort((a, b) => a.dataCrua - b.dataCrua); 
+                    localStorage.setItem(cacheKey, JSON.stringify({ tempo: new Date().getTime(), jogos: jogosCarregados }));
                     
-                    // 💾 SALVA OS JOGOS NA MEMÓRIA DO CELULAR DO CLIENTE
-                    localStorage.setItem(cacheKey, JSON.stringify({
-                        tempo: new Date().getTime(),
-                        jogos: jogosCarregados
-                    }));
-
                     painelAviso.style.display = "none";
                     let idsVivos = jogosCarregados.map(j => j.id); carrinho = carrinho.filter(c => idsVivos.includes(c.idJogo));
                     salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
                 
                 } catch (erro) { 
-                    painelAviso.innerHTML = `❌ Falha ao buscar os jogos. Verifique se o seu dispositivo está com internet.`; 
+                    // 🚨 MODO SOBREVIVÊNCIA (Blindagem Nível 3)
+                    if (cacheSalvo) {
+                        const dadosCache = JSON.parse(cacheSalvo);
+                        jogosCarregados = dadosCache.jogos;
+                        let idsVivos = jogosCarregados.map(j => j.id); 
+                        carrinho = carrinho.filter(c => idsVivos.includes(c.idJogo));
+                        salvarCarrinho(); atualizarGaveta(); pintarJogosNaTela();
+                        painelAviso.innerHTML = `⚠️ Conexão perdida ou Limite API atingido.<br>Mostrando jogos em <b>Modo Sobrevivência</b> (Offline).`;
+                        console.log("🛡️ BLINDAGEM ATIVADA: Carregando cache antigo por falha na rede.");
+                    } else {
+                        painelAviso.innerHTML = `❌ Falha crítica de rede. Verifique sua internet.`; 
+                    }
                 }
             };
 
@@ -789,7 +784,22 @@
             let jogoAtual = jogosCarregados.find(j => j.id === idJogo);
             
             const gruposMercado = { '1': 'pr', 'X': 'pr', '2': 'pr', '1X': 'pr', '12': 'pr', 'X2': 'pr', 'DNBC': 'pr', 'DNBF': 'pr', '1HT': 'pr', 'XHT': 'pr', '2HT': 'pr', 'BTTSY': 'bt', 'BTTSN': 'bt', 'M15': 'go', 'N15': 'go', 'M25': 'go', 'N25': 'go', 'CM25': 'ca', 'CN25': 'ca' };
-            let meuGrupo = gruposMercado[tipoOpcao]; let selecoesNesteJogo = carrinho.filter(c => c.idJogo === idJogo); let jaSelecionado = selecoesNesteJogo.find(c => c.tipoOpcao === tipoOpcao);
+            let meuGrupo = gruposMercado[tipoOpcao]; 
+            let selecoesNesteJogo = carrinho.filter(c => c.idJogo === idJogo); 
+            let jaSelecionado = selecoesNesteJogo.find(c => c.tipoOpcao === tipoOpcao);
+
+            // 🛑 REGRA DA BANCA: Proibir "Ambas Marcam" e "1º Tempo" no mesmo bilhete
+            let isOpcHT = tipoOpcao.includes('HT');
+            let isOpcBTTS = tipoOpcao.includes('BTTS');
+            let temHTnoCarrinho = carrinho.some(c => c.tipoOpcao.includes('HT'));
+            let temBTTSnoCarrinho = carrinho.some(c => c.tipoOpcao.includes('BTTS'));
+
+            if (!jaSelecionado) {
+                if ((isOpcHT && temBTTSnoCarrinho) || (isOpcBTTS && temHTnoCarrinho)) {
+                    mostrarToast("⚠️ Regra da Banca:<br>Proibido combinar Ambas Marcam com 1º Tempo!", "erro");
+                    return;
+                }
+            }
 
             if (!jaSelecionado && carrinho.length > 0) {
                 let temLiveCart = false, temPreCart = false;
