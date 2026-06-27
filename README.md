@@ -19,7 +19,7 @@
         .logo-title strong { color: var(--neon); margin-right: 4px; font-style: italic; }
         .logo-subtitle { font-size: 9px; font-weight: 800; color: var(--texto-secundario); letter-spacing: 3.5px; text-transform: uppercase; margin-top: 2px; }
         
-        .btn-sync{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda);padding:6px 12px;border-radius:8px;font-weight:700;cursor:pointer;transition:.2s;font-size:13px}.btn-sync:active{transform:scale(.95);background:var(--bg-hover)}.nav-ligas{display:flex;gap:10px;margin-top:18px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.nav-ligas::-webkit-scrollbar{display:none}.liga-btn{background:rgba(9,14,23,0.8);color:var(--texto-secundario);border:1px solid var(--borda);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:.3s}.liga-btn.ativo{background:var(--neon);color:#000;border-color:var(--neon)}#status-msg{text-align:center;padding:25px 20px;color:var(--texto-secundario);font-size:14px;margin:20px 15px;border-radius:12px;background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px dashed var(--borda);line-height:1.6}.container{padding:5px 15px;max-width:600px;margin:0 auto}.card-jogo{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--borda);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}.card-topo{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);padding-bottom:10px}.liga-tag{font-size:11px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;letter-spacing:.5px}.badge-horario{font-size:11px;font-weight:800;color:#000;background:var(--neon);padding:4px 8px;border-radius:6px}.badge-aovivo{background:rgba(255,59,59,0.15);color:var(--live);border:1px solid var(--live);animation:piscar 1.5s infinite}.badge-intervalo{background:rgba(245,166,35,0.15);color:var(--amarelo);border:1px solid var(--amarelo);animation:piscar 1.5s infinite}@keyframes piscar{0%,100%{opacity:1}50%{opacity:.5}}.placar-box{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px}.time-box{display:flex;align-items:center;gap:10px;width:40%}.time-box.visitante{flex-direction:row-reverse;text-align:right}.escudo-container{width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.escudo-img{width:100%;height:100%;object-fit:contain}.escudo-letra{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;box-shadow:inset 0 2px 5px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1)}.nome-time{font-size:14px;font-weight:800;color:var(--texto);line-height:1.2}.vs-txt{font-size:12px;font-weight:900;color:var(--texto-secundario)}.placar-live{font-size:16px;font-weight:900;color:var(--neon);background:rgba(0,255,136,0.1);padding:4px 8px;border-radius:6px;letter-spacing:1px;white-space:nowrap}.mercado-titulo{font-size:11px;color:var(--texto-secundario);font-weight:700;text-transform:uppercase;margin-bottom:-5px;margin-top:5px;text-align:center;border-top:1px dashed rgba(255,255,255,0.05);padding-top:10px}.odds-linha{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.odds-linha-dupla{display:grid;grid-template-columns:1fr 1fr;gap:8px}.odd-btn{background:rgba(9,14,23,0.6);border:1px solid var(--borda);border-radius:10px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;user-select:none}.odd-btn.selecionado{background:var(--neon);border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.2)}.odd-btn.selecionado .odd-lbl,.odd-btn.selecionado .odd-val{color:#000}.odd-lbl{font-size:10px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;margin-bottom:2px;text-align:center}.odd-val{font-size:15px;font-weight:900;color:var(--texto)}#btn-gaveta{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;width:90%;max-width:400px;padding:16px 20px;border-radius:14px;font-weight:900;font-size:15px;display:none;justify-content:space-between;align-items:center;box-shadow:0 10px 30px rgba(0,255,136,0.3);z-index:90;cursor:pointer;border:none}.badge-qtd{background:#000;color:var(--neon);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}#modal-bilhete{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;display:none;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(5px)}.bilhete-conteudo{background:rgba(18,25,39,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--borda);width:100%;max-height:85vh;border-top-left-radius:24px;border-top-right-radius:24px;padding:24px;display:flex;flex-direction:column;animation:subirTela .3s ease-out forwards}@keyframes subirTela{from{transform:translateY(100%)}to{transform:translateY(0)}}.bilhete-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--borda);padding-bottom:15px}.bilhete-titulo{font-size:20px;font-weight:900}.btn-fechar{background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:var(--texto);width:36px;height:36px;border-radius:50%;font-weight:700;cursor:pointer}.lista-palpites{overflow-y:auto;max-height:35vh;margin-bottom:15px;padding-right:5px}.palpite-item{background:rgba(9,14,23,0.6);padding:14px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--borda);border-left:4px solid var(--neon)}.palpite-jogo{font-size:12px;color:var(--texto-secundario);font-weight:700;margin-bottom:5px}.palpite-escolha{font-size:15px;font-weight:900}.palpite-odd{font-weight:900;color:var(--neon);font-size:18px}.caixa-valores{background:rgba(5,8,12,0.8);padding:18px;border-radius:16px;border:1px solid var(--borda);margin-bottom:15px}.linha-valor{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;font-weight:700;color:var(--texto-secundario)}.odd-final{color:var(--texto);font-size:18px;font-weight:900}.input-grana{width:100%;background:rgba(18,25,39,0.6);border:2px solid var(--borda);color:#fff;padding:16px;border-radius:12px;font-size:20px;font-weight:900;text-align:center;outline:0;margin-bottom:10px}.input-grana:focus{border-color:var(--neon)}.input-nome{width:100%;background:rgba(18,25,39,0.6);border:2px solid var(--borda);color:#fff;padding:12px;border-radius:12px;font-size:16px;font-weight:700;text-align:center;outline:0;margin-bottom:10px}.input-nome:focus{border-color:var(--neon)}.linha-retorno{display:flex;justify-content:space-between;align-items:center;margin-top:15px;font-weight:800}.retorno-verde{color:var(--neon);font-size:24px;font-weight:900}.btn-enviar-zap{width:100%;background:var(--neon);color:#000;padding:18px;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;text-transform:uppercase;margin-top:5px;box-shadow:0 4px 15px rgba(0,255,136,0.2)}.btn-apagar-tudo{background:0 0;border:none;color:var(--danger);font-size:13px;font-weight:700;margin-top:20px;width:100%;cursor:pointer;text-decoration:underline}.botao-fantasma{position:fixed;bottom:0;right:0;width:60px;height:60px;background:0 0;z-index:9999;cursor:default}#tela-login,#tela-admin{display:none;padding:25px;max-width:500px;margin:40px auto;background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}.input-admin{width:100%;padding:16px;margin-bottom:15px;background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:#fff;border-radius:8px;font-size:16px}.btn-admin{width:100%;background:var(--neon);color:#000;padding:18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:10px;font-size:16px}.btn-voltar{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda)}#tela-digital{display:none;padding:20px;max-width:500px;margin:0 auto}.digital-card{background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;padding:20px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}.digital-header{text-align:center;border-bottom:2px dashed var(--borda);padding-bottom:15px;margin-bottom:15px}.digital-pin{font-size:28px;font-weight:900;color:var(--texto);letter-spacing:2px}.digital-status{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:900;margin-top:10px;border:1px solid transparent}
+        .btn-sync{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda);padding:6px 12px;border-radius:8px;font-weight:700;cursor:pointer;transition:.2s;font-size:13px}.btn-sync:active{transform:scale(.95);background:var(--bg-hover)}.nav-ligas{display:flex;gap:10px;margin-top:18px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.nav-ligas::-webkit-scrollbar{display:none}.liga-btn{background:rgba(9,14,23,0.8);color:var(--texto-secundario);border:1px solid var(--borda);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:.3s}.liga-btn.ativo{background:var(--neon);color:#000;border-color:var(--neon)}#status-msg{text-align:center;padding:25px 20px;color:var(--texto-secundario);font-size:14px;margin:20px 15px;border-radius:12px;background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px dashed var(--borda);line-height:1.6}.container{padding:5px 15px;max-width:600px;margin:0 auto}.card-jogo{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--borda);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}.card-topo{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);padding-bottom:10px}.liga-tag{font-size:11px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;letter-spacing:.5px}.badge-horario{font-size:11px;font-weight:800;color:#000;background:var(--neon);padding:4px 8px;border-radius:6px}.badge-aovivo{background:rgba(255,59,59,0.15);color:var(--live);border:1px solid var(--live);animation:piscar 1.5s infinite}.badge-intervalo{background:rgba(245,166,35,0.15);color:var(--amarelo);border:1px solid var(--amarelo);animation:piscar 1.5s infinite}@keyframes piscar{0%,100%{opacity:1}50%{opacity:.5}}.placar-box{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px}.time-box{display:flex;align-items:center;gap:10px;width:40%}.time-box.visitante{flex-direction:row-reverse;text-align:right}.escudo-container{width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.escudo-img{width:100%;height:100%;object-fit:contain}.escudo-letra{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;box-shadow:inset 0 2px 5px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1)}.nome-time{font-size:14px;font-weight:800;color:var(--texto);line-height:1.2}.vs-txt{font-size:12px;font-weight:900;color:var(--texto-secundario)}.placar-live{font-size:16px;font-weight:900;color:var(--neon);background:rgba(0,255,136,0.1);padding:4px 8px;border-radius:6px;letter-spacing:1px;white-space:nowrap}.mercado-titulo{font-size:11px;color:var(--texto-secundario);font-weight:700;text-transform:uppercase;margin-bottom:-5px;margin-top:5px;text-align:center;border-top:1px dashed rgba(255,255,255,0.05);padding-top:10px}.odds-linha{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.odds-linha-dupla{display:grid;grid-template-columns:1fr 1fr;gap:8px}.odd-btn{background:rgba(9,14,23,0.6);border:1px solid var(--borda);border-radius:10px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;user-select:none}.odd-btn.selecionado{background:var(--neon);border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.2)}.odd-btn.selecionado .odd-lbl,.odd-btn.selecionado .odd-val{color:#000}.odd-lbl{font-size:10px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;margin-bottom:2px;text-align:center}.odd-val{font-size:15px;font-weight:900;color:var(--texto)}#btn-gaveta{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;width:90%;max-width:400px;padding:16px 20px;border-radius:14px;font-weight:900;font-size:15px;display:none;justify-content:space-between;align-items:center;box-shadow:0 10px 30px rgba(0,255,136,0.3);z-index:90;cursor:pointer;border:none}.badge-qtd{background:#000;color:var(--neon);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}#modal-bilhete{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;display:none;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(5px)}.bilhete-conteudo{background:rgba(18,25,39,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--borda);width:100%;max-height:85vh;border-top-left-radius:24px;border-top-right-radius:24px;padding:24px;display:flex;flex-direction:column;animation:subirTela .3s ease-out forwards}@keyframes subirTela{from{transform:translateY(100%)}to{transform:translateY(0)}}.bilhete-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--borda);padding-bottom:15px}.bilhete-titulo{font-size:20px;font-weight:900}.btn-fechar{background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:var(--texto);width:36px;height:36px;border-radius:50%;font-weight:700;cursor:pointer}.lista-palpites{overflow-y:auto;max-height:35vh;margin-bottom:15px;padding-right:5px}.palpite-item{background:rgba(9,14,23,0.6);padding:14px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--borda);border-left:4px solid var(--neon)}.palpite-jogo{font-size:12px;color:var(--texto-secundario);font-weight:700;margin-bottom:5px}.palpite-escolha{font-size:15px;font-weight:900}.palpite-odd{font-weight:900;color:var(--neon);font-size:18px}.caixa-valores{background:rgba(5,8,12,0.8);padding:18px;border-radius:16px;border:1px solid var(--borda);margin-bottom:15px}.linha-valor{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;font-weight:700;color:var(--texto-secundario)}.odd-final{color:var(--texto);font-size:18px;font-weight:900}.input-grana{width:100%;background:rgba(18,25,39,0.6);border:2px solid var(--borda);color:#fff;padding:16px;border-radius:12px;font-size:20px;font-weight:900;text-align:center;outline:0;margin-bottom:10px}.input-grana:focus{border-color:var(--neon)}.linha-retorno{display:flex;justify-content:space-between;align-items:center;margin-top:15px;font-weight:800}.retorno-verde{color:var(--neon);font-size:24px;font-weight:900}.btn-enviar-zap{width:100%;background:#25D366;color:#fff;padding:18px;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;text-transform:uppercase;margin-top:5px;box-shadow:0 4px 15px rgba(37,211,102,0.3)}.btn-apagar-tudo{background:0 0;border:none;color:var(--danger);font-size:13px;font-weight:700;margin-top:20px;width:100%;cursor:pointer;text-decoration:underline}.botao-fantasma{position:fixed;bottom:0;right:0;width:60px;height:60px;background:0 0;z-index:9999;cursor:default}#tela-login,#tela-admin{display:none;padding:25px;max-width:500px;margin:40px auto;background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}.input-admin{width:100%;padding:16px;margin-bottom:15px;background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:#fff;border-radius:8px;font-size:16px}.btn-admin{width:100%;background:var(--neon);color:#000;padding:18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:10px;font-size:16px}.btn-voltar{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda)}#tela-digital{display:none;padding:20px;max-width:500px;margin:0 auto}.digital-card{background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;padding:20px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}.digital-header{text-align:center;border-bottom:2px dashed var(--borda);padding-bottom:15px;margin-bottom:15px}.digital-pin{font-size:28px;font-weight:900;color:var(--texto);letter-spacing:2px}.digital-status{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:900;margin-top:10px;border:1px solid transparent}
         
         /* CORES DOS STATUS */
         .status-0{background:rgba(245,166,35,0.15);color:var(--amarelo);border-color:var(--amarelo)}
@@ -112,12 +112,11 @@
                 </div>
                 <div class="lista-palpites" id="lista-carrinho"></div>
                 <div class="caixa-valores">
-                    <input type="text" id="input-nome" class="input-nome" placeholder="👤 Qual o seu Nome?">
                     <input type="number" id="input-dinheiro" class="input-grana" placeholder="R$ Valor da Aposta" onkeyup="calcularLucro()">
                     <div class="linha-valor" style="margin-top: 10px;"><span>Cotação Total:</span><span class="odd-final" id="visor-odd">1.00</span></div>
                     <div class="linha-retorno"><span>Retorno Possível:</span><span class="retorno-verde" id="visor-retorno">R$ 0,00</span></div>
                 </div>
-                <button class="btn-enviar-zap" onclick="enviarParaAdmin()">Gerar e Enviar Link 📲</button>
+                <button class="btn-enviar-zap" onclick="enviarParaAdmin()">Enviar Aposta no WhatsApp 📲</button>
                 <button class="btn-apagar-tudo" onclick="limparBilhete()">🗑️ Cancelar Tudo</button>
             </div>
         </div>
@@ -136,7 +135,11 @@
     <div id="tela-admin">
         <h2 style="color: var(--neon); margin-bottom: 10px;">DASHBOARD RICK</h2>
         <p style="color: var(--texto-secundario); font-size: 14px; margin-bottom: 15px;">Cole o link que o cliente te enviou para validar a aposta na nuvem.</p>
+        
         <input type="text" id="codigo-recebido" class="input-admin" placeholder="Ex: seusite.com/?b=123456">
+        
+        <input type="text" id="nome-cliente-admin" class="input-admin" placeholder="👤 Nome do Cliente (Você define)">
+        
         <button class="btn-admin" onclick="gerarBilheteValidado()">VALIDAR NOVO BILHETE ✅</button>
         <button class="btn-admin btn-voltar" onclick="fecharAdmin()">VOLTAR AO SITE</button>
         
@@ -190,10 +193,8 @@
         let jogosCarregados = [];
         let carrinho = [];
         
-        // Memória local do Admin para guardar os links validados
         let historicoBilhetes = JSON.parse(localStorage.getItem('xrsports_historico_links')) || [];
 
-        // --- SISTEMA DE 3 CLIQUES PARA O ADMIN ---
         let clicksAdmin = 0; let timerAdmin;
         function tentarAbrirAdmin() {
             clicksAdmin++; clearTimeout(timerAdmin);
@@ -216,37 +217,63 @@
         }
         function esconderLoading() { document.getElementById('overlay-loading').style.display = 'none'; }
 
-        // --- API JSONBLOB (BANCO DE DADOS FANTASMA) ---
+        // --- SISTEMA DE BANCO DE DADOS HÍBRIDO (Correção definitiva para não dar erro) ---
         const URL_BLOB = "https://jsonblob.com/api/jsonBlob";
+        const URL_NPOINT = "https://api.npoint.io";
         
         async function salvarNaNuvem(dados) {
             try {
+                // TENTATIVA 1: Usar JSONBlob normal
                 let res = await fetch(URL_BLOB, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(dados)
                 });
                 let loc = res.headers.get('Location');
-                return loc.split('/').pop(); // Retorna o ID gerado
+                if (loc) return loc.split('/').pop();
+                
+                // FALLBACK: Se o Location falhar pelo bloqueio do navegador (CORS), salva no Npoint
+                let nres = await fetch(URL_NPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                let njson = await nres.json();
+                return "NPT-" + njson.id; 
             } catch(e) { return null; }
         }
 
         async function lerDaNuvem(blobId) {
             try {
-                let res = await fetch(`${URL_BLOB}/${blobId}`);
-                if(!res.ok) return null;
-                return await res.json();
+                if(blobId.startsWith("NPT-")) {
+                    let id = blobId.replace("NPT-", "");
+                    let res = await fetch(`${URL_NPOINT}/${id}`);
+                    return await res.json();
+                } else {
+                    let res = await fetch(`${URL_BLOB}/${blobId}`);
+                    return await res.json();
+                }
             } catch(e) { return null; }
         }
 
         async function atualizarNaNuvem(blobId, dados) {
             try {
-                await fetch(`${URL_BLOB}/${blobId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(dados)
-                });
-                return true;
+                if(blobId.startsWith("NPT-")) {
+                    let id = blobId.replace("NPT-", "");
+                    await fetch(`${URL_NPOINT}/${id}`, {
+                        method: 'POST', // Npoint aceita POST para atualizar
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+                    return true;
+                } else {
+                    await fetch(`${URL_BLOB}/${blobId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+                    return true;
+                }
             } catch(e) { return false; }
         }
 
@@ -346,7 +373,10 @@
 
         async function gerarBilheteValidado() {
             let codigoLink = document.getElementById('codigo-recebido').value.trim();
+            let nomeClienteAdmin = document.getElementById('nome-cliente-admin').value.trim();
+
             if(!codigoLink) { mostrarToast("Cole o link do cliente primeiro!", "erro"); return; }
+            if(!nomeClienteAdmin) { mostrarToast("Digite o nome do cliente antes de validar!", "erro"); return; }
             
             let partes = codigoLink.split('?b=');
             let blobId = partes.length > 1 ? partes[1] : codigoLink;
@@ -355,7 +385,9 @@
             let dados = await lerDaNuvem(blobId);
             if(dados) {
                 dados.s = 1; 
+                dados.n = nomeClienteAdmin; // O cambista define o nome do cliente
                 let agora = new Date(); dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+                
                 await atualizarNaNuvem(blobId, dados);
                 
                 if(!historicoBilhetes.includes(blobId)) {
@@ -364,6 +396,7 @@
                 }
                 
                 document.getElementById('codigo-recebido').value = '';
+                document.getElementById('nome-cliente-admin').value = '';
                 mostrarToast("Bilhete Validado Oficialmente!");
                 carregarHistoricoAdmin();
             } else {
@@ -374,8 +407,6 @@
 
         // --- SISTEMA CLIENTE (MONTAR E ACOMPANHAR) ---
         async function enviarParaAdmin() {
-            let nomeCli = document.getElementById('input-nome').value.trim();
-            if(!nomeCli) { mostrarToast("Digite seu nome antes de gerar o bilhete!", "erro"); return; }
             let valorDep = parseFloat(document.getElementById('input-dinheiro').value);
             if(isNaN(valorDep) || valorDep < 2) { mostrarToast("O valor mínimo é R$ 2,00!", "erro"); return; }
             
@@ -385,7 +416,8 @@
             let l1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(Math.floor(Math.random() * 26)), l2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(Math.floor(Math.random() * 26));
             let codigoPIN = `PIN-${l1}${l2}${Math.floor(1000 + Math.random() * 9000)}`;
             
-            let pacoteDados = { p: codigoPIN, n: nomeCli, v: valorDep, o: oddNumerica, j: carrinho, s: 0, d: "" };
+            // Vai como aguardando pois o nome será colocado pelo cambista no painel admin
+            let pacoteDados = { p: codigoPIN, n: "Aguardando Validação...", v: valorDep, o: oddNumerica, j: carrinho, s: 0, d: "" };
             
             mostrarLoading("Gerando Link Seguro...");
             let blobId = await salvarNaNuvem(pacoteDados);
@@ -393,7 +425,7 @@
 
             if (blobId) {
                 let linkAcompanhar = window.location.origin + window.location.pathname + "?b=" + blobId;
-                let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A👤 Nome: *${nomeCli}*%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Rick, valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
+                let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
                 window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`, '_blank');
             } else {
                 mostrarToast("Erro ao conectar no banco de dados. Tente novamente.", "erro");
@@ -415,7 +447,7 @@
             let selo = document.getElementById('dig-status');
             selo.className = `digital-status status-${dados.s}`;
             
-            if (dados.s === 0) { selo.innerText = "⏳ Pendente de Pagamento/Validação"; document.getElementById('dig-data').innerText = "Aguarde o cambista aprovar."; }
+            if (dados.s === 0) { selo.innerText = "⏳ Pendente de Validação"; document.getElementById('dig-data').innerText = "Aguarde o cambista aprovar."; }
             else if (dados.s === 1) { selo.innerText = "✅ BILHETE ATIVO (VALIDADO)"; document.getElementById('dig-data').innerText = `📅 Validado em: ${dados.d}`; }
             else if (dados.s === 2) { selo.innerText = "🟢 BILHETE PREMIADO (GREEN)"; document.getElementById('dig-data').innerText = "🏆 Parabéns! Procure o cambista para receber."; }
             else if (dados.s === 3) { selo.innerText = "🔴 NÃO BATEU (RED)"; document.getElementById('dig-data').innerText = "Mais sorte na próxima vez!"; }
@@ -482,9 +514,8 @@
                         let probE_HT = Math.min(0.55, probE * 1.45); let probRestante = 1 - probE_HT; let pesoCasa = probC / (probC + probF);
                         oddC_HT = (1 / (probRestante * pesoCasa)) * juice; oddE_HT = (1 / probE_HT) * juice; oddF_HT = (1 / (probRestante * (1 - pesoCasa))) * juice;
 
-                        // Criando odds sintéticas dinâmicas para Cartões Amarelos (+/- 2.5)
                         let variacaoCartao = (Math.random() * 0.1); 
-                        let probM25Cartoes = 0.70 + variacaoCartao; // Média alta de cartões
+                        let probM25Cartoes = 0.70 + variacaoCartao;
                         oddCrtM25 = (1 / probM25Cartoes) * juice;
                         oddCrtN25 = (1 / (1 - probM25Cartoes)) * juice;
                     }
