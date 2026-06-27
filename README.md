@@ -19,9 +19,9 @@
         .logo-title strong { color: var(--neon); margin-right: 4px; font-style: italic; }
         .logo-subtitle { font-size: 9px; font-weight: 800; color: var(--texto-secundario); letter-spacing: 3.5px; text-transform: uppercase; margin-top: 2px; }
         
-        .btn-sync{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda);padding:6px 12px;border-radius:8px;font-weight:700;cursor:pointer;transition:.2s;font-size:13px}.btn-sync:active{transform:scale(.95);background:var(--bg-hover)}.nav-ligas{display:flex;gap:10px;margin-top:18px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.nav-ligas::-webkit-scrollbar{display:none}.liga-btn{background:rgba(9,14,23,0.8);color:var(--texto-secundario);border:1px solid var(--borda);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:.3s}.liga-btn.ativo{background:var(--neon);color:#000;border-color:var(--neon)}#status-msg{text-align:center;padding:25px 20px;color:var(--texto-secundario);font-size:14px;margin:20px 15px;border-radius:12px;background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px dashed var(--borda);line-height:1.6}.container{padding:5px 15px;max-width:600px;margin:0 auto}.card-jogo{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--borda);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}.card-topo{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);padding-bottom:10px}.liga-tag{font-size:11px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;letter-spacing:.5px}.badge-horario{font-size:11px;font-weight:800;color:#000;background:var(--neon);padding:4px 8px;border-radius:6px}.badge-aovivo{background:rgba(255,59,59,0.15);color:var(--live);border:1px solid var(--live);animation:piscar 1.5s infinite}.badge-intervalo{background:rgba(245,166,35,0.15);color:var(--amarelo);border:1px solid var(--amarelo);animation:piscar 1.5s infinite}@keyframes piscar{0%,100%{opacity:1}50%{opacity:.5}}.placar-box{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px}.time-box{display:flex;align-items:center;gap:10px;width:40%}.time-box.visitante{flex-direction:row-reverse;text-align:right}.escudo-container{width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.escudo-img{width:100%;height:100%;object-fit:contain}.escudo-letra{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;box-shadow:inset 0 2px 5px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1)}.nome-time{font-size:14px;font-weight:800;color:var(--texto);line-height:1.2}.vs-txt{font-size:12px;font-weight:900;color:var(--texto-secundario)}.placar-live{font-size:16px;font-weight:900;color:var(--neon);background:rgba(0,255,136,0.1);padding:4px 8px;border-radius:6px;letter-spacing:1px;white-space:nowrap}.mercado-titulo{font-size:11px;color:var(--texto-secundario);font-weight:700;text-transform:uppercase;margin-bottom:-5px;margin-top:5px;text-align:center;border-top:1px dashed rgba(255,255,255,0.05);padding-top:10px}.odds-linha{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.odds-linha-dupla{display:grid;grid-template-columns:1fr 1fr;gap:8px}.odd-btn{background:rgba(9,14,23,0.6);border:1px solid var(--borda);border-radius:10px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;user-select:none}.odd-btn.selecionado{background:var(--neon);border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.2)}.odd-btn.selecionado .odd-lbl,.odd-btn.selecionado .odd-val{color:#000}.odd-lbl{font-size:10px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;margin-bottom:2px;text-align:center}.odd-val{font-size:15px;font-weight:900;color:var(--texto)}#btn-gaveta{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;width:90%;max-width:400px;padding:16px 20px;border-radius:14px;font-weight:900;font-size:15px;display:none;justify-content:space-between;align-items:center;box-shadow:0 10px 30px rgba(0,255,136,0.3);z-index:90;cursor:pointer;border:none}.badge-qtd{background:#000;color:var(--neon);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}#modal-bilhete{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;display:none;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(5px)}.bilhete-conteudo{background:rgba(18,25,39,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--borda);width:100%;max-height:85vh;border-top-left-radius:24px;border-top-right-radius:24px;padding:24px;display:flex;flex-direction:column;animation:subirTela .3s ease-out forwards}@keyframes subirTela{from{transform:translateY(100%)}to{transform:translateY(0)}}.bilhete-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--borda);padding-bottom:15px}.bilhete-titulo{font-size:20px;font-weight:900}.btn-fechar{background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:var(--texto);width:36px;height:36px;border-radius:50%;font-weight:700;cursor:pointer}.lista-palpites{overflow-y:auto;max-height:35vh;margin-bottom:15px;padding-right:5px}.palpite-item{background:rgba(9,14,23,0.6);padding:14px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--borda);border-left:4px solid var(--neon)}.palpite-jogo{font-size:12px;color:var(--texto-secundario);font-weight:700;margin-bottom:5px}.palpite-escolha{font-size:15px;font-weight:900}.palpite-odd{font-weight:900;color:var(--neon);font-size:18px}.caixa-valores{background:rgba(5,8,12,0.8);padding:18px;border-radius:16px;border:1px solid var(--borda);margin-bottom:15px}.linha-valor{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;font-weight:700;color:var(--texto-secundario)}.odd-final{color:var(--texto);font-size:18px;font-weight:900}.input-grana{width:100%;background:rgba(18,25,39,0.6);border:2px solid var(--borda);color:#fff;padding:16px;border-radius:12px;font-size:20px;font-weight:900;text-align:center;outline:0;margin-bottom:10px}.input-grana:focus{border-color:var(--neon)}.linha-retorno{display:flex;justify-content:space-between;align-items:center;margin-top:15px;font-weight:800}.retorno-verde{color:var(--neon);font-size:24px;font-weight:900}.btn-enviar-zap{width:100%;background:#25D366;color:#fff;padding:18px;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;text-transform:uppercase;margin-top:5px;box-shadow:0 4px 15px rgba(37,211,102,0.3)}.btn-apagar-tudo{background:0 0;border:none;color:var(--danger);font-size:13px;font-weight:700;margin-top:20px;width:100%;cursor:pointer;text-decoration:underline}.botao-fantasma{position:fixed;bottom:0;right:0;width:60px;height:60px;background:0 0;z-index:9999;cursor:default}#tela-login,#tela-admin{display:none;padding:25px;max-width:500px;margin:40px auto;background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}.input-admin{width:100%;padding:16px;margin-bottom:15px;background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:#fff;border-radius:8px;font-size:16px}.btn-admin{width:100%;background:var(--neon);color:#000;padding:18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:10px;font-size:16px}.btn-voltar{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda)}#tela-digital{display:none;padding:20px;max-width:500px;margin:0 auto}.digital-card{background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;padding:20px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}.digital-header{text-align:center;border-bottom:2px dashed var(--borda);padding-bottom:15px;margin-bottom:15px}.digital-pin{font-size:28px;font-weight:900;color:var(--texto);letter-spacing:2px}.digital-status{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:900;margin-top:10px;border:1px solid transparent}
+        .btn-sync{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda);padding:6px 12px;border-radius:8px;font-weight:700;cursor:pointer;transition:.2s;font-size:13px}.btn-sync:active{transform:scale(.95);background:var(--bg-hover)}.nav-ligas{display:flex;gap:10px;margin-top:18px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.nav-ligas::-webkit-scrollbar{display:none}.liga-btn{background:rgba(9,14,23,0.8);color:var(--texto-secundario);border:1px solid var(--borda);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;transition:.3s}.liga-btn.ativo{background:var(--neon);color:#000;border-color:var(--neon)}#status-msg{text-align:center;padding:25px 20px;color:var(--texto-secundario);font-size:14px;margin:20px 15px;border-radius:12px;background:var(--bg-card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px dashed var(--borda);line-height:1.6}.container{padding:5px 15px;max-width:600px;margin:0 auto}.card-jogo{background:var(--bg-card);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--borda);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}.card-topo{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--borda);padding-bottom:10px}.liga-tag{font-size:11px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;letter-spacing:.5px}.badge-horario{font-size:11px;font-weight:800;color:#000;background:var(--neon);padding:4px 8px;border-radius:6px}.badge-aovivo{background:rgba(255,59,59,0.15);color:var(--live);border:1px solid var(--live);animation:piscar 1.5s infinite}.badge-intervalo{background:rgba(245,166,35,0.15);color:var(--amarelo);border:1px solid var(--amarelo);animation:piscar 1.5s infinite}@keyframes piscar{0%,100%{opacity:1}50%{opacity:.5}}.placar-box{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:5px}.time-box{display:flex;align-items:center;gap:10px;width:40%}.time-box.visitante{flex-direction:row-reverse;text-align:right}.escudo-container{width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.escudo-img{width:100%;height:100%;object-fit:contain}.escudo-letra{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;box-shadow:inset 0 2px 5px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1)}.nome-time{font-size:14px;font-weight:800;color:var(--texto);line-height:1.2}.vs-txt{font-size:12px;font-weight:900;color:var(--texto-secundario)}.placar-live{font-size:16px;font-weight:900;color:var(--neon);background:rgba(0,255,136,0.1);padding:4px 8px;border-radius:6px;letter-spacing:1px;white-space:nowrap}.mercado-titulo{font-size:11px;color:var(--texto-secundario);font-weight:700;text-transform:uppercase;margin-bottom:-5px;margin-top:5px;text-align:center;border-top:1px dashed rgba(255,255,255,0.05);padding-top:10px}.odds-linha{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.odds-linha-dupla{display:grid;grid-template-columns:1fr 1fr;gap:8px}.odd-btn{background:rgba(9,14,23,0.6);border:1px solid var(--borda);border-radius:10px;padding:10px 5px;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:.2s;user-select:none}.odd-btn.selecionado{background:var(--neon);border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.2)}.odd-btn.selecionado .odd-lbl,.odd-btn.selecionado .odd-val{color:#000}.odd-lbl{font-size:10px;color:var(--texto-secundario);font-weight:800;text-transform:uppercase;margin-bottom:2px;text-align:center}.odd-val{font-size:15px;font-weight:900;color:var(--texto)}#btn-gaveta{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;width:90%;max-width:400px;padding:16px 20px;border-radius:14px;font-weight:900;font-size:15px;display:none;justify-content:space-between;align-items:center;box-shadow:0 10px 30px rgba(0,255,136,0.3);z-index:90;cursor:pointer;border:none}.badge-qtd{background:#000;color:var(--neon);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}#modal-bilhete{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;display:none;flex-direction:column;justify-content:flex-end;backdrop-filter:blur(5px)}.bilhete-conteudo{background:rgba(18,25,39,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--borda);width:100%;max-height:85vh;border-top-left-radius:24px;border-top-right-radius:24px;padding:24px;display:flex;flex-direction:column;animation:subirTela .3s ease-out forwards}@keyframes subirTela{from{transform:translateY(100%)}to{transform:translateY(0)}}.bilhete-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid var(--borda);padding-bottom:15px}.bilhete-titulo{font-size:20px;font-weight:900}.btn-fechar{background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:var(--texto);width:36px;height:36px;border-radius:50%;font-weight:700;cursor:pointer}.lista-palpites{overflow-y:auto;max-height:35vh;margin-bottom:15px;padding-right:5px}.palpite-item{background:rgba(9,14,23,0.6);padding:14px;border-radius:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--borda);border-left:4px solid var(--neon)}.palpite-jogo{font-size:12px;color:var(--texto-secundario);font-weight:700;margin-bottom:5px}.palpite-escolha{font-size:15px;font-weight:900}.palpite-odd{font-weight:900;color:var(--neon);font-size:18px}.caixa-valores{background:rgba(5,8,12,0.8);padding:18px;border-radius:16px;border:1px solid var(--borda);margin-bottom:15px}.linha-valor{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;font-weight:700;color:var(--texto-secundario)}.odd-final{color:var(--texto);font-size:18px;font-weight:900}.input-grana{width:100%;background:rgba(18,25,39,0.6);border:2px solid var(--borda);color:#fff;padding:16px;border-radius:12px;font-size:20px;font-weight:900;text-align:center;outline:0;margin-bottom:10px}.input-grana:focus{border-color:var(--neon)}.linha-retorno{display:flex;justify-content:space-between;align-items:center;margin-top:15px;font-weight:800}.retorno-verde{color:var(--neon);font-size:24px;font-weight:900}.btn-enviar-zap{width:100%;background:#25D366;color:#fff;padding:18px;border:none;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;text-transform:uppercase;margin-top:5px;box-shadow:0 4px 15px rgba(37,211,102,0.3)}.btn-apagar-tudo{background:0 0;border:none;color:var(--danger);font-size:13px;font-weight:700;margin-top:20px;width:100%;cursor:pointer;text-decoration:underline}.botao-fantasma{position:fixed;bottom:0;right:0;width:60px;height:60px;background:0 0;z-index:9999;cursor:default}#tela-login,#tela-admin{display:none;padding:25px;max-width:500px;margin:40px auto;background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}.input-admin{width:100%;padding:16px;margin-bottom:15px;background:rgba(9,14,23,0.8);border:1px solid var(--borda);color:#fff;border-radius:8px;font-size:16px}.btn-admin{width:100%;background:var(--neon);color:#000;padding:18px;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:10px;font-size:16px}.btn-voltar{background:0 0;color:var(--texto-secundario);border:1px solid var(--borda)}#tela-digital{display:none;padding:20px;max-width:500px;margin:0 auto; opacity:0; transition: opacity 0.4s ease;}.digital-card{background:rgba(18,25,39,0.7);backdrop-filter:blur(15px);border:1px solid var(--borda);border-radius:16px;padding:20px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}.digital-header{text-align:center;border-bottom:2px dashed var(--borda);padding-bottom:15px;margin-bottom:15px}.digital-pin{font-size:28px;font-weight:900;color:var(--texto);letter-spacing:2px}.digital-status{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:900;margin-top:10px;border:1px solid transparent}
         
-        /* CORES DOS STATUS - ATUALIZADO PARA VERDE NO STATUS 1 */
+        /* CORES DOS STATUS */
         .status-0{background:rgba(245,166,35,0.15);color:var(--amarelo);border-color:var(--amarelo)}
         .status-1{background:rgba(0,255,136,0.15);color:var(--neon);border-color:var(--neon);box-shadow:0 0 15px rgba(0,255,136,0.2)}
         .status-2{background:rgba(0,255,136,0.25);color:var(--neon);border-color:var(--neon);box-shadow:0 0 20px rgba(0,255,136,0.4)}
@@ -61,7 +61,7 @@
     <div id="toast-container"></div>
     <div id="overlay-loading">
         <div class="spinner"></div>
-        <div id="loading-txt">Sincronizando Banco de Dados...</div>
+        <div id="loading-txt">Carregando...</div>
     </div>
     
     <div id="tela-principal">
@@ -94,7 +94,6 @@
             </div>
         </header>
 
-        <!-- NOVO CAMPO DE BUSCAR BILHETE PARA O CLIENTE -->
         <div class="busca-bilhete-box">
             <input type="text" id="input-busca-cliente" placeholder="🔗 Cole o Link do Bilhete aqui...">
             <button onclick="clienteBuscarBilhete()">BUSCAR</button>
@@ -176,21 +175,21 @@
         <div class="digital-card">
             <div class="digital-header">
                 <div style="font-size: 12px; color: var(--texto-secundario); text-transform: uppercase;">Código do Bilhete</div>
-                <div class="digital-pin" id="dig-pin">PIN-XXXX</div>
-                <div class="digital-status status-0" id="dig-status">⏳ Carregando...</div>
-                <div class="digital-cliente" id="dig-cliente">Cliente: ---</div>
+                <div class="digital-pin" id="dig-pin"></div>
+                <div class="digital-status status-0" id="dig-status"></div>
+                <div class="digital-cliente" id="dig-cliente"></div>
                 <div style="font-size: 12px; color: var(--texto-secundario); margin-top: 8px; font-weight: bold;" id="dig-data"></div>
             </div>
             <div id="dig-jogos"></div>
             <div style="border-top: 1px solid var(--borda); margin-top: 15px; padding-top: 15px;">
                 <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; color: var(--texto-secundario);">
-                    <span>Valor da Aposta:</span> <strong style="color: var(--texto);" id="dig-aposta">R$ 0,00</strong>
+                    <span>Valor da Aposta:</span> <strong style="color: var(--texto);" id="dig-aposta"></strong>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 5px; color: var(--texto-secundario);">
-                    <span>Cotação Total:</span> <strong style="color: var(--texto);" id="dig-odd">1.00</strong>
+                    <span>Cotação Total:</span> <strong style="color: var(--texto);" id="dig-odd"></strong>
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 18px; margin-top: 10px; font-weight: 900;">
-                    <span>Retorno Potencial:</span> <strong style="color: var(--neon);" id="dig-retorno">R$ 0,00</strong>
+                    <span>Retorno Potencial:</span> <strong style="color: var(--neon);" id="dig-retorno"></strong>
                 </div>
             </div>
         </div>
@@ -230,93 +229,45 @@
         }
         function esconderLoading() { document.getElementById('overlay-loading').style.display = 'none'; }
 
-        // --- SISTEMA BLINDADO COM API RESTFUL (100% NUVEM E TEMPO REAL) ---
+        // --- SISTEMA DE BANCO DE DADOS (AGORA COM ANTI-CACHE PARA RESOLVER O ATRASO) ---
         async function salvarNaNuvem(dados) {
-            // TENTATIVA 1: RESTful API (Super Estável, sem block de CORS)
             try {
-                let res = await fetch("https://api.restful-api.dev/objects", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: "XRSportsTicket", data: dados })
+                let resBlob = await fetch("https://jsonblob.com/api/jsonBlob", { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
+                    body: JSON.stringify(dados) 
                 });
-                if(res.ok) { let json = await res.json(); return "RST-" + json.id; }
-            } catch(e) { console.log("RST falhou"); }
-
-            // TENTATIVA 2: JSONBlob
-            try {
-                let res = await fetch("https://jsonblob.com/api/jsonBlob", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(dados)
-                });
-                let loc = res.headers.get("Location") || res.headers.get("location");
-                if(loc) return "BLB-" + loc.split('/').pop();
-            } catch(e) { console.log("BLB falhou"); }
-
-            return null; // Força a ter conexão
+                if(resBlob.ok) { 
+                    let loc = resBlob.headers.get("Location") || resBlob.headers.get("location"); 
+                    if(loc) return loc.split('/').pop(); 
+                }
+            } catch(e) { console.error("Erro na nuvem: ", e); }
+            return null;
         }
 
         async function lerDaNuvem(blobId) {
             if (!blobId) return null;
+            // Limpa qualquer coisa que o WhatsApp colocar a mais no link
+            blobId = blobId.split('&')[0].trim();
+            // Esse é o Fura-Cache! Impede o navegador do cliente de puxar a versão velha
+            let furaCache = new Date().getTime();
             
-            if (blobId.startsWith("RST-")) {
-                let id = blobId.replace("RST-", "");
-                try {
-                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`);
-                    if(res.ok) { let json = await res.json(); return json.data; }
-                } catch(e) {}
-                return null;
-            }
-            
-            if (blobId.startsWith("BLB-")) {
-                let id = blobId.replace("BLB-", "");
-                try {
-                    let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`);
-                    if(res.ok) return await res.json();
-                } catch(e) {}
-                return null;
-            }
-
-            // Suporte para bilhetes antigos que usavam só os números do JSONBlob
-            try {
-                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`);
-                if(res.ok) return await res.json();
+            try { 
+                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}?_cb=${furaCache}`, { cache: 'no-store' }); 
+                if(res.ok) return await res.json(); 
             } catch(e) {}
             return null;
         }
 
         async function atualizarNaNuvem(blobId, dados) {
-            if (blobId.startsWith("RST-")) {
-                let id = blobId.replace("RST-", "");
-                try {
-                    let res = await fetch(`https://api.restful-api.dev/objects/${id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name: "XRSportsTicket", data: dados })
-                    });
-                    return res.ok ? blobId : false;
-                } catch(e) { return false; }
-            }
-            
-            if (blobId.startsWith("BLB-")) {
-                let id = blobId.replace("BLB-", "");
-                try {
-                    let res = await fetch(`https://jsonblob.com/api/jsonBlob/${id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify(dados)
-                    });
-                    return res.ok ? blobId : false;
-                } catch(e) { return false; }
-            }
-
-            try {
-                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(dados)
-                });
-                return res.ok ? blobId : false;
+            blobId = blobId.split('&')[0].trim();
+            try { 
+                let res = await fetch(`https://jsonblob.com/api/jsonBlob/${blobId}`, { 
+                    method: 'PUT', 
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
+                    body: JSON.stringify(dados) 
+                }); 
+                return res.ok ? blobId : false; 
             } catch(e) { return false; }
         }
 
@@ -345,18 +296,17 @@
             const urlParams = new URLSearchParams(window.location.search);
             if(urlParams.has('b')) {
                 document.getElementById('tela-principal').style.display = 'none';
-                document.getElementById('tela-digital').style.display = 'block';
                 montarBilheteDigital(urlParams.get('b'));
             } else { carregarCarrinho(); buscarJogosNaAPI(); }
         };
 
-        // --- FUNÇÃO PARA O CLIENTE BUSCAR O BILHETE ---
         function clienteBuscarBilhete() {
             let linkInformado = document.getElementById('input-busca-cliente').value.trim();
             if(!linkInformado) { mostrarToast("Cole o link do seu bilhete primeiro!", "erro"); return; }
             
             let partes = linkInformado.split('?b=');
             let blobId = partes.length > 1 ? partes[1] : linkInformado;
+            blobId = blobId.split('&')[0].trim();
             
             let baseUrl = window.location.href.split('?')[0];
             window.location.href = baseUrl + "?b=" + blobId;
@@ -418,9 +368,13 @@
             let dados = await lerDaNuvem(blobId);
             if (dados) {
                 dados.s = novoStatus;
-                await atualizarNaNuvem(blobId, dados);
-                mostrarToast("Status atualizado com sucesso!");
-                carregarHistoricoAdmin();
+                let isSuccess = await atualizarNaNuvem(blobId, dados);
+                if (isSuccess) {
+                    mostrarToast("Status atualizado com sucesso!");
+                    carregarHistoricoAdmin();
+                } else {
+                    mostrarToast("Falha na atualização. Verifique a internet.", "erro");
+                }
             }
             esconderLoading();
         }
@@ -434,6 +388,7 @@
             
             let partes = codigoLink.split('?b=');
             let blobId = partes.length > 1 ? partes[1] : codigoLink;
+            blobId = blobId.split('&')[0].trim();
             
             mostrarLoading("Buscando Bilhete...");
             let dados = await lerDaNuvem(blobId);
@@ -442,17 +397,21 @@
                 dados.n = nomeClienteAdmin; 
                 let agora = new Date(); dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                 
-                await atualizarNaNuvem(blobId, dados);
+                let isSuccess = await atualizarNaNuvem(blobId, dados);
                 
-                if(!historicoBilhetes.includes(blobId)) {
-                    historicoBilhetes.unshift(blobId);
-                    localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
+                if(isSuccess) {
+                    if(!historicoBilhetes.includes(blobId)) {
+                        historicoBilhetes.unshift(blobId);
+                        localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
+                    }
+                    
+                    document.getElementById('codigo-recebido').value = '';
+                    document.getElementById('nome-cliente-admin').value = '';
+                    mostrarToast("Bilhete Validado Oficialmente!");
+                    carregarHistoricoAdmin();
+                } else {
+                    mostrarToast("Erro ao validar na nuvem! Tente novamente.", "erro");
                 }
-                
-                document.getElementById('codigo-recebido').value = '';
-                document.getElementById('nome-cliente-admin').value = '';
-                mostrarToast("Bilhete Validado Oficialmente!");
-                carregarHistoricoAdmin();
             } else { mostrarToast("Bilhete não encontrado na nuvem!", "erro"); }
             esconderLoading();
         }
@@ -476,7 +435,7 @@
                 let linkAcompanhar = baseUrl + "?b=" + blobId;
                 let textoZap = `⚡ *XR SPORTS - NOVA APOSTA* ⚡%0A📌 PIN: *${codigoPIN}*%0A💰 Valor: *R$ ${valorDep.toFixed(2)}*%0A%0A👉 *Valide meu bilhete no link abaixo:*%0A${linkAcompanhar}`;
                 window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${textoZap}`, '_blank');
-            } else { mostrarToast("Erro de Conexão. Tente novamente.", "erro"); }
+            } else { mostrarToast("Erro Crítico de Conexão. Desative o Adblock/VPN e tente novamente.", "erro"); }
         }
 
         async function buscarPlacaresBilhete(ligas, jogosNoBilhete) {
@@ -503,10 +462,17 @@
         }
 
         async function montarBilheteDigital(blobId) {
-            document.getElementById('dig-status').innerText = "⏳ Buscando Dados...";
+            mostrarLoading("Abrindo Bilhete...");
+            document.getElementById('tela-digital').style.display = 'block';
+            
             let dados = await lerDaNuvem(blobId);
             
-            if (!dados) { alert("Link Inválido ou Bilhete Expirado."); window.location.href = window.location.href.split('?')[0]; return; }
+            if (!dados) { 
+                esconderLoading();
+                alert("Link Inválido ou Bilhete Expirado."); 
+                window.location.href = window.location.href.split('?')[0]; 
+                return; 
+            }
 
             document.getElementById('dig-pin').innerText = dados.p; 
             document.getElementById('dig-cliente').innerText = `👤 Jogador: ${dados.n}`;
@@ -539,6 +505,9 @@
                 </div>`; 
             });
             document.getElementById('dig-jogos').innerHTML = htmlJogos;
+
+            document.getElementById('tela-digital').style.opacity = '1';
+            esconderLoading();
 
             if(ligasBilhete.length > 0 && dados.s === 1) {
                 buscarPlacaresBilhete(ligasBilhete, dados.j);
