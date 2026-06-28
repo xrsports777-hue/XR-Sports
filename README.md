@@ -205,6 +205,7 @@
         <button class="btn-voltar-home" style="margin-top: 20px;" onclick="window.location.href=window.location.href.split('?')[0]">🏠 Ir para a Home de Apostas</button>
     </div>
 
+    <!-- MODAL PREMIUM DA BLINDAGEM -->
     <div id="modal-blindagem" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
         <div style="background:var(--bg-card); border:1px solid var(--neon); border-radius:16px; padding:24px; width:90%; max-width:400px; text-align:center; box-shadow:0 10px 40px rgba(0,255,136,0.2); animation: fadeIn 0.3s ease-out;">
             <div style="font-size:45px; margin-bottom:10px;">🛡️</div>
@@ -688,7 +689,6 @@
                     }
 
                     if(isSuccess) {
-                        // Limpa o historico antigo e salva o novo no lugar
                         let idx = historicoBilhetes.indexOf(blobIdOriginal);
                         if (idx > -1) {
                             historicoBilhetes[idx] = blobId;
@@ -708,7 +708,6 @@
                             try { navigator.clipboard.writeText(linkFinalValidado); } catch(e){}
                             document.getElementById('modal-blindagem-texto').innerHTML = "O sistema gerou um <strong style='color:var(--neon);'>NOVO LINK</strong> já validado!<br><br>Ele já foi <b>Copiado para o seu celular!</b><br>Mande pro cliente, pois o link antigo dele não vai mudar.";
                             
-                            // Botão que manda pra tela do bilhete validado
                             document.getElementById('btn-modal-blindagem').onclick = function() {
                                 window.location.href = linkFinalValidado;
                             };
@@ -769,9 +768,20 @@
                 if(divPlacar && placaresMap[jogo.idJogo]) {
                     let s = placaresMap[jogo.idJogo];
                     if(s.completed) {
-                        divPlacar.innerHTML = `<div style="color:var(--texto-secundario); font-size: 12px; font-weight: bold; margin-top: 8px; border-top: 1px dashed var(--borda); padding-top: 5px; text-align: center;">🏁 FIM DE JOGO: ${s.scores && s.scores.length > 1 ? s.scores[0].score + ' - ' + s.scores[1].score : 'Encerrado'}</div>`;
+                        divPlacar.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--borda);">
+                            <div class="badge-horario" style="background:rgba(255,255,255,0.1); color:var(--texto-secundario);">🏁 FIM DE JOGO</div>
+                            <div style="font-size: 16px; font-weight: 900; color: var(--texto-secundario);">${s.scores && s.scores.length > 1 ? s.scores[0].score + ' - ' + s.scores[1].score : ''}</div>
+                        </div>`;
                     } else if (s.scores && s.scores.length > 0) {
-                        divPlacar.innerHTML = `<div style="color:var(--live); font-size: 13px; font-weight: 900; margin-top: 8px; border-top: 1px dashed var(--borda); padding-top: 5px; text-align: center; animation: piscar 1.5s infinite;">🔴 AO VIVO: ${s.scores[0].score} - ${s.scores[1].score}</div>`;
+                        divPlacar.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--borda);">
+                            <div class="badge-horario badge-aovivo">🔴 AO VIVO</div>
+                            <div class="placar-live" style="font-size: 16px; margin: 0;">${s.scores[0].score} - ${s.scores[1].score}</div>
+                        </div>`;
+                    } else {
+                        divPlacar.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--borda);">
+                            <div class="badge-horario" style="background:rgba(245,166,35,0.1); color:var(--amarelo); border: 1px solid var(--amarelo);">⏳ AGUARDANDO</div>
+                            <div style="font-size: 16px; font-weight: 900; color: var(--texto-secundario);">- : -</div>
+                        </div>`;
                     }
                 }
             });
@@ -812,12 +822,17 @@
                 if(jogo.liga && !ligasBilhete.includes(jogo.liga)) ligasBilhete.push(jogo.liga);
                 
                 htmlJogos += `<div style="background: rgba(9, 14, 23, 0.6); padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--neon);">
-                    <div style="font-size: 11px; color: var(--texto-secundario); margin-bottom: 4px;">${jogo.tituloJogo}</div>
+                    <div style="font-size: 11px; color: var(--texto-secundario); margin-bottom: 6px;">${jogo.tituloJogo}</div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 15px; font-weight: 900;">${jogo.palpite}</span>
                         <span style="color: var(--neon); font-weight: 900;">Odd: ${jogo.oddAposta.toFixed(2)}</span>
                     </div>
-                    <div id="placar-bilhete-${jogo.idJogo}"></div>
+                    <div id="placar-bilhete-${jogo.idJogo}">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--borda);">
+                            <div class="badge-horario" style="background:rgba(138,150,168,0.15); color:var(--texto-secundario); border: 1px solid var(--texto-secundario);">AGUARDANDO...</div>
+                            <div style="font-size: 16px; font-weight: 900; color: var(--texto-secundario);">- : -</div>
+                        </div>
+                    </div>
                 </div>`; 
             });
             document.getElementById('dig-jogos').innerHTML = htmlJogos;
@@ -827,7 +842,8 @@
 
             if(ligasBilhete.length > 0 && dados.s === 1) {
                 buscarPlacaresBilhete(ligasBilhete, dados.j);
-                setInterval(() => buscarPlacaresBilhete(ligasBilhete, dados.j), 30000);
+                // Ajustado para 2 minutos para evitar bloqueio da API
+                setInterval(() => buscarPlacaresBilhete(ligasBilhete, dados.j), 120000);
             }
         }
 
