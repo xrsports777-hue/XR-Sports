@@ -329,47 +329,35 @@
         const fetchHeaders = { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache', 'Expires': '0' };
 
         async function salvarNaNuvem(dados) {
-            dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`); 
+            try { dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`); } catch(e) {} 
 
-            // Tenta 1: JSONBlob
             try {
                 let res = await fetch("https://jsonblob.com/api/jsonBlob", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                    method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
                     body: JSON.stringify(dados)
                 });
                 if (res.ok) {
                     let location = res.headers.get("Location");
-                    if (location) {
-                        let parts = location.split('/');
-                        return "BLB-" + parts[parts.length - 1];
-                    }
+                    if (location) { let parts = location.split('/'); return "BLB-" + parts[parts.length - 1]; }
                 }
             } catch(e) { console.warn("JSONBlob falhou..."); }
 
-            // Tenta 2: Restful-API
             for (let i = 1; i <= 2; i++) {
                 try {
                     let jsonReq = await fetch("https://api.restful-api.dev/objects", {
                         method: "POST", headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ name: "XRSportsTicket", data: dados })
                     });
-                    if (jsonReq.ok) {
-                        let json = await jsonReq.json();
-                        return "RST-" + json.id;
-                    }
+                    if (jsonReq.ok) { let json = await jsonReq.json(); return "RST-" + json.id; }
                 } catch (erro) { await new Promise(r => setTimeout(r, 800)); }
             }
             
-            // MÁGICA AQUI: O Fallback Offline (Plano B)
-            // Se a internet do cliente falhar ou a API bloquear, gera o link instantâneo
+            // MODO OFFLINE (Garante que nunca vai travar)
             try {
                 let dadosString = JSON.stringify(dados);
                 let base64 = btoa(encodeURIComponent(dadosString));
                 return "OFF-" + encodeURIComponent(base64);
-            } catch(e) {
-                return null;
-            }
+            } catch(e) { return null; }
         }
 
         async function lerDaNuvem(blobId) {
@@ -617,15 +605,36 @@
         }
 
         async function alterarStatusAdmin(blobId, novoStatus) {
-            mostrarLoading("Atualizando Nuvem...");
-            let dados = await lerDaNuvem(blobId);
-            if (dados) {
-                dados.s = novoStatus;
-                let isSuccess = await atualizarNaNuvem(blobId, dados);
-                if (isSuccess) {
-                    mostrarToast("Status atualizado com sucesso!");
-                    carregarHistoricoAdmin();
-                } else { mostrarToast("Falha na atualização. Verifique a internet.", "erro"); }
+            mostrarLoading("Atualizando...");
+            try {
+                let dados = await lerDaNuvem(blobId);
+                if (dados) {
+                    dados.s = novoStatus;
+                    let isSuccess = await atualizarNaNuvem(blobId, dados);
+                    
+                    // BYPASS DE RED/GREEN: Se a API bloquear a atualização, cria um novo por cima
+                    if (!isSuccess) {
+                        let novoBlobId = await salvarNaNuvem(dados);
+                        if (novoBlobId) {
+                            // Atualiza silenciosamente a ID no seu painel de Histórico
+                            let idx = historicoBilhetes.indexOf(blobId);
+                            if (idx > -1) {
+                                historicoBilhetes[idx] = novoBlobId;
+                                localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
+                            }
+                            isSuccess = true;
+                        }
+                    }
+
+                    if (isSuccess) {
+                        mostrarToast("Status atualizado com sucesso!");
+                        carregarHistoricoAdmin();
+                    } else { 
+                        mostrarToast("Falha na atualização. Verifique a internet.", "erro"); 
+                    }
+                }
+            } catch(e) {
+                mostrarToast("Erro ao processar dados da aposta.", "erro");
             }
             esconderLoading();
         }
@@ -641,39 +650,58 @@
             let blobId = partes.length > 1 ? partes[1] : codigoLink;
             blobId = blobId.split('&')[0].trim();
             
-            mostrarLoading("Validando na Nuvem...");
-            let dados = await lerDaNuvem(blobId);
+            mostrarLoading("Validando...");
             
-            if(dados) {
-                dados.s = 1; 
-                dados.n = nomeClienteAdmin; 
-                let agora = new Date(); dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+            try {
+                let dados = await lerDaNuvem(blobId);
                 
-                let isSuccess = false;
-
-                // NOVO: Se o cliente mandou um link offline, o Admin sobe pra nuvem na validação!
-                if (blobId.startsWith("OFF-")) {
-                    let novoBlobId = await salvarNaNuvem(dados);
-                    if (novoBlobId && !novoBlobId.startsWith("OFF-")) {
-                        blobId = novoBlobId; // Transforma o link offline em link oficial da nuvem
-                        isSuccess = true;
-                    }
-                } else {
-                    isSuccess = await atualizarNaNuvem(blobId, dados);
-                }
-
-                if(isSuccess) {
-                    if(!historicoBilhetes.includes(blobId)) {
-                        historicoBilhetes.unshift(blobId);
-                        localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
-                    }
-                    document.getElementById('codigo-recebido').value = '';
-                    document.getElementById('nome-cliente-admin').value = '';
+                if(dados) {
+                    dados.s = 1; // Marca como Validado
+                    dados.n = nomeClienteAdmin; 
+                    let agora = new Date(); 
+                    dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                     
-                    mostrarToast("Bilhete Validado Oficialmente!");
-                    carregarHistoricoAdmin();
-                } else { mostrarToast("Erro de conexão ao validar. Tente novamente.", "erro"); }
-            } else { mostrarToast("Bilhete não encontrado ou link corrompido!", "erro"); }
+                    let isSuccess = false;
+
+                    // 1. Tenta atualizar o bilhete original
+                    if (!blobId.startsWith("OFF-")) {
+                        isSuccess = await atualizarNaNuvem(blobId, dados);
+                    }
+
+                    // 2. BYPASS: Se a atualização for bloqueada pela API, cria um bilhete novo já validado!
+                    if (!isSuccess) {
+                        let novoBlobId = await salvarNaNuvem(dados);
+                        if (novoBlobId) {
+                            blobId = novoBlobId; // Atualiza a ID pro novo bilhete
+                            isSuccess = true;
+                        }
+                    }
+
+                    if(isSuccess) {
+                        if(!historicoBilhetes.includes(blobId)) {
+                            historicoBilhetes.unshift(blobId);
+                            localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
+                        }
+                        
+                        document.getElementById('codigo-recebido').value = '';
+                        document.getElementById('nome-cliente-admin').value = '';
+                        
+                        if (blobId.startsWith("OFF-")) {
+                            mostrarToast("✅ Validado em MODO OFFLINE! Copie o link no Histórico e mande pro cliente.");
+                        } else {
+                            mostrarToast("✅ Bilhete Validado na Nuvem!");
+                        }
+                        carregarHistoricoAdmin();
+                    } else { 
+                        mostrarToast("Erro Crítico. O servidor e o modo offline falharam.", "erro"); 
+                    }
+                } else { 
+                    mostrarToast("Bilhete não encontrado ou corrompido!", "erro"); 
+                }
+            } catch (e) {
+                mostrarToast("Erro no processamento.", "erro");
+            }
+            
             esconderLoading();
         }
 
