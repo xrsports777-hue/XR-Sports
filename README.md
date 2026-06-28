@@ -917,13 +917,20 @@
                         let minutosCorridos = isLive ? Math.floor((horaAtual - horaDoJogo) / 60000) : 0;
                         
                         let placarCInt = 0, placarFInt = 0;
-                        if(isLive && dadosScore && dadosScore.scores && dadosScore.scores.length > 0) {
-                            let scoreCasa = dadosScore.scores.find(s => s.name === jogo.home_team); let scoreFora = dadosScore.scores.find(s => s.name === jogo.away_team);
-                            if(scoreCasa && scoreFora) { 
-                                placarC = scoreCasa.score; placarF = scoreFora.score; 
-                                placarCInt = parseInt(placarC) || 0; placarFInt = parseInt(placarF) || 0;
+                        
+                        // --- FIX 1: O problema do placar vazio 0 x 0 ---
+                        if(isLive) {
+                            placarC = "0"; placarF = "0"; 
+                            if(dadosScore && dadosScore.scores && dadosScore.scores.length > 0) {
+                                let scoreCasa = dadosScore.scores.find(s => s.name === jogo.home_team);
+                                let scoreFora = dadosScore.scores.find(s => s.name === jogo.away_team);
+                                if(scoreCasa && scoreCasa.score !== null) placarC = scoreCasa.score;
+                                if(scoreFora && scoreFora.score !== null) placarF = scoreFora.score;
                             }
+                            placarCInt = parseInt(placarC) || 0;
+                            placarFInt = parseInt(placarF) || 0;
                         }
+                        
                         if (minutosCorridos >= 46 && minutosCorridos <= 60) { isIntervalo = true; }
 
                         let totalGols = placarCInt + placarFInt; 
@@ -953,9 +960,22 @@
                             let fUnder = Math.pow(f, 1.5); 
                             let fatorAumento = 1 + (1 - f) * 3;
 
-                            if (placarCInt > placarFInt) { oddC = 1.01 + (oddC - 1.01) * fUnder; oddE = oddE * (fatorAumento * 0.8); oddF = oddF * fatorAumento; }
-                            else if (placarFInt > placarCInt) { oddF = 1.01 + (oddF - 1.01) * fUnder; oddE = oddE * (fatorAumento * 0.8); oddC = oddC * fatorAumento; }
-                            else { oddE = 1.01 + (oddE - 1.01) * fUnder; oddC = oddC * (fatorAumento * 0.6); oddF = oddF * (fatorAumento * 0.6); }
+                            // --- FIX 2: O problema da odd que travava em 1.01 no empate (0x0) ---
+                            if (placarCInt > placarFInt) { 
+                                oddC = 1.01 + (oddC - 1.01) * fUnder; 
+                                oddE = oddE * (fatorAumento * 0.8); 
+                                oddF = oddF * fatorAumento; 
+                            }
+                            else if (placarFInt > placarCInt) { 
+                                oddF = 1.01 + (oddF - 1.01) * fUnder; 
+                                oddE = oddE * (fatorAumento * 0.8); 
+                                oddC = oddC * fatorAumento; 
+                            }
+                            else { 
+                                oddE = 1.01 + (oddE - 1.01) * fUnder; 
+                                oddC = oddC * fatorAumento; 
+                                oddF = oddF * fatorAumento; 
+                            }
 
                             if (totalGols >= 2) { oddM15 = 0; oddN15 = 0; } else { oddN15 = 1.01 + (oddN15 - 1.01) * fUnder; oddM15 = oddM15 * fatorAumento; }
                             if (totalGols >= 3) { oddM25 = 0; oddN25 = 0; } else { oddN25 = 1.01 + (oddN25 - 1.01) * fUnder; oddM25 = oddM25 * fatorAumento; }
