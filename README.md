@@ -1022,20 +1022,26 @@
 
             if (!jaSelecionado) {
                 
-                // Regra Global: 1º Tempo vs Ambas Marcam
-                let temHTnoCarrinho = carrinho.some(c => c.tipoOpcao.includes('HT'));
-                let temBTTSnoCarrinho = carrinho.some(c => c.tipoOpcao.includes('BTTS'));
-                if ((isOpcHT && temBTTSnoCarrinho) || (isOpcBTTS && temHTnoCarrinho)) {
-                    if(navigator.vibrate) navigator.vibrate(200); 
-                    mostrarToast("⚠️ Regra da Banca:<br>Proibido combinar Ambas Marcam com 1º Tempo!", "erro");
+                // --- NOVA REGRA: 1º Tempo isolado no mesmo jogo ---
+                let temHTNesteJogo = selecoesNesteJogo.some(c => c.tipoOpcao.includes('HT'));
+                let outrasOpcoesNesteJogoHT = selecoesNesteJogo.filter(c => !c.tipoOpcao.includes('HT'));
+
+                if (isOpcHT && outrasOpcoesNesteJogoHT.length > 0) {
+                    if(navigator.vibrate) navigator.vibrate(200);
+                    mostrarToast("⚠️ Regra da Banca:<br>O mercado de 1º Tempo não pode ser combinado com outros mercados no mesmo jogo!", "erro");
+                    return;
+                }
+                if (!isOpcHT && temHTNesteJogo) {
+                    if(navigator.vibrate) navigator.vibrate(200);
+                    mostrarToast("⚠️ Regra da Banca:<br>Você já selecionou 1º Tempo neste jogo. Ele não permite combinações!", "erro");
                     return;
                 }
 
-                // Dupla Chance NÃO se mistura com nada no mesmo jogo
+                // --- REGRA: Dupla Chance isolada no mesmo jogo ---
                 let temDuplaChanceNesteJogo = selecoesNesteJogo.some(c => ['1X', '12', 'X2'].includes(c.tipoOpcao));
-                let outrasOpcoesNesteJogo = selecoesNesteJogo.filter(c => !['1X', '12', 'X2'].includes(c.tipoOpcao));
+                let outrasOpcoesNesteJogoDC = selecoesNesteJogo.filter(c => !['1X', '12', 'X2'].includes(c.tipoOpcao));
 
-                if (isOpcDuplaChance && outrasOpcoesNesteJogo.length > 0) {
+                if (isOpcDuplaChance && outrasOpcoesNesteJogoDC.length > 0) {
                     if(navigator.vibrate) navigator.vibrate(200);
                     mostrarToast("⚠️ Regra da Banca:<br>Dupla Chance não pode ser combinada com outros mercados no mesmo jogo!", "erro");
                     return;
