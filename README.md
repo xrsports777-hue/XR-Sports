@@ -255,6 +255,7 @@
         // =======================================================================
 
         const _0xShieldKeys = [
+            atob("YzYzMDNkZGM1YTg1OTNjYzgzZTRjMjA4ZGYwOWRiMjU="), // SUA NOVA CHAVE FOI ADICIONADA AQUI
             atob("MzViN2M4NDhhMDU2ZGYxOWY0ZTBkNThmN2E0ZjMyZjc="), 
             atob("NGQyNzg2MTQzODhiNDVlYzQ5M2I5YzI4NzhiNTJjODA="), 
             atob("MTY2N2JjNDA3MDk4NWUzMmQ0ZTljOTdjNTFjYjAyYjk=")  
@@ -263,7 +264,7 @@
         let indiceChave = 0;
         let API_KEY = _0xShieldKeys[indiceChave];
         const NUMERO_WHATSAPP = "5582993729095"; 
-        const COOLDOWN_MS = 15000; 
+        const COOLDOWN_MS = 300000; // ATUALIZADO: 5 minutos de espera entre atualizações no botão (Modo Ultra Economia)
 
         function permissaoParaChamarAPI() {
             const ultimoAcesso = localStorage.getItem('xrsports_firewall_timer');
@@ -827,7 +828,8 @@
 
             if(ligasBilhete.length > 0 && dados.s === 1) {
                 buscarPlacaresBilhete(ligasBilhete, dados.j);
-                setInterval(() => buscarPlacaresBilhete(ligasBilhete, dados.j), 30000);
+                // ATUALIZADO: Intervalo de 5 minutos (Modo Ultra Economia)
+                setInterval(() => buscarPlacaresBilhete(ligasBilhete, dados.j), 300000);
             }
         }
 
@@ -868,7 +870,9 @@
                 const diffMinutos = (new Date().getTime() - dadosCache.tempo) / 60000;
 
                 let temLive = dadosCache.jogos.some(j => j.isLive);
-                let limiteCache = temLive ? 3 : 30;
+                
+                // ATUALIZADO: Cache de 10 min ao vivo, 45 min pré-jogo (Modo Ultra Economia)
+                let limiteCache = temLive ? 10 : 45;
 
                 if (diffMinutos < limiteCache) {
                     jogosCarregados = dadosCache.jogos;
