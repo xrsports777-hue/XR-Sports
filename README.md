@@ -662,18 +662,20 @@
                     dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                     
                     let isSuccess = false;
+                    let linkMudouParaNovo = false; // Sensor para saber se a blindagem gerou link novo
 
-                    // 1. Tenta atualizar o bilhete original
+                    // 1. Tenta atualizar o bilhete original (se não for offline)
                     if (!blobId.startsWith("OFF-")) {
                         isSuccess = await atualizarNaNuvem(blobId, dados);
                     }
 
-                    // 2. BYPASS: Se a atualização for bloqueada pela API, cria um bilhete novo já validado!
+                    // 2. BYPASS: Se for offline ou a API bloquear, cria um bilhete novo já validado!
                     if (!isSuccess) {
                         let novoBlobId = await salvarNaNuvem(dados);
                         if (novoBlobId) {
                             blobId = novoBlobId; // Atualiza a ID pro novo bilhete
                             isSuccess = true;
+                            linkMudouParaNovo = true;
                         }
                     }
 
@@ -683,14 +685,21 @@
                             localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
                         }
                         
-                        document.getElementById('codigo-recebido').value = '';
-                        document.getElementById('nome-cliente-admin').value = '';
-                        
-                        if (blobId.startsWith("OFF-")) {
-                            mostrarToast("✅ Validado em MODO OFFLINE! Copie o link no Histórico e mande pro cliente.");
+                        // Monta a URL completa do bilhete atualizado/novo
+                        let linkFinalValidado = window.location.href.split('?')[0] + "?b=" + blobId;
+
+                        if (linkMudouParaNovo) {
+                            // UX MATADORA: Avisa o cambista e joga o link novo no input pra copiar!
+                            document.getElementById('codigo-recebido').value = linkFinalValidado;
+                            document.getElementById('nome-cliente-admin').value = '';
+                            alert("⚠️ BLINDAGEM ATIVADA!\n\nO servidor bloqueou o link antigo (ou era offline). O sistema gerou um NOVO LINK já validado!\n\nO link atualizado já está na caixinha de texto. COPIE ELE e mande pro seu cliente, pois o link antigo dele não vai mudar!");
                         } else {
-                            mostrarToast("✅ Bilhete Validado na Nuvem!");
+                            // Atualizou o mesmo link sem problemas
+                            document.getElementById('codigo-recebido').value = '';
+                            document.getElementById('nome-cliente-admin').value = '';
+                            mostrarToast("✅ Bilhete Validado na Nuvem! O cliente já pode atualizar a página dele.");
                         }
+
                         carregarHistoricoAdmin();
                     } else { 
                         mostrarToast("Erro Crítico. O servidor e o modo offline falharam.", "erro"); 
