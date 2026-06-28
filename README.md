@@ -205,6 +205,15 @@
         <button class="btn-voltar-home" style="margin-top: 20px;" onclick="window.location.href=window.location.href.split('?')[0]">🏠 Ir para a Home de Apostas</button>
     </div>
 
+    <div id="modal-blindagem" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
+        <div style="background:var(--bg-card); border:1px solid var(--neon); border-radius:16px; padding:24px; width:90%; max-width:400px; text-align:center; box-shadow:0 10px 40px rgba(0,255,136,0.2); animation: fadeIn 0.3s ease-out;">
+            <div style="font-size:45px; margin-bottom:10px;">🛡️</div>
+            <h3 style="color:var(--neon); margin-bottom:15px; font-weight:900;">BLINDAGEM ATIVADA</h3>
+            <p id="modal-blindagem-texto" style="color:var(--texto); font-size:15px; line-height:1.5; margin-bottom:20px;">O servidor bloqueou o link antigo (ou era offline). O sistema gerou um NOVO LINK já validado!</p>
+            <button id="btn-modal-blindagem" style="width:100%; background:var(--neon); color:#000; border:none; padding:16px; border-radius:12px; font-weight:900; font-size:16px; cursor:pointer;">VER BILHETE VALIDADO</button>
+        </div>
+    </div>
+
     <script>
         // =======================================================================
         // 🛡️ SISTEMA DE BLINDAGEM EXTREMA FRONTEND (ANTI-CURIOSO)
@@ -387,7 +396,6 @@
 
         async function atualizarNaNuvem(blobId, dados) {
             if (blobId.startsWith("OFF-")) { 
-                mostrarToast("Erro: Esse é um link antigo offline. Peça pro cliente gerar outro.", "erro");
                 return false; 
             }
             if (blobId.startsWith("BLB-")) {
@@ -606,27 +614,28 @@
 
         async function alterarStatusAdmin(blobId, novoStatus) {
             mostrarLoading("Atualizando...");
+            let blobIdOriginal = blobId;
             try {
                 let dados = await lerDaNuvem(blobId);
                 if (dados) {
                     dados.s = novoStatus;
                     let isSuccess = await atualizarNaNuvem(blobId, dados);
                     
-                    // BYPASS DE RED/GREEN: Se a API bloquear a atualização, cria um novo por cima
                     if (!isSuccess) {
                         let novoBlobId = await salvarNaNuvem(dados);
                         if (novoBlobId) {
-                            // Atualiza silenciosamente a ID no seu painel de Histórico
-                            let idx = historicoBilhetes.indexOf(blobId);
-                            if (idx > -1) {
-                                historicoBilhetes[idx] = novoBlobId;
-                                localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
-                            }
+                            blobId = novoBlobId;
                             isSuccess = true;
                         }
                     }
 
                     if (isSuccess) {
+                        let idx = historicoBilhetes.indexOf(blobIdOriginal);
+                        if (idx > -1) {
+                            historicoBilhetes[idx] = blobId;
+                            localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
+                        }
+
                         mostrarToast("Status atualizado com sucesso!");
                         carregarHistoricoAdmin();
                     } else { 
@@ -649,6 +658,7 @@
             let partes = codigoLink.split('?b=');
             let blobId = partes.length > 1 ? partes[1] : codigoLink;
             blobId = blobId.split('&')[0].trim();
+            let blobIdOriginal = blobId;
             
             mostrarLoading("Validando...");
             
@@ -656,51 +666,57 @@
                 let dados = await lerDaNuvem(blobId);
                 
                 if(dados) {
-                    dados.s = 1; // Marca como Validado
+                    dados.s = 1; 
                     dados.n = nomeClienteAdmin; 
                     let agora = new Date(); 
                     dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                     
                     let isSuccess = false;
-                    let linkMudouParaNovo = false; // Sensor para saber se a blindagem gerou link novo
+                    let linkMudouParaNovo = false; 
 
-                    // 1. Tenta atualizar o bilhete original (se não for offline)
                     if (!blobId.startsWith("OFF-")) {
                         isSuccess = await atualizarNaNuvem(blobId, dados);
                     }
 
-                    // 2. BYPASS: Se for offline ou a API bloquear, cria um bilhete novo já validado!
                     if (!isSuccess) {
                         let novoBlobId = await salvarNaNuvem(dados);
                         if (novoBlobId) {
-                            blobId = novoBlobId; // Atualiza a ID pro novo bilhete
+                            blobId = novoBlobId; 
                             isSuccess = true;
                             linkMudouParaNovo = true;
                         }
                     }
 
                     if(isSuccess) {
-                        if(!historicoBilhetes.includes(blobId)) {
+                        // Limpa o historico antigo e salva o novo no lugar
+                        let idx = historicoBilhetes.indexOf(blobIdOriginal);
+                        if (idx > -1) {
+                            historicoBilhetes[idx] = blobId;
+                        } else if (!historicoBilhetes.includes(blobId)) {
                             historicoBilhetes.unshift(blobId);
-                            localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
                         }
+                        localStorage.setItem('xrsports_historico_links', JSON.stringify(historicoBilhetes));
                         
-                        // Monta a URL completa do bilhete atualizado/novo
+                        document.getElementById('codigo-recebido').value = '';
+                        document.getElementById('nome-cliente-admin').value = '';
+                        
                         let linkFinalValidado = window.location.href.split('?')[0] + "?b=" + blobId;
 
-                        if (linkMudouParaNovo) {
-                            // UX MATADORA: Avisa o cambista e joga o link novo no input pra copiar!
-                            document.getElementById('codigo-recebido').value = linkFinalValidado;
-                            document.getElementById('nome-cliente-admin').value = '';
-                            alert("⚠️ BLINDAGEM ATIVADA!\n\nO servidor bloqueou o link antigo (ou era offline). O sistema gerou um NOVO LINK já validado!\n\nO link atualizado já está na caixinha de texto. COPIE ELE e mande pro seu cliente, pois o link antigo dele não vai mudar!");
-                        } else {
-                            // Atualizou o mesmo link sem problemas
-                            document.getElementById('codigo-recebido').value = '';
-                            document.getElementById('nome-cliente-admin').value = '';
-                            mostrarToast("✅ Bilhete Validado na Nuvem! O cliente já pode atualizar a página dele.");
-                        }
-
                         carregarHistoricoAdmin();
+
+                        if (linkMudouParaNovo) {
+                            try { navigator.clipboard.writeText(linkFinalValidado); } catch(e){}
+                            document.getElementById('modal-blindagem-texto').innerHTML = "O sistema gerou um <strong style='color:var(--neon);'>NOVO LINK</strong> já validado!<br><br>Ele já foi <b>Copiado para o seu celular!</b><br>Mande pro cliente, pois o link antigo dele não vai mudar.";
+                            
+                            // Botão que manda pra tela do bilhete validado
+                            document.getElementById('btn-modal-blindagem').onclick = function() {
+                                window.location.href = linkFinalValidado;
+                            };
+                            document.getElementById('modal-blindagem').style.display = 'flex';
+                        } else {
+                            mostrarToast("✅ Bilhete Validado na Nuvem!");
+                            setTimeout(() => { window.location.href = linkFinalValidado; }, 1500);
+                        }
                     } else { 
                         mostrarToast("Erro Crítico. O servidor e o modo offline falharam.", "erro"); 
                     }
