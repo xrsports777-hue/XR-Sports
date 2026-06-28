@@ -1,3 +1,4 @@
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -1034,7 +1035,8 @@
                         painelAviso.innerHTML = `⚠️ Conexão perdida ou Limite API atingido.<br>Mostrando jogos em <b>Modo Sobrevivência</b> (Offline).`;
                         console.log("🛡️ BLINDAGEM ATIVADA: Carregando cache antigo por falha na rede.");
                     } else {
-                        painelAviso.innerHTML = `❌ Falha crítica de rede. Verifique sua internet.`; 
+                        // ATUALIZADO: Modo X9 Ativado - Vai dedurar o erro exato da API
+                        painelAviso.innerHTML = `❌ ERRO REAL DA API: <b>${erro.message}</b><br>Verifique a chave ou bloqueadores de anúncio.`; 
                     }
                 }
             };
