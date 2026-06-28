@@ -331,9 +331,10 @@
         async function salvarNaNuvem(dados) {
             dados.hash = btoa(`${dados.v}-${dados.o}-${dados.p}`); 
 
+            // Tenta 1: JSONBlob
             try {
                 let res = await fetch("https://jsonblob.com/api/jsonBlob", {
-                    method: "POST", 
+                    method: "POST",
                     headers: { "Content-Type": "application/json", "Accept": "application/json" },
                     body: JSON.stringify(dados)
                 });
@@ -344,9 +345,10 @@
                         return "BLB-" + parts[parts.length - 1];
                     }
                 }
-            } catch(e) { console.warn("JSONBlob falhou, tentando servidor secundário..."); }
+            } catch(e) { console.warn("JSONBlob falhou..."); }
 
-            for (let i = 1; i <= 3; i++) {
+            // Tenta 2: Restful-API
+            for (let i = 1; i <= 2; i++) {
                 try {
                     let jsonReq = await fetch("https://api.restful-api.dev/objects", {
                         method: "POST", headers: { "Content-Type": "application/json" },
@@ -356,10 +358,18 @@
                         let json = await jsonReq.json();
                         return "RST-" + json.id;
                     }
-                } catch (erro) { if (i === 3) break; await new Promise(r => setTimeout(r, 800)); }
+                } catch (erro) { await new Promise(r => setTimeout(r, 800)); }
             }
             
-            return null;
+            // MÁGICA AQUI: O Fallback Offline (Plano B)
+            // Se a internet do cliente falhar ou a API bloquear, gera o link instantâneo
+            try {
+                let dadosString = JSON.stringify(dados);
+                let base64 = btoa(encodeURIComponent(dadosString));
+                return "OFF-" + encodeURIComponent(base64);
+            } catch(e) {
+                return null;
+            }
         }
 
         async function lerDaNuvem(blobId) {
@@ -633,12 +643,25 @@
             
             mostrarLoading("Validando na Nuvem...");
             let dados = await lerDaNuvem(blobId);
+            
             if(dados) {
                 dados.s = 1; 
                 dados.n = nomeClienteAdmin; 
                 let agora = new Date(); dados.d = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                 
-                let isSuccess = await atualizarNaNuvem(blobId, dados);
+                let isSuccess = false;
+
+                // NOVO: Se o cliente mandou um link offline, o Admin sobe pra nuvem na validação!
+                if (blobId.startsWith("OFF-")) {
+                    let novoBlobId = await salvarNaNuvem(dados);
+                    if (novoBlobId && !novoBlobId.startsWith("OFF-")) {
+                        blobId = novoBlobId; // Transforma o link offline em link oficial da nuvem
+                        isSuccess = true;
+                    }
+                } else {
+                    isSuccess = await atualizarNaNuvem(blobId, dados);
+                }
+
                 if(isSuccess) {
                     if(!historicoBilhetes.includes(blobId)) {
                         historicoBilhetes.unshift(blobId);
@@ -650,7 +673,7 @@
                     mostrarToast("Bilhete Validado Oficialmente!");
                     carregarHistoricoAdmin();
                 } else { mostrarToast("Erro de conexão ao validar. Tente novamente.", "erro"); }
-            } else { mostrarToast("Bilhete não encontrado na nuvem!", "erro"); }
+            } else { mostrarToast("Bilhete não encontrado ou link corrompido!", "erro"); }
             esconderLoading();
         }
 
