@@ -802,7 +802,7 @@
             
             if (dados.s === 0) { selo.innerText = "⏳ Pendente de Validação"; document.getElementById('dig-data').innerText = "Aguarde o cambista aprovar."; }
             else if (dados.s === 1) { selo.innerText = "✅ BILHETE ATIVO (VALIDADO)"; document.getElementById('dig-data').innerText = `📅 Validado em: ${dados.d}`; }
-            else if (dados.s === 2) { selo.innerText = "🟢 BILHETE PREMIADO (GREEN)"; document.getElementById('dig-data').innerText = "🏆 Parabéns! Procure o cambista para receber a premiação."; }
+            else if (dados.s === 2) { selo.innerText = "🟢 APOSTA GANHA! (GREEN)"; document.getElementById('dig-data').innerText = "🏆 Parabéns! Procure o cambista para receber a premiação."; }
             else if (dados.s === 3) { selo.innerText = "🔴 PERDEU (RED)"; document.getElementById('dig-data').innerText = "Boa sorte na próxima vez!"; }
             else if (dados.s === 4) { selo.innerText = "⚪ BILHETE CANCELADO"; document.getElementById('dig-data').innerText = "Aposta anulada."; }
 
