@@ -255,7 +255,7 @@
         // =======================================================================
 
         const _0xShieldKeys = [
-            atob("YzYzMDNkZGM1YTg1OTNjYzgzZTRjMjA4ZGYwOWRiMjU="), // SUA NOVA CHAVE FOI ADICIONADA AQUI
+            atob("MzhiNTczYWU0YzNjYzEyZGNhZjljYTM2OTY3YjU3MDk="), // SUA NOVA CHAVE FOI ADICIONADA AQUI
             atob("MzViN2M4NDhhMDU2ZGYxOWY0ZTBkNThmN2E0ZjMyZjc="), 
             atob("NGQyNzg2MTQzODhiNDVlYzQ5M2I5YzI4NzhiNTJjODA="), 
             atob("MTY2N2JjNDA3MDk4NWUzMmQ0ZTljOTdjNTFjYjAyYjk=")  
