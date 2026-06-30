@@ -116,7 +116,7 @@
         <div class="termos-rodape">
             <h3>📜 Termos e Regras da Banca</h3>
             <ul>
-                <li><strong>Conferência Obrigatória:</strong> Tenha certeza absoluta ao montar seu bilhete e confira todos os palpites direitinho. Após a emissão, não tem mais volta, pois o sistema da XR Sports blinda e tranca o bilhete automaticamente de forma irreversível.</li>
+                <li><strong>Conferência Obrigatória:</strong> Tenha certeza absoluta ao montar seu bilhete e confira todos os palpites direitinho. Após a emissão, não tem mais volta, pois o sistema da XR Sports tranca o bilhete automaticamente de forma irreversível.</li>
                 <li><strong>Variação de Cotações:</strong> A odd oficial e válida será exclusivamente aquela registrada no momento da confirmação final pelo cambista.</li>
                 <li><strong>Tempo Regulamentar:</strong> Apostas válidas apenas para os 90 min (+ acréscimos). Prorrogações e pênaltis não contam.</li>
             </ul>
@@ -1098,7 +1098,7 @@
             // --- NOVO BLOQUEIO DE JOGOS AO VIVO ---
             if (jogoAtual && jogoAtual.isLive) {
                 if(navigator.vibrate) navigator.vibrate(200);
-                mostrarToast("⚠️ O mercado para este jogo ao vivo está fechado. Você não pode adicionar esta aposta.", "erro");
+                mostrarToast("⚠️ Mercado ao vivo está fechado!", "erro");
                 return;
             }
             // --------------------------------------
