@@ -1103,6 +1103,26 @@
             }
             // --------------------------------------
 
+            // --- NOVO BLOQUEIO POR DATA (HOJE + 2 DIAS) ---
+            if (jogoAtual) {
+                // Pega o dia de hoje e zera as horas para o início do dia
+                let hoje = new Date();
+                hoje.setHours(0, 0, 0, 0); 
+                
+                // Cria a data limite somando 2 dias
+                let dataLimite = new Date(hoje);
+                dataLimite.setDate(hoje.getDate() + 2);
+                dataLimite.setHours(23, 59, 59, 999); // Vai até o final do 3º dia permitido
+                
+                // Verifica se a data do jogo ultrapassa a data limite
+                if (jogoAtual.dataCrua > dataLimite) {
+                    if(navigator.vibrate) navigator.vibrate(200);
+                    mostrarToast("⚠️ Este jogo ainda não foi liberado para fazer aposta.", "erro");
+                    return; // Bloqueia a ação
+                }
+            }
+            // ----------------------------------------------
+
             const gruposMercado = {
                 '1': 'pr', 'X': 'pr', '2': 'pr',
                 '1X': 'pr', '12': 'pr', 'X2': 'pr',
