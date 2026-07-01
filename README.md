@@ -1103,19 +1103,21 @@
             }
             // --------------------------------------
 
-            // --- NOVO BLOQUEIO POR DATA (HOJE + 2 DIAS) ---
+            // --- NOVO BLOQUEIO POR DATA CORRIGIDO (HOJE + 2 DIAS) ---
             if (jogoAtual) {
-                // Pega o dia de hoje e zera as horas para o início do dia
                 let hoje = new Date();
                 hoje.setHours(0, 0, 0, 0); 
                 
-                // Cria a data limite somando 2 dias
                 let dataLimite = new Date(hoje);
                 dataLimite.setDate(hoje.getDate() + 2);
-                dataLimite.setHours(23, 59, 59, 999); // Vai até o final do 3º dia permitido
+                dataLimite.setHours(23, 59, 59, 999); 
                 
-                // Verifica se a data do jogo ultrapassa a data limite
-                if (jogoAtual.dataCrua > dataLimite) {
+                // FIX: Converte a 'dataCrua' de volta para um objeto de Data oficial.
+                // Isso impede que o cache transforme a data em texto e bugue a regra.
+                let dataDoJogo = new Date(jogoAtual.dataCrua);
+
+                // FIX: Usa o '.getTime()' para comparar o número exato de milissegundos. É à prova de falhas.
+                if (dataDoJogo.getTime() > dataLimite.getTime()) {
                     if(navigator.vibrate) navigator.vibrate(200);
                     mostrarToast("⚠️ Este jogo ainda não foi liberado para fazer aposta.", "erro");
                     return; // Bloqueia a ação
