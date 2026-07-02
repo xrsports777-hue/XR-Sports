@@ -942,6 +942,7 @@
 
                         let oddC = 0, oddE = 0, oddF = 0, oddM15 = 0, oddN15 = 0, oddM25 = 0, oddN25 = 0, oddBttsSim = 0, oddBttsNao = 0;
                         let oddCrtM25 = 0, oddCrtN25 = 0; 
+                        let oddM05_HT = 0, oddN05_HT = 0, oddM15_HT = 0, oddN15_HT = 0;
 
                         jogo.bookmakers.forEach(bm => {
                             let mH2H = bm.markets.find(m => m.key === 'h2h');
@@ -955,6 +956,15 @@
 
                         if (oddM25 > 0 && oddM15 === 0) { let pM25 = 1 / oddM25; let pM15 = Math.min(0.95, pM25 * 1.35); oddM15 = (1 / pM15) * 0.92; oddN15 = (1 / (1-pM15)) * 0.92; }
                         if (oddM25 > 0) { let pBttsSim = Math.min(0.88, (1 / oddM25) * 1.05); oddBttsSim = (1 / pBttsSim) * 0.92; oddBttsNao = (1 / (1 - pBttsSim)) * 0.92; } else if (oddC > 0) { oddBttsSim = 1.85 * 0.92; oddBttsNao = 1.85 * 0.92; }
+                        if (oddM25 > 0) {
+                            let pM25 = 1 / oddM25;
+                            let pM05HT = Math.min(0.85, pM25 * 1.5);
+                            let pM15HT = Math.max(0.15, pM25 * 0.6);
+                            oddM05_HT = (1 / pM05HT) * 0.92;
+                            oddN05_HT = (1 / (1 - pM05HT)) * 0.92;
+                            oddM15_HT = (1 / pM15HT) * 0.92;
+                            oddN15_HT = (1 / (1 - pM15HT)) * 0.92;
+                        }
                         
                         let probM25Cartoes = 0.70 + (Math.random() * 0.1); 
                         oddCrtM25 = (1 / probM25Cartoes) * 0.92; oddCrtN25 = (1 / (1 - probM25Cartoes)) * 0.92;
@@ -983,12 +993,15 @@
 
                             if (totalGols >= 2) { oddM15 = 0; oddN15 = 0; } else { oddN15 = 1.01 + (oddN15 - 1.01) * fUnder; oddM15 = oddM15 * fatorAumento; }
                             if (totalGols >= 3) { oddM25 = 0; oddN25 = 0; } else { oddN25 = 1.01 + (oddN25 - 1.01) * fUnder; oddM25 = oddM25 * fatorAumento; }
+                            if (totalGols >= 1) { oddM05_HT = 0; oddN05_HT = 0; } else { oddN05_HT = 1.01 + (oddN05_HT - 1.01) * fUnder; oddM05_HT = oddM05_HT * fatorAumento; }
+                            if (totalGols >= 2) { oddM15_HT = 0; oddN15_HT = 0; } else { oddN15_HT = 1.01 + (oddN15_HT - 1.01) * fUnder; oddM15_HT = oddM15_HT * fatorAumento; }
                             if (isBtts) { oddBttsSim = 0; oddBttsNao = 0; } else { oddBttsNao = 1.01 + (oddBttsNao - 1.01) * fUnder; oddBttsSim = oddBttsSim * fatorAumento; }
 
                             let cartoesSimulados = Math.floor(minutosCorridos / 25);
                             if (cartoesSimulados >= 3) { oddCrtM25 = 0; oddCrtN25 = 0; } else { oddCrtN25 = 1.01 + (oddCrtN25 - 1.01) * fUnder; oddCrtM25 = oddCrtM25 * fatorAumento; }
                         } else if (isLive && minutosCorridos > 100) {
                             oddC=0; oddE=0; oddF=0; oddM15=0; oddN15=0; oddM25=0; oddN25=0; oddBttsSim=0; oddBttsNao=0; oddCrtM25=0; oddCrtN25=0;
+                            oddM05_HT=0; oddN05_HT=0; oddM15_HT=0; oddN15_HT=0;
                         }
 
                         let odd1X = 0, odd12 = 0, oddX2 = 0, oddDnbCasa = 0, oddDnbFora = 0, oddC_HT = 0, oddE_HT = 0, oddF_HT = 0;
@@ -1008,12 +1021,15 @@
                         oddC = clampOdd(oddC); oddE = clampOdd(oddE); oddF = clampOdd(oddF);
                         oddM15 = clampOdd(oddM15); oddN15 = clampOdd(oddN15);
                         oddM25 = clampOdd(oddM25); oddN25 = clampOdd(oddN25);
+                        if (isLive && minutosCorridos > 45) { oddM05_HT = 0; oddN05_HT = 0; oddM15_HT = 0; oddN15_HT = 0; }
+                        oddM05_HT = clampOdd(oddM05_HT); oddN05_HT = clampOdd(oddN05_HT);
+                        oddM15_HT = clampOdd(oddM15_HT); oddN15_HT = clampOdd(oddN15_HT);
                         oddBttsSim = clampOdd(oddBttsSim); oddBttsNao = clampOdd(oddBttsNao);
                         oddCrtM25 = clampOdd(oddCrtM25); oddCrtN25 = clampOdd(oddCrtN25);
 
                         if(oddC > 0 || oddM25 > 0) {
                             jogosCarregados.push({
-                                id: jogo.id, casa: jogo.home_team, fora: jogo.away_team, oddC, oddE, oddF, odd1X, odd12, oddX2, oddDnbCasa, oddDnbFora, oddBttsSim, oddBttsNao, oddM15, oddN15, oddM25, oddN25, oddC_HT, oddE_HT, oddF_HT, oddCrtM25, oddCrtN25, dataCrua: horaDoJogo, dataVisual: arrumarData(jogo.commence_time), isLive, isIntervalo, minutosCorridos, placarC, placarF
+                                id: jogo.id, casa: jogo.home_team, fora: jogo.away_team, oddC, oddE, oddF, odd1X, odd12, oddX2, oddDnbCasa, oddDnbFora, oddBttsSim, oddBttsNao, oddM15, oddN15, oddM25, oddN25, oddC_HT, oddE_HT, oddF_HT, oddCrtM25, oddCrtN25, oddM05_HT, oddN05_HT, oddM15_HT, oddN15_HT, dataCrua: horaDoJogo, dataVisual: arrumarData(jogo.commence_time), isLive, isIntervalo, minutosCorridos, placarC, placarF
                             });
                         }
                     });
@@ -1073,6 +1089,12 @@
                                  ((j.oddM25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-M25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 2.5 Gols', ${j.oddM25}, 'M25')"><span class="odd-lbl">+ 2.5 Gols</span><span class="odd-val">${j.oddM25.toFixed(2)}</span></div>` : "") +
                                  ((j.oddN25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-N25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 2.5 Gols', ${j.oddN25}, 'N25')"><span class="odd-lbl">- 2.5 Gols</span><span class="odd-val">${j.oddN25.toFixed(2)}</span></div>` : "");
                 let blocoGols = botoesGols !== "" ? `<div class="mercado-titulo">Total de Gols</div><div class="odds-linha-dupla">${botoesGols}</div>` : "";
+                
+                let botoesGolsHT = ((j.oddM05_HT > 0) ? `<div class="odd-btn" id="btn-${j.id}-M05HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 0.5 Gols (1ºT)', ${j.oddM05_HT}, 'M05HT')"><span class="odd-lbl">+ 0.5 (1ºT)</span><span class="odd-val">${j.oddM05_HT.toFixed(2)}</span></div>` : "") +
+                                   ((j.oddN05_HT > 0) ? `<div class="odd-btn" id="btn-${j.id}-N05HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 0.5 Gols (1ºT)', ${j.oddN05_HT}, 'N05HT')"><span class="odd-lbl">- 0.5 (1ºT)</span><span class="odd-val">${j.oddN05_HT.toFixed(2)}</span></div>` : "") +
+                                   ((j.oddM15_HT > 0) ? `<div class="odd-btn" id="btn-${j.id}-M15HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 1.5 Gols (1ºT)', ${j.oddM15_HT}, 'M15HT')"><span class="odd-lbl">+ 1.5 (1ºT)</span><span class="odd-val">${j.oddM15_HT.toFixed(2)}</span></div>` : "") +
+                                   ((j.oddN15_HT > 0) ? `<div class="odd-btn" id="btn-${j.id}-N15HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 1.5 Gols (1ºT)', ${j.oddN15_HT}, 'N15HT')"><span class="odd-lbl">- 1.5 (1ºT)</span><span class="odd-val">${j.oddN15_HT.toFixed(2)}</span></div>` : "");
+                let blocoGolsHT = botoesGolsHT !== "" ? `<div class="mercado-titulo">Gols - 1º Tempo</div><div class="odds-linha-dupla">${botoesGolsHT}</div>` : "";
 
                 let botoesCartoes = ((j.oddCrtM25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-CM25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '+ 2.5 Cartões', ${j.oddCrtM25}, 'CM25')"><span class="odd-lbl">+ 2.5</span><span class="odd-val">${j.oddCrtM25.toFixed(2)}</span></div>` : "") +
                                     ((j.oddCrtN25 > 0) ? `<div class="odd-btn" id="btn-${j.id}-CN25" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '- 2.5 Cartões', ${j.oddCrtN25}, 'CN25')"><span class="odd-lbl">- 2.5</span><span class="odd-val">${j.oddCrtN25.toFixed(2)}</span></div>` : "");
@@ -1083,7 +1105,7 @@
                 let btn2HT = j.oddF_HT > 0 ? `<div class="odd-btn" id="btn-${j.id}-2HT" onclick="clicarNaOdd('${j.id}', '${j.casa} x ${j.fora}', '${j.fora} (1ºT)', ${j.oddF_HT}, '2HT')"><span class="odd-lbl">Fora</span><span class="odd-val">${j.oddF_HT.toFixed(2)}</span></div>` : "";
                 let blocoHT = (btn1HT || btnXHT || btn2HT) ? `<div class="mercado-titulo">Vencedor - 1º Tempo</div><div class="odds-linha">${btn1HT}${btnXHT}${btn2HT}</div>` : "";
 
-                htmlHTML += `<div class="card-jogo"><div class="card-topo"><span class="liga-tag">${nomeLigaFoco}</span>${badgeDaHora}</div><div class="placar-box"><div class="time-box">${desenharEscudo(j.casa)}<span class="nome-time">${j.casa}</span></div>${centroPlacar}<div class="time-box visitante">${desenharEscudo(j.fora)}<span class="nome-time">${j.fora}</span></div></div>${bloco1X2}${blocoHT}${blocoDuchance}${blocoDnb}${blocoBtts}${blocoGols}${blocoCartoes}</div>`;
+                htmlHTML += `<div class="card-jogo"><div class="card-topo"><span class="liga-tag">${nomeLigaFoco}</span>${badgeDaHora}</div><div class="placar-box"><div class="time-box">${desenharEscudo(j.casa)}<span class="nome-time">${j.casa}</span></div>${centroPlacar}<div class="time-box visitante">${desenharEscudo(j.fora)}<span class="nome-time">${j.fora}</span></div></div>${bloco1X2}${blocoHT}${blocoDuchance}${blocoDnb}${blocoBtts}${blocoGolsHT}${blocoGols}${blocoCartoes}</div>`;
             });
             document.getElementById('container-jogos').innerHTML = htmlHTML;
             carrinho.forEach(c => { let b = document.getElementById(`btn-${c.idJogo}-${c.tipoOpcao}`); if(b) b.classList.add('selecionado'); });
@@ -1132,6 +1154,7 @@
                 '1HT': 'pr', 'XHT': 'pr', '2HT': 'pr',
                 'BTTSY': 'bt', 'BTTSN': 'bt',
                 'M15': 'go', 'N15': 'go', 'M25': 'go', 'N25': 'go',
+                'M05HT': 'goHT', 'N05HT': 'goHT', 'M15HT': 'goHT', 'N15HT': 'goHT',
                 'CM25': 'ca', 'CN25': 'ca'
             };
             
@@ -1139,15 +1162,15 @@
             let selecoesNesteJogo = carrinho.filter(c => c.idJogo === idJogo); 
             let jaSelecionado = selecoesNesteJogo.find(c => c.tipoOpcao === tipoOpcao);
 
-            let isOpcHT = tipoOpcao.includes('HT');
+            let isOpcHT = tipoOpcao.includes('HT') && !tipoOpcao.includes('05HT') && !tipoOpcao.includes('15HT');
             let isOpcBTTS = tipoOpcao.includes('BTTS');
             let isOpcDuplaChance = ['1X', '12', 'X2'].includes(tipoOpcao);
             
             let isOpcGols15 = ['M15', 'N15'].includes(tipoOpcao);
 
             if (!jaSelecionado) {
-                let temHTNesteJogo = selecoesNesteJogo.some(c => c.tipoOpcao.includes('HT'));
-                let outrasOpcoesNesteJogoHT = selecoesNesteJogo.filter(c => !c.tipoOpcao.includes('HT'));
+                let temHTNesteJogo = selecoesNesteJogo.some(c => c.tipoOpcao.includes('HT') && !c.tipoOpcao.includes('05HT') && !c.tipoOpcao.includes('15HT'));
+                let outrasOpcoesNesteJogoHT = selecoesNesteJogo.filter(c => !(c.tipoOpcao.includes('HT') && !c.tipoOpcao.includes('05HT') && !c.tipoOpcao.includes('15HT')));
 
                 if (isOpcHT && outrasOpcoesNesteJogoHT.length > 0) {
                     if(navigator.vibrate) navigator.vibrate(200);
@@ -1171,6 +1194,21 @@
                 if (!isOpcDuplaChance && temDuplaChanceNesteJogo) {
                     if(navigator.vibrate) navigator.vibrate(200);
                     mostrarToast("⚠️ Regra da Banca:<br>Você já selecionou Dupla Chance neste jogo. Ela não permite combinações!", "erro");
+                    return;
+                }
+
+                let isOpcGolsHT = ['M05HT', 'N05HT', 'M15HT', 'N15HT'].includes(tipoOpcao);
+                let temGolsHTNesteJogo = selecoesNesteJogo.some(c => ['M05HT', 'N05HT', 'M15HT', 'N15HT'].includes(c.tipoOpcao));
+                let outrasOpcoesNesteJogoGolsHT = selecoesNesteJogo.filter(c => !['M05HT', 'N05HT', 'M15HT', 'N15HT'].includes(c.tipoOpcao));
+
+                if (isOpcGolsHT && outrasOpcoesNesteJogoGolsHT.length > 0) {
+                    if(navigator.vibrate) navigator.vibrate(200);
+                    mostrarToast("⚠️ Regra da Banca:<br>Gols no 1º Tempo não pode ser combinado com outros mercados no mesmo jogo!", "erro");
+                    return;
+                }
+                if (!isOpcGolsHT && temGolsHTNesteJogo) {
+                    if(navigator.vibrate) navigator.vibrate(200);
+                    mostrarToast("⚠️ Regra da Banca:<br>Você já selecionou Gols 1º Tempo neste jogo. Ele não permite combinações!", "erro");
                     return;
                 }
 
